@@ -1,0 +1,39 @@
+@font-face {
+  font-family: 'iconfont';  /* project id 1866729 */
+  src: url('//at.alicdn.com/t/font_1866729_um0jre7ejv.eot');
+  src: url('//at.alicdn.com/t/font_1866729_um0jre7ejv.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1866729_um0jre7ejv.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1866729_um0jre7ejv.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1866729_um0jre7ejv.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1866729_um0jre7ejv.svg#iconfont') format('svg');
+}
+
+/* 举例：fa 就是 prefixClass 的值，下面的的图标 css class 命名都要用 fa- 开头  */
+.fa {
+  display: inline-block;
+  /* 以下的 font 与上面 @font-face 的 font-family 要一致*/
+  font: normal normal normal 14px/1 iconfont;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fa-medal:before {
+  content: '\e805';
+}
+
+.fa-order:before {
+  content: '\e621';
+}
+
+.fa-bag:before {
+  content: '\e60b';
+}
+
+.fa-compass:before {
+  content: '\e7c2';
+}
+.fa-coupon:before {
+  content: '\e637';
+}
