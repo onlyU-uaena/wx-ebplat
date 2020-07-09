@@ -11,7 +11,8 @@ const config = {
   outputRoot: 'dist',
   copy: {
     patterns: [
-      { from: 'images/', to: 'dist/images' }
+      { from: 'images/', to: 'dist/images' },
+      { from: 'sitemap.json', to: 'dist/sitemap.json' }
     ]
   },
   babel: {

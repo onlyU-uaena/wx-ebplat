@@ -1,0 +1,17 @@
+@import "src/common/styles/style.scss";
+@import "src/common/styles/icon.scss";
+
+.tabBarContainer {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 14PX;
+}
+
+.buttonGroup {
+  flex-direction: row;
+  align-items: center;
+  width: 100px;
+}

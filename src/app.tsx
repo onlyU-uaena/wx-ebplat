@@ -1,10 +1,9 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
-import 'taro-ui/dist/style/index.scss'
 import Index from './pages/home/index'
 import store from './redux/store/index'
 import './app.scss'
-import './common/styles/icon.scss'
+import './custom-theme.scss'
 
 class App extends Component {
 

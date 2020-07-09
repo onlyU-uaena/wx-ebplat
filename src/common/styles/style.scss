@@ -14,3 +14,7 @@
   transition: opacity .1s;
   opacity: 0.6;
 }
+
+.gradient {
+  background: linear-gradient(to right, rgb(235, 105, 44), rgb(233, 133, 60));
+}

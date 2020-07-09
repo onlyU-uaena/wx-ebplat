@@ -1,11 +1,11 @@
 @font-face {
-  font-family: 'iconfont';  /* project id 1866729 */
-  src: url('//at.alicdn.com/t/font_1866729_um0jre7ejv.eot');
-  src: url('//at.alicdn.com/t/font_1866729_um0jre7ejv.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1866729_um0jre7ejv.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1866729_um0jre7ejv.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1866729_um0jre7ejv.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1866729_um0jre7ejv.svg#iconfont') format('svg');
+  font-family: 'iconfont';  /* project id 1934891 */
+  src: url('//at.alicdn.com/t/font_1934891_glww5m4xzu4.eot');
+  src: url('//at.alicdn.com/t/font_1934891_glww5m4xzu4.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1934891_glww5m4xzu4.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1934891_glww5m4xzu4.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1934891_glww5m4xzu4.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1934891_glww5m4xzu4.svg#iconfont') format('svg');
 }
 
 /* 举例：fa 就是 prefixClass 的值，下面的的图标 css class 命名都要用 fa- 开头  */
@@ -19,21 +19,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.fa-medal:before {
-  content: '\e805';
+.fa-back:before {
+  content: '\e611';
 }
 
-.fa-order:before {
-  content: '\e621';
-}
-
-.fa-bag:before {
-  content: '\e60b';
-}
-
-.fa-compass:before {
-  content: '\e7c2';
-}
-.fa-coupon:before {
-  content: '\e637';
+.fa-backHome:before {
+  content: '\e62c';
 }
