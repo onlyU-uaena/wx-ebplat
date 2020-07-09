@@ -1,5 +1,5 @@
 const config = {
-  projectName: 'wxApp',
+  projectName: 'meijia',
   date: '2020-4-24',
   designWidth: 750,
   deviceRatio: {

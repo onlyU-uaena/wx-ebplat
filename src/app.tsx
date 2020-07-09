@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import 'taro-ui/dist/style/index.scss'
-import Index from './pages/index'
+import Index from './pages/home/index'
 import store from './redux/store/index'
 import './app.scss'
 import './common/styles/icon.scss'
@@ -18,13 +18,25 @@ class App extends Component {
 
   config: Config = {
     pages: [
-      'pages/index/index'
+      'pages/home/index',
+      'pages/mine/pages/login/index',
+      'pages/mine/index'
     ],
+    tabBar: {
+      "list": [{
+        "pagePath": "pages/home/index",
+        "text": "首页"
+      },{
+        "pagePath": "pages/mine/index",
+        "text": "我的"
+      }]
+    },
     window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      // backgroundTextStyle: 'light',
+      // navigationBarBackgroundColor: '#fff',
+      // navigationBarTitleText: 'WeChat',
+      // navigationBarTextStyle: 'black',
+      navigationStyle: "custom"
     }
   }
 

@@ -2,13 +2,14 @@ import Taro, { useState } from "@tarojs/taro"
 import { View } from "@tarojs/components"
 import { AtTabBar } from 'taro-ui'
 import Home from '../home'
+import Mine from '../mine'
 
 interface Props {
 }
 
 const Index: Taro.FC<Props> = () => {
   const [currentTab, setCurrentTab] = useState<number>(0)
-  const handleClick = value => {
+  const handleClick = (value: number) => {
     setCurrentTab(value)
   }
   const tabTitle = [
@@ -18,13 +19,14 @@ const Index: Taro.FC<Props> = () => {
     '购物车',
     '我的'
   ]
+
   return (
     <View className='container'>
       {currentTab === 0 && <Home />}
       {currentTab === 1 && ''}
       {currentTab === 2 && ''}
       {currentTab === 3 && ''}
-      {currentTab === 4 && ''}
+      {currentTab === 4 && <Mine />}
       <AtTabBar
         fixed
         fontSize={11}
