@@ -23,12 +23,27 @@ class App extends Component {
       'pages/mine/index'
     ],
     tabBar: {
-      "list": [{
-        "pagePath": "pages/home/index",
-        "text": "首页"
+      selectedColor: "#CB4842",
+      list: [{
+        pagePath: "pages/home/index",
+        text: "首页",
+        iconPath: 'images/home.png',
+        selectedIconPath: 'images/homeSelect.png'
       },{
-        "pagePath": "pages/mine/index",
-        "text": "我的"
+        pagePath: "pages/home/index",
+        text: "分类",
+        iconPath: 'images/classification.png',
+        selectedIconPath: 'images/classificationSelect.png'
+      },{
+        pagePath: "pages/home/index",
+        text: "购物车",
+        iconPath: 'images/shop.png',
+        selectedIconPath: 'images/shopSelect.png'
+      },{
+        pagePath: "pages/mine/index",
+        text: "我的",
+        iconPath: 'images/mine.png',
+        selectedIconPath: 'images/mineSelect.png'
       }]
     },
     window: {

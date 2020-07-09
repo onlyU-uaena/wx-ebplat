@@ -9,7 +9,6 @@ const Home: Taro.FC<Props> = () => {
 
   return (
     <View>
-      <AtButton>test</AtButton>
     </View>
   )
 }

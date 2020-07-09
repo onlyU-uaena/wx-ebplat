@@ -53,7 +53,10 @@ const colors = {
   ranking: ['#FFC948', '#FD7E7E', '#4F86E0'],
 
   skyBlue: 'rgb(198, 215, 238)',
-  dark: 'rgb(92, 93, 94)'
+  dark: 'rgb(92, 93, 94)',
+
+  themeColor: 'rgb(234, 114 ,49)',
+  themeRed: 'rgb(203,72,66)'
 }
 
 export default colors

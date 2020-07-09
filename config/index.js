@@ -9,6 +9,11 @@ const config = {
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
+  copy: {
+    patterns: [
+      { from: 'images/', to: 'dist/images' }
+    ]
+  },
   babel: {
     sourceMap: true,
     presets: [
