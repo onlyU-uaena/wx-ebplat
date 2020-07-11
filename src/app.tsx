@@ -45,6 +45,11 @@ class App extends Component {
         selectedIconPath: 'images/mineSelect.png'
       }]
     },
+    permission: {
+      "scope.userLocation": {
+        "desc": "你的位置信息将用于向您展示个性化的内容"
+      }
+    },
     window: {
       // backgroundTextStyle: 'light',
       // navigationBarBackgroundColor: '#fff',
