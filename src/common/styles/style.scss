@@ -1,12 +1,17 @@
+$themeColor: rgb(234, 114 ,49);
+$themeRed: rgb(203,72,66);
+
 .commonRowFlex {
   display: flex;
   flex-direction: row;
-  align-items: center;
 }
 
 .commonColumnFlex {
   display: flex;
   flex-direction: column;
+}
+
+.flexCenter {
   align-items: center;
 }
 
@@ -15,16 +20,28 @@
   opacity: 0.6;
 }
 
-.gradient {
+.gradientTheme {
   background: linear-gradient(to right, rgb(235, 105, 44), rgb(233, 133, 60));
 }
 
 .smallText {
-  font-size: 14px;
+  font-size: 9PX;
+}
+
+.slightlySmallText {
+  font-size: 12PX;
+}
+
+.whiteText {
+  color: white;
+}
+
+.grayText {
+  color: gray;
 }
 
 .mediumText {
-  font-size: 15px;
+  font-size: 15PX;
 }
 
 .boldText {

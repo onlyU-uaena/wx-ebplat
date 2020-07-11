@@ -56,7 +56,7 @@ const colors = {
   dark: 'rgb(92, 93, 94)',
 
   themeColor: 'rgb(234, 114 ,49)',
-  themeRed: 'rgb(203,72,66)'
+  themeRed: 'rgb(203, 72, 66)'
 }
 
 export default colors
