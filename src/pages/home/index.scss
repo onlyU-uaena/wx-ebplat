@@ -1,4 +1,44 @@
+@import "src/common/styles/style.scss";
+@import "src/common/styles/icon.scss";
+
 .index {
   flex-direction: column;
   width: 100%;
 }
+
+.topBackground {
+  z-index: -1;
+  position: absolute;
+  height: 400px;
+  width: 100%;
+  background-color: $themeColor;
+  border-bottom-left-radius: 36Px;
+  border-bottom-right-radius: 36Px;
+}
+
+.headerAndTitle {
+  margin-top: 16PX;
+  padding: 0 16Px;
+}
+
+.cusSearchBar {
+  margin: 16Px;
+  flex: 1;
+  background-color: white;
+  border-radius: 30Px;
+  height: 35Px;
+}
+
+.countDown {
+  border-radius: 15px;
+  background-color: $themeRed;
+}
+
+.at-countdown {
+  color: white;
+}
+
+.at-countdown__time {
+  color: white;
+}
+

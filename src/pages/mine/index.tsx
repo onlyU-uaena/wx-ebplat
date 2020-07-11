@@ -11,7 +11,7 @@ const Mine: Taro.FC<Props> = () => {
 
   return (
     <View>
-      <AtButton className='gradient' type='primary' onClick={() => {Taro.navigateTo({url: '/pages/mine/pages/login/index'})}}>登录</AtButton>
+      <AtButton className='gradientTheme' type='primary' onClick={() => {Taro.navigateTo({url: '/pages/mine/pages/login/index'})}}>登录</AtButton>
     </View>
   )
 }
