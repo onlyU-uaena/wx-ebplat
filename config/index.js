@@ -1,3 +1,5 @@
+const path = require('path')
+
 const config = {
   projectName: 'meijia',
   date: '2020-4-24',
@@ -14,6 +16,9 @@ const config = {
       { from: 'images/', to: 'dist/images' },
       { from: 'sitemap.json', to: 'dist/sitemap.json' }
     ]
+  },
+  alias: {
+    '@utils': path.resolve(__dirname, '..', 'src/utils'),
   },
   babel: {
     sourceMap: true,
