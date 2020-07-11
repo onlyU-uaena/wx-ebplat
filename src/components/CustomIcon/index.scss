@@ -1,2 +1,29 @@
 @import "src/common/styles/style.scss";
 @import "src/common/styles/icon.scss";
+
+.dot {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8Px;
+  height: 8Px;
+  background-color: red;
+  border-radius: 10Px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.noNumDot {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8Px;
+  height: 8Px;
+  border-radius: 10Px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

@@ -5,12 +5,13 @@ import './index.scss'
 import CustomIcon from '../CustomIcon'
 
 interface Props {
+  hideContent?: boolean
   title: string
   backButton?: boolean
-  honeButton?: boolean
+  homeButton?: boolean
 }
 
-const TabBar: Taro.FC<Props> = ({title, backButton, honeButton}) => {
+const TabBar: Taro.FC<Props> = ({title, hideContent, backButton = true, homeButton = true}) => {
   const [safeTop, setSafeTop] = useState<number>(0)
 
   useEffect(() => {
@@ -29,35 +30,50 @@ const TabBar: Taro.FC<Props> = ({title, backButton, honeButton}) => {
   }
 
   return (
-    <View
-      className='tabBarContainer commonRowFlex gradient'
-      style={{
-        paddingTop: `${safeTop}px`,
-        ...styles.tabBarContainer
-      }}
-    >
-      <View className='buttonGroup commonRowFlex'>
-        <CustomIcon
-          size={20}
-          name='back'
-          color={colors.white}
+    <View>
+      {!hideContent ? (
+        <View
+          className='tabBarContainer gradientTheme commonRowFlex'
           style={{
-            marginLeft: '8px'
+            paddingTop: `${safeTop}px`,
+            ...styles.tabBarContainer
           }}
-          onClick={goBack}
-        />
-        <CustomIcon
-          size={20}
-          name='backHome'
-          color={colors.white}
+        >
+          <View className='buttonGroup commonRowFlex'>
+            {backButton ? (
+              <CustomIcon
+                size={20}
+                name='back'
+                color={colors.white}
+                style={{
+                  marginLeft: '8px'
+                }}
+                onClick={goBack}
+              />
+            ) : null}
+            {homeButton ? (
+              <CustomIcon
+                size={20}
+                name='backHome'
+                color={colors.white}
+                style={{
+                  marginLeft: '16px'
+                }}
+                onClick={goHome}
+              />
+            ) : null}
+          </View>
+          <Text className='title' style={styles.title}>{title}</Text>
+          <View className='buttonGroup' />
+        </View>
+      ) : (
+        <View
+          className='tabBarContainer gradientTheme commonRowFlex'
           style={{
-            marginLeft: '16px'
+            paddingTop: `${safeTop}px`
           }}
-          onClick={goHome}
         />
-      </View>
-      <Text className='title' style={styles.title}>{title}</Text>
-      <View className='buttonGroup' />
+      )}
     </View>
   )
 }

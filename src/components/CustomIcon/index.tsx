@@ -1,5 +1,5 @@
 import Taro, { useState } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { Text, View } from '@tarojs/components'
 import './index.scss'
 import { CSSProperties } from 'react'
 
@@ -9,21 +9,37 @@ interface Props {
   name: string
   onClick?: () => void
   style?: CSSProperties
+  showDot?: boolean
+  dotNumber?: number
 }
 
 const CustomIcon: Taro.FC<Props> = (props) => {
-  const {size, color, name, onClick, style} = props
+  const {size, color, name, onClick, style, showDot, dotNumber} = props
 
   return (
     <View
-      onClick={onClick}
-      className={`fa fa-${name}`}
       style={{
-        fontSize: size + 'px',
-        color: color,
-        ...style
+        position: 'relative'
       }}
-    />
+    >
+      {(showDot && dotNumber) ? (
+        <View className='noNumDot'>
+          <Text className='smallText boldText' style={{color: 'red'}}>{dotNumber}</Text>
+        </View>
+      ) : showDot ? (
+        <View className='dot' >
+        </View>
+      ) : null}
+      <View
+        onClick={onClick}
+        className={`fa fa-${name}`}
+        style={{
+          fontSize: size + 'px',
+          color: color,
+          ...style
+        }}
+      />
+    </View>
   )
 }
 
