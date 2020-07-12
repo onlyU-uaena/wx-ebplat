@@ -1,18 +1,25 @@
-import Taro, { useState, useEffect } from "@tarojs/taro"
-import { View, Text, Swiper, SwiperItem, Image } from '@tarojs/components'
+import Taro, { useState, useEffect, useReachBottom } from "@tarojs/taro"
+import { View, Text, Swiper, SwiperItem, Image, ScrollView } from '@tarojs/components'
 import TabBar from '../../components/TabBar'
 import './index.scss'
 import { getLocation } from '@utils/getLocation'
-import { AtAvatar, AtCountdown } from 'taro-ui'
+import { AtAvatar, AtCountdown, AtTag } from 'taro-ui'
 import CustomIcon from '../../components/CustomIcon'
 import SwiperImg from '../../components/SwiperImg'
-import { classificationList, imgList } from './mock'
+import { classificationList, fightTogether, hotShopping, imgList, spikeList } from './mock'
+import FreshList, { FreshListInterface } from '../../components/FreshList'
 
 interface Props {
+
 }
 
 const Home: Taro.FC<Props> = () => {
   const [location, setLocation] = useState<string>('')
+  const [freshList, setFreshList] = useState<FreshListInterface>()
+
+  useReachBottom(() => {
+    freshList.nextPage()
+  })
 
   useEffect(() => {
     const getLocationMes = async () => {
@@ -156,9 +163,11 @@ const Home: Taro.FC<Props> = () => {
         {/*秒杀*/}
         <View className='commonColumnFlex'
           style={{
+            background: 'linear-gradient(to left top, white, rgb(253, 246, 246))',
+            borderRadius: '15PX',
             padding: '8px',
             flex: 1,
-            marginRight: '16px'
+            marginRight: '8px'
           }}
         >
           <View className='commonRowFlex'
@@ -167,7 +176,8 @@ const Home: Taro.FC<Props> = () => {
             }}
           >
             <Text>今日秒杀</Text>
-            <View className='countDown'>
+            <View className='countDown commonRowFlex'>
+              <CustomIcon name='lightning' color='white' size={15} style={{marginLeft: '4px'}} />
               <AtCountdown
                 format={{
                   hours: ':',
@@ -181,16 +191,121 @@ const Home: Taro.FC<Props> = () => {
               />
             </View>
           </View>
+          <Text className='slightlySmallText redText'>拼手速 低价抢好物</Text>
+          <View className='commonRowFlex'
+            style={{
+              justifyContent: 'space-around',
+              marginTop: '8px'
+            }}
+          >
+            {spikeList.map((item, index) => (
+              <View className='commonColumnFlex flexCenter'
+                key={index}
+                style={{
+                  justifyContent: 'center',
+                  flex: 1,
+                }}
+              >
+                <AtAvatar image={item.imgUrl} />
+                <View className='commonRowFlex flexCenter'>
+                  <Text className='slightlySmallText'>
+                    ¥ {item.price}
+                  </Text>
+                  <Text className='smallText grayText'
+                        style={{
+                          marginLeft: '4px',
+                          textDecoration: 'line-through'
+                        }}
+                  >
+                    ¥ {item.oldPrice}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
         </View>
         {/*拼团*/}
         <View className='commonColumnFlex'
-          style={{
-            flex: 1
-          }}
+              style={{
+                backgroundColor: 'white',
+                borderRadius: '15PX',
+                padding: '8px',
+                flex: 1,
+              }}
         >
-
+          <View className='commonRowFlex'
+                style={{
+                  justifyContent: 'space-between'
+                }}
+          >
+            <Text>拼团特惠</Text>
+          </View>
+          <Text className='slightlySmallText grayText'>拼团享特价优惠</Text>
+          <View className='commonRowFlex'
+                style={{
+                  justifyContent: 'space-around',
+                  marginTop: '8px'
+                }}
+          >
+            {fightTogether.map((item, index) => (
+              <View className='commonColumnFlex flexCenter'
+                    key={index}
+                    style={{
+                      justifyContent: 'center',
+                      flex: 1,
+                    }}
+              >
+                <AtAvatar image={item.imgUrl} />
+                <View className='commonRowFlex flexCenter'>
+                  <AtTag size='small' circle active>{`${item.person}人团${item.price}`}</AtTag>
+                </View>
+              </View>
+            ))}
+          </View>
         </View>
       </View>
+      {/*热门活动*/}
+      <View className='normalMarginTop'
+            style={{
+              position: 'relative'
+            }}
+      >
+        <View className='titleWithColor' />
+        <Text className='boldText'
+              style={{
+                marginLeft: '16px'
+              }}
+        >热销排行榜</Text>
+      </View>
+      <View className='radius normalMargin'
+            style={{
+              backgroundColor: 'white'
+            }}
+      >
+        <ScrollView scrollX>
+          <View className='commonRowFlex'>
+            {hotShopping.map((item, index) => (
+              <View className='normalMargin commonColumnFlex flexCenter' key={index}>
+                <AtAvatar size='large' image={item.imgUrl} />
+                <Text className='mediumText smallMarginTop smallMarginBottom'>{item.name}</Text>
+                <View className='commonRowFlex flexCenter'
+                      style={{
+                        justifyContent: 'space-between',
+                        width: '100%'
+                      }}
+                >
+                  <View className='commonColumnFlex'>
+                    <Text className='slightlySmallText redText'>¥ {item.price}</Text>
+                    <Text className='smallText throughLineText grayText'>¥ {item.oldPrice}</Text>
+                  </View>
+                  <CustomIcon name='add' color='rgb(239, 154, 151)' size={25} />
+                </View>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+      <FreshList onRef={setFreshList} />
     </View>
   )
 }

@@ -4,6 +4,7 @@
   "rules": {
     "no-unused-vars": ["off", { "varsIgnorePattern": "Taro" }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }],
+    "react/jsx-indent-props": ["off"],
     "@typescript-eslint/no-unused-vars": ["off", { "varsIgnorePattern": "Taro" }],
     "@typescript-eslint/member-delimiter-style": ["error", {
       "multiline": {

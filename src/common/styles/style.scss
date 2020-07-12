@@ -36,6 +36,10 @@ $themeRed: rgb(203,72,66);
   color: white;
 }
 
+.redText {
+  color: $themeRed;
+}
+
 .grayText {
   color: gray;
 }
@@ -46,4 +50,52 @@ $themeRed: rgb(203,72,66);
 
 .boldText {
   font-weight: bold;
+}
+
+.normalMarginTop {
+  margin-top: 16Px;
+}
+
+.normalMarginLeft {
+  margin-left: 16Px;
+}
+
+.normalMarginRight {
+  margin-right: 16Px;
+}
+
+.normalMarginBottom {
+  margin-bottom: 16Px;
+}
+
+.normalMargin {
+  margin: 16Px;
+}
+
+.smallMarginTop {
+  margin-top: 8Px;
+}
+
+.smallMarginLeft {
+  margin-left: 8Px;
+}
+
+.smallMarginRight {
+  margin-right: 8Px;
+}
+
+.smallMarginBottom {
+  margin-bottom: 8Px;
+}
+
+.smallMargin {
+  margin: 8Px;
+}
+
+.throughLineText {
+  text-decoration: line-through;
+}
+
+.radius {
+  border-radius: 15Px;
 }

@@ -9,3 +9,22 @@ export const imgList = [
   'https://qq.yh31.com/tp/fj/201903192118302864.jpg',
   'https://qq.yh31.com/tp/fj/201903192118302864.jpg'
 ]
+
+export const spikeList = [
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10},
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10},
+]
+
+export const fightTogether = [
+  {imgUrl: 'https://jdc.jd.com/img/200', person: 5, price: 10.2},
+  {imgUrl: 'https://jdc.jd.com/img/200', person: 5, price: 10.9},
+]
+
+export const hotShopping = [
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5.2, oldPrice: 10.4, name: '测试商品'},
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'},
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'},
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'},
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'},
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'}
+]

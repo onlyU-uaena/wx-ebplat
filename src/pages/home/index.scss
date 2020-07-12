@@ -30,15 +30,32 @@
 }
 
 .countDown {
-  border-radius: 15px;
+  border-radius: 35px;
   background-color: $themeRed;
 }
 
-.at-countdown {
+.at-countdown, .at-countdown__time {
   color: white;
+  font-size: 14PX;
 }
 
-.at-countdown__time {
-  color: white;
+.at-countdown__separator {
+  padding: 0;
 }
 
+.titleWithColor:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: $themeColor;
+  -moz-border-radius-topright: 4px;
+  border-top-right-radius: 4px;
+  -moz-border-radius-bottomright: 4px;
+  border-bottom-right-radius: 4px;
+  -webkit-box-shadow: 1px 0 12px 0 $themeColor;
+  -moz-box-shadow: 1px 0 12px 0 $themeColor;
+  box-shadow: 1px 0 12px 0 $themeColor;
+}
