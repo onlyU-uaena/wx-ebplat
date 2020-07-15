@@ -63,6 +63,16 @@ const config = {
 
         }
       },
+      "postcss-autoreset": {
+        enable: true,
+        config: {
+          reset: {
+            // 这里的声明会应用于所有 WXSS 选择器
+            // Styles apply to all WXSS selectors
+            boxSizing: "border-box",
+          },
+        }
+      },
       url: {
         enable: true,
         config: {
