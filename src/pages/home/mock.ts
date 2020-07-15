@@ -28,3 +28,17 @@ export const hotShopping = [
   {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'},
   {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'}
 ]
+
+export const tabs = [
+  {title: '全部', desc: '精选好物'},
+  {title: '全部', desc: '精选好物'},
+  {title: '全部', desc: '精选好物'},
+  {title: '全部', desc: '精选好物'},
+  {title: '全部', desc: '精选好物'},
+  {title: '全部', desc: '精选好物'}
+]
+
+export const commodity = [
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'},
+  {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'},
+]

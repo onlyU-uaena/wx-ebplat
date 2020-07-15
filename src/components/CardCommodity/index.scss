@@ -1,0 +1,10 @@
+@import "src/common/styles/style.scss";
+@import "src/common/styles/icon.scss";
+
+.commodityLabel {
+  display: flex;
+  padding: 0 8Px;
+  margin-right: 4Px;
+  border-bottom-left-radius: 5Px;
+  border-top-right-radius: 5Px;
+}

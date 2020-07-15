@@ -6,8 +6,9 @@ import { getLocation } from '@utils/getLocation'
 import { AtAvatar, AtCountdown, AtTag } from 'taro-ui'
 import CustomIcon from '../../components/CustomIcon'
 import SwiperImg from '../../components/SwiperImg'
-import { classificationList, fightTogether, hotShopping, imgList, spikeList } from './mock'
+import { classificationList, commodity, fightTogether, hotShopping, imgList, spikeList, tabs } from './mock'
 import FreshList, { FreshListInterface } from '../../components/FreshList'
+import CusTabs from '../../components/CusTabs'
 
 interface Props {
 
@@ -18,7 +19,8 @@ const Home: Taro.FC<Props> = () => {
   const [freshList, setFreshList] = useState<FreshListInterface>()
 
   useReachBottom(() => {
-    freshList.nextPage()
+    if (freshList)
+      freshList.nextPage()
   })
 
   useEffect(() => {
@@ -130,7 +132,7 @@ const Home: Taro.FC<Props> = () => {
         }}
       >
         {classificationList.map((item, index) => (
-          <View className='commonColumnFlex flexCenter'>
+          <View className='commonColumnFlex flexCenter' key={index}>
             <AtAvatar size='large' image={item.img} circle />
             <Text className='slightlySmallText' style={{marginTop: '4px'}}>{item.name}</Text>
           </View>
@@ -305,7 +307,11 @@ const Home: Taro.FC<Props> = () => {
           </View>
         </ScrollView>
       </View>
-      <FreshList onRef={setFreshList} />
+      {/*商品列表*/}
+      <CusTabs tabs={tabs} active={1} changeTab={(e) => console.log(e)} />
+      <View className='normalMarginLeft normalMarginRight'>
+        <FreshList beRenderList={commodity} onRef={setFreshList} />
+      </View>
     </View>
   )
 }
