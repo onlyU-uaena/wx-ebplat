@@ -19,7 +19,10 @@ const CustomIcon: Taro.FC<Props> = (props) => {
   return (
     <View
       style={{
-        position: 'relative'
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
       }}
     >
       {(showDot && dotNumber) ? (
@@ -34,8 +37,8 @@ const CustomIcon: Taro.FC<Props> = (props) => {
         onClick={onClick}
         className={`fa fa-${name}`}
         style={{
-          fontSize: size + 'px',
-          color: color,
+          fontSize: (size || 14) + 'px',
+          color: color || '',
           ...style
         }}
       />

@@ -17,9 +17,10 @@ class App extends Component {
 
   config: Config = {
     pages: [
+      'pages/mine/index',
       'pages/home/index',
       'pages/mine/pages/login/index',
-      'pages/mine/index'
+      'pages/mine/pages/register/index'
     ],
     tabBar: {
       selectedColor: "#CB4842",

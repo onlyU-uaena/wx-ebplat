@@ -9,9 +9,10 @@ interface Props {
   title: string
   backButton?: boolean
   homeButton?: boolean
+  beforeBackFuc?: Function
 }
 
-const TabBar: Taro.FC<Props> = ({title, hideContent, backButton = true, homeButton = true}) => {
+const TabBar: Taro.FC<Props> = ({beforeBackFuc, title, hideContent, backButton = true, homeButton = true}) => {
   const [safeTop, setSafeTop] = useState<number>(0)
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const TabBar: Taro.FC<Props> = ({title, hideContent, backButton = true, homeButt
   }, [])
 
   const goBack = () => {
+    beforeBackFuc()
     Taro.navigateBack()
   }
 
@@ -80,7 +82,7 @@ const TabBar: Taro.FC<Props> = ({title, hideContent, backButton = true, homeButt
 
 const styles = {
   tabBarContainer: {
-    height: '40px'
+    height: '60px'
   },
   title: {
     color: colors.white

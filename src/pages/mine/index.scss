@@ -1,2 +1,28 @@
 @import "src/common/styles/style.scss";
 @import "src/common/styles/icon.scss";
+
+.topBackground {
+  z-index: -1;
+  position: absolute;
+  height: 150Px;
+  width: 100%;
+  background-color: $themeColor;
+}
+
+.person {
+  margin: 52Px 16Px;
+  margin-bottom: 37Px;
+}
+
+.avatar {
+  padding-right: 16Px;
+  border-right: 1px solid white;
+}
+
+.personPoint {
+  padding: 16Px 0;
+}
+
+.borderBottom {
+  border-bottom: 1px solid $borderColor;
+}
