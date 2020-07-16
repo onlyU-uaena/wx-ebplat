@@ -36,6 +36,8 @@ const colors = {
    */
   purple: '#B888FC',
 
+  pink: 'rgb(235, 91, 124)',
+
   green: '#82DD5F',
   lightGreen: '#EEF8EA',
 

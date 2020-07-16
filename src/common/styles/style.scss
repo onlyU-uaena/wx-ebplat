@@ -2,6 +2,7 @@
 
 $themeColor: rgb(234, 114 ,49);
 $themeRed: rgb(203,72,66);
+$borderColor: rgb(238, 238, 238);
 
 .commonRowFlex {
   display: flex;
@@ -42,6 +43,10 @@ $themeRed: rgb(203,72,66);
   color: $themeRed;
 }
 
+.orangeText {
+  color: $themeColor;
+}
+
 .grayText {
   color: gray;
 }
@@ -74,6 +79,26 @@ $themeRed: rgb(203,72,66);
   margin: 16Px;
 }
 
+.normalPaddingTop {
+  padding-top: 16Px;
+}
+
+.normalPaddingLeft {
+  padding-left: 16Px;
+}
+
+.normalPaddingRight {
+  padding-right: 16Px;
+}
+
+.normalPaddingBottom {
+  padding-bottom: 16Px;
+}
+
+.normalPadding {
+  padding: 16Px;
+}
+
 .smallMarginTop {
   margin-top: 8Px;
 }
@@ -100,4 +125,12 @@ $themeRed: rgb(203,72,66);
 
 .radius {
   border-radius: 15Px;
+}
+
+.horMirror {
+  transform: rotateY(180deg)
+}
+
+.whiteBack {
+  background-color: white;
 }
