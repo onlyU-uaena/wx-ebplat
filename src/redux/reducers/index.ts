@@ -1,15 +1,10 @@
 import { combineReducers } from 'redux'
-
-const defaultState = {
-  toLocale: 'English',
-}
-
-function myReducer(state = defaultState, action) {
-  return state
-}
+import authReducer from './auth'
 
 const rootReducer = combineReducers({
-  myReducer
+  authState: authReducer
 })
+
+export type RootState = ReturnType<typeof rootReducer>
 
 export default rootReducer
