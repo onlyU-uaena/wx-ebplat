@@ -16,6 +16,10 @@ class AccountVerification {
   public async forgetPassword (phoneNum: string, sms: string, password: string) {
       throw new Error('need sub to achieve')
   }
+
+  public async getSmsCode (phoneNum: string, type: string) {
+      throw new Error('need sub to achieve')
+  }
 }
 
 export default AccountVerification
