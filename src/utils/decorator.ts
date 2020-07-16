@@ -7,7 +7,7 @@ export const debounceFunc = (waitTime: number) => {
       descriptor.value = function(...args: any) {
         if (timer) clearTimeout(timer)
         timer = setTimeout(() => {
-          func.apply(this, args)
+          return func.apply(this, args)
         }, waitTime)
       }
     }
