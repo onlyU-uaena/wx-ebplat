@@ -19,6 +19,7 @@ const config = {
   },
   alias: {
     '@utils': path.resolve(__dirname, '..', 'src/utils'),
+    '@redux': path.resolve(__dirname, '..', 'src/redux')
   },
   babel: {
     sourceMap: true,

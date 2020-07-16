@@ -23,7 +23,8 @@
       "node_modules/@types"
     ],
     "paths": {
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@redux/*": ["redux/*"]
     }
   },
   "exclude": [
