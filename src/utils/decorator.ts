@@ -23,8 +23,8 @@ export const throttleFunc = (waitTime: number) => {
       descriptor.value = function (...args: any) {
         const now = new Date().valueOf()
         if (now - prev > waitTime) {
-          func.apply(this, args)
           prev = new Date().valueOf()
+          return func.apply(this, args)
         }
       }
     }
@@ -43,7 +43,7 @@ export const noEmpty = (failedCallback: () => void) => {
             return
           }
         }
-        func.apply(this, args)
+        return func.apply(this, args)
       }
     }
   }
