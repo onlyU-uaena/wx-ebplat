@@ -52,7 +52,7 @@ const Mine: Taro.FC<Props> = () => {
               }}
         >
           <Text className='whiteText'>{authState.userData.nickname || '点击登录'}</Text>
-          <Text className='whiteText'>{authState.userData.nickname && '欢迎回来'}</Text>
+          <Text className='whiteText'>{authState.userData.nickname ? '欢迎回来' : '登录后可享更多特权'}</Text>
         </View>
         <View style={{
           position: 'absolute',

@@ -2,7 +2,7 @@
 	"miniprogramRoot": "dist/",
 	"projectname": "meiJia",
 	"description": "wx",
-	"appid": "wx2beadd96a9a2f964",
+	"appid": "wx62672ebce1d5bcf7",
 	"setting": {
 		"urlCheck": false,
 		"es6": false,
@@ -27,7 +27,7 @@
 			"outputPath": ""
 		},
 		"useIsolateContext": true,
-		"useCompilerModule": false,
+		"useCompilerModule": true,
 		"userConfirmedUseCompilerModuleSwitch": true,
 		"packNpmManually": false,
 		"packNpmRelationList": []

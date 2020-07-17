@@ -11,6 +11,7 @@ import { baseUrl } from '@utils/request'
 import CusModal from '../../../../components/CusModal'
 import account from '../../utils/login'
 import { loginIn, loginOut } from '@redux/actions'
+import ChooseImagesListFn from '@utils/chooseImg'
 
 interface Props {
 
@@ -66,32 +67,12 @@ const Profile: Taro.FC<Props> = () => {
     setModalOpen(false)
   }
 
-  const chooseImagesListFn = () => {
-    Taro.chooseImage({
-      count: 1,
-      sizeType: ['original', 'compressed'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        console.log(res)
-        // tempFilePath可以作为img标签的src属性显示图片
-        const tempFilePaths = res.tempFilePaths
-        Taro.uploadFile({
-          url: baseUrl + '/img/upload',
-          filePath: tempFilePaths[0],
-          name: 'file',
-          formData: {
-            'token': Taro.getStorageSync('token'),
-            'relationtype': 0,
-            'ch': '3'
-          },
-          success: (successRes) => {
-            console.log(successRes)
-            const data = JSON.parse(successRes.data)
-            setImgurl(data.data[0])
-          }
-        })
 
-      }
+  const chooseImagesListFn = () => {
+    ChooseImagesListFn((successRes) => {
+      console.log(successRes)
+      const data = JSON.parse(successRes.data)
+      setImgurl(data.data[0])
     })
   }
 

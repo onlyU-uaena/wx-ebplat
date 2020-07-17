@@ -1,10 +1,11 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, useEffect } from '@tarojs/taro'
 import { Image, Swiper, SwiperItem, View } from '@tarojs/components'
 import './index.scss'
 import { SwiperProps } from '@tarojs/components/types/Swiper'
+import { GetAdv } from '../../pages/home/utils/interface'
 
 interface Props extends SwiperProps {
-  imgUrl: string[]
+  list: GetAdv[]
   marginLeft?: number
   marginRight?: number
   imgWidth?: number
@@ -12,7 +13,7 @@ interface Props extends SwiperProps {
 }
 
 const SwiperImg: Taro.FC<Props> = (props) => {
-  const { imgUrl, marginLeft, marginRight, circular, autoplay, imgWidth, swiperHeight } = props
+  const { list, marginLeft, marginRight, circular, autoplay, imgWidth, swiperHeight } = props
 
   return (
     <Swiper
@@ -25,17 +26,17 @@ const SwiperImg: Taro.FC<Props> = (props) => {
         height: swiperHeight
       }}
     >
-      {imgUrl ? imgUrl.map((item, index) => (
+      {list && list.map((item, index) => (
         <SwiperItem key={index}>
           <Image className='swiperImg'
-            src={item}
+            src={item.list[0].imgurl}
             style={{
               width: imgWidth ? `${imgWidth}%` : '100%'
             }}
           >
           </Image>
         </SwiperItem>
-      )) : null}
+      ))}
     </Swiper>
   )
 }
