@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, useEffect } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
@@ -7,7 +7,9 @@ import { AtAvatar } from 'taro-ui'
 import CustomIcon from '../../components/CustomIcon'
 import { firstIconList, secondIconList, thirdIconList } from './data'
 import { navTo } from '@utils/route'
-import { selectAuthState } from '../../redux/reducers/selector'
+import { selectAuthState } from '@redux/reducers/selector'
+import account from './utils/login'
+import { loginIn, loginOut } from '@redux/actions'
 
 interface Props {
 
@@ -15,27 +17,42 @@ interface Props {
 
 const Mine: Taro.FC<Props> = () => {
   const authState = useSelector(selectAuthState)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const autoLogin = async () => {
+      const { code, data } = await account.getUserData()
+      if (!code) {
+        dispatch(loginIn(data))
+      } else {
+        dispatch(loginOut())
+      }
+    }
+
+    autoLogin()
+  }, [dispatch])
 
   return (
     <View>
       <TabBar title='我的' hideContent />
       <View className='topBackground gradientTheme' />
       {/*个人*/}
-      <View className='person commonRowFlex' style={{
-        position: 'relative'
-      }}
+      <View className='person commonRowFlex'
+            onClick={authState.loginStatus ? () => navTo('mine', 'profile') : () => navTo('mine', 'login')}
+            style={{
+              position: 'relative'
+            }}
       >
         <View className='avatar'>
-          <AtAvatar size='large' circle image='https://jdc.jd.com/img/200' />
+          <AtAvatar size='large' circle image={authState.userData.imgurl} />
         </View>
         <View className='commonColumnFlex normalMarginLeft'
-              onClick={() => navTo('mine', 'login')}
               style={{
                 justifyContent: 'space-between'
               }}
         >
-          <Text className='whiteText'>点击登录</Text>
-          <Text className='whiteText'>登录后可享更多特权</Text>
+          <Text className='whiteText'>{authState.userData.nickname || '点击登录'}</Text>
+          <Text className='whiteText'>{authState.userData.nickname && '欢迎回来'}</Text>
         </View>
         <View style={{
           position: 'absolute',

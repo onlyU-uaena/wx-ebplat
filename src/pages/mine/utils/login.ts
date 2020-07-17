@@ -13,7 +13,8 @@ class Account extends AccountVerification {
     register: '/api/app/userinfo/register',
     loginWithPhoneNumber: '/api/app/userinfo/loginsms',
     getSmsCode: '/api/app/sms/send',
-    getUserData: '/api/app/userinfo/personalInformation'
+    getUserData: '/api/app/userinfo/personalInformation',
+    postUserInfo: '/api/app/userinfo/userperfect'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -57,10 +58,14 @@ class Account extends AccountVerification {
     return await httpRequest(this.urls.getSmsCode, data)
   }
 
-  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
+  public async postUserInfo (imgUrl: string, nickname: string, sex: string, birthday: string, email: string, userwork: string) {
+    const data = {imgUrl, nickName: nickname, sex, birthDay: birthday, email, userwork}
+    return await httpRequest(this.urls.postUserInfo, data)
+  }
+
   public async getUserData () {
-    return await httpRequest(this.urls.getUserData)
+    return await httpRequest(this.urls.getUserData, {}, false)
   }
 }
 

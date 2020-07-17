@@ -20,7 +20,8 @@ class App extends Component {
       'pages/mine/index',
       'pages/home/index',
       'pages/mine/pages/login/index',
-      'pages/mine/pages/register/index'
+      'pages/mine/pages/register/index',
+      'pages/mine/pages/profile/index'
     ],
     tabBar: {
       selectedColor: "#CB4842",

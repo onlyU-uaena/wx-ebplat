@@ -134,3 +134,7 @@ $borderColor: rgb(238, 238, 238);
 .whiteBack {
   background-color: white;
 }
+
+.borderBottom {
+  border-bottom: 1px solid $borderColor;
+}

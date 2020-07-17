@@ -21,7 +21,8 @@ const TabBar: Taro.FC<Props> = ({beforeBackFuc, title, hideContent, backButton =
   }, [])
 
   const goBack = () => {
-    beforeBackFuc()
+    if (beforeBackFuc)
+      beforeBackFuc()
     Taro.navigateBack()
   }
 

@@ -26,17 +26,17 @@ const Login: Taro.FC<Props> = () => {
     if (useSmsLogin) {
       const { code, token } = await account.loginWithPhoneNumber(username, sms)
       if (!code) {
+        Taro.setStorageSync('token', token)
         const { data } = await account.getUserData()
         dispatch(loginIn(data))
-        Taro.setStorageSync('token', token)
       }
       delayBack(1, 0)
     } else {
       const { code, token } = await account.loginWithPassword(username, password)
       if (!code) {
+        Taro.setStorageSync('token', token)
         const { data } = await account.getUserData()
         dispatch(loginIn(data))
-        Taro.setStorageSync('token', token)
       }
       delayBack(1, 0)
     }
