@@ -4,3 +4,7 @@
 .border {
   border-right: solid 1px rgb(240, 240, 240);
 }
+
+.at-tag--active .at-tag--primary {
+  background-color: $themeRed;
+}

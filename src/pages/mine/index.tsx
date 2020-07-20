@@ -17,20 +17,6 @@ interface Props {
 
 const Mine: Taro.FC<Props> = () => {
   const authState = useSelector(selectAuthState)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    const autoLogin = async () => {
-      const { code, data } = await account.getUserData()
-      if (!code) {
-        dispatch(loginIn(data))
-      } else {
-        dispatch(loginOut())
-      }
-    }
-
-    autoLogin()
-  }, [dispatch])
 
   return (
     <View>

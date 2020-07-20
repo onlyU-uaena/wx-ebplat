@@ -11,3 +11,23 @@ export interface GetAdv {
     url: string
   }]
 }
+
+export interface GetTopicSku {
+  id: number
+  img: string
+  name: string
+  num: string
+}
+
+export interface Comment {
+  title: string
+  star: number
+  username: string
+  id: number
+  createtime: string
+  content: string
+  ShowImgList: {
+    imgurl: string
+    id: number
+  }[]
+}

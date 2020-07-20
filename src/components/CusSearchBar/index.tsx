@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
@@ -8,6 +8,7 @@ import commodity from '../../pages/home/utils/commodity'
 interface Props {
   showActionButton?: boolean
   focus?: boolean
+  onChangeResult: (e: any) => void
 }
 
 class CusSearchBar extends Taro.Component<Props, any> {
@@ -30,8 +31,10 @@ class CusSearchBar extends Taro.Component<Props, any> {
   }
 
   async search () {
-    const {data} = await commodity.search(this.state.value, '-1')
-
+    const {code, data} = await commodity.search(this.state.value, '-1')
+    if (!code) {
+      this.props.onChangeResult(data)
+    }
   }
 
   render () {

@@ -17,12 +17,16 @@ class App extends Component {
 
   config: Config = {
     pages: [
-      'pages/home/pages/search/index',
       'pages/home/index',
+      'pages/home/pages/productDetails/index',
+      'pages/home/pages/search/index',
+      'pages/home/pages/searchResult/index',
       'pages/mine/index',
       'pages/mine/pages/login/index',
       'pages/mine/pages/register/index',
-      'pages/mine/pages/profile/index'
+      'pages/mine/pages/profile/index',
+      'pages/shoppingCart/index',
+      'pages/classification/index'
     ],
     tabBar: {
       selectedColor: "#CB4842",
@@ -32,12 +36,12 @@ class App extends Component {
         iconPath: 'images/home.png',
         selectedIconPath: 'images/homeSelect.png'
       },{
-        pagePath: "pages/home/index",
+        pagePath: "pages/classification/index",
         text: "分类",
         iconPath: 'images/classification.png',
         selectedIconPath: 'images/classificationSelect.png'
       },{
-        pagePath: "pages/home/index",
+        pagePath: "pages/shoppingCart/index",
         text: "购物车",
         iconPath: 'images/shop.png',
         selectedIconPath: 'images/shopSelect.png'
@@ -62,7 +66,9 @@ class App extends Component {
     }
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+
+  }
 
   componentDidShow () {}
 

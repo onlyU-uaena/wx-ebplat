@@ -1,3 +1,5 @@
+import { Comment } from './utils/interface'
+
 export const classificationList = [
   {name: '时令水果', img: 'http://www.gx8899.com/uploads/allimg/160825/3-160R5093948-52.jpg'},
   {name: '新鲜蔬菜', img: 'http://www.gx8899.com/uploads/allimg/160825/3-160R5093948-52.jpg'},
@@ -41,4 +43,20 @@ export const tabs = [
 export const commodityList = [
   {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'},
   {imgUrl: 'https://jdc.jd.com/img/200', price: 5, oldPrice: 10, name: '测试商品'},
+]
+
+export const cmts: Comment[] = [
+  {
+    id: 1,
+    star: 4,
+    username: '测试',
+    title: '12',
+    createtime: '123',
+    content: '测试谁是谁',
+    ShowImgList: [
+      {imgurl: 'https://jdc.jd.com/img/200', id: 2},
+      // {imgurl: 'https://jdc.jd.com/img/200', id: 22},
+      // {imgurl: 'https://jdc.jd.com/img/200', id: 4}
+    ]
+  }
 ]

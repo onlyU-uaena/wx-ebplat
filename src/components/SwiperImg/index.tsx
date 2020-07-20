@@ -5,7 +5,7 @@ import { SwiperProps } from '@tarojs/components/types/Swiper'
 import { GetAdv } from '../../pages/home/utils/interface'
 
 interface Props extends SwiperProps {
-  list: GetAdv[]
+  list: GetAdv[] | string[]
   marginLeft?: number
   marginRight?: number
   imgWidth?: number
@@ -29,7 +29,7 @@ const SwiperImg: Taro.FC<Props> = (props) => {
       {list && list.map((item, index) => (
         <SwiperItem key={index}>
           <Image className='swiperImg'
-            src={item.list[0].imgurl}
+            src={item.list[0].imgurl || item}
             style={{
               width: imgWidth ? `${imgWidth}%` : '100%'
             }}

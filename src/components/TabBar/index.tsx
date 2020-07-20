@@ -33,7 +33,10 @@ const TabBar: Taro.FC<Props> = ({beforeBackFuc, title, hideContent, backButton =
   }
 
   return (
-    <View>
+    <View style={{
+      height: `${!hideContent ? 60 : ''}px`
+    }}
+    >
       {!hideContent ? (
         <View
           className='tabBarContainer gradientTheme commonRowFlex'
@@ -83,8 +86,11 @@ const TabBar: Taro.FC<Props> = ({beforeBackFuc, title, hideContent, backButton =
 
 const styles = {
   tabBarContainer: {
-    height: '60px'
-  },
+    height: '60px',
+    position: 'fixed',
+    width: '100%',
+    zIndex: 999
+},
   title: {
     color: colors.white
   }

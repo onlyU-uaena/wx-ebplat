@@ -2,12 +2,13 @@ import Taro, { useState } from '@tarojs/taro'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
 import { CSSProperties } from 'react'
+import { AtBadge } from 'taro-ui'
 
 interface Props {
   size?: number
   color?: string
   name: string
-  onClick?: () => void
+  onClick?: (e) => void
   style?: CSSProperties
   showDot?: boolean
   dotNumber?: number
@@ -18,6 +19,7 @@ const CustomIcon: Taro.FC<Props> = (props) => {
 
   return (
     <View
+      onClick={event => event.stopPropagation()}
       style={{
         position: 'relative',
         display: 'flex',
@@ -25,23 +27,17 @@ const CustomIcon: Taro.FC<Props> = (props) => {
         justifyContent: 'center'
       }}
     >
-      {(showDot && dotNumber) ? (
-        <View className='noNumDot'>
-          <Text className='smallText boldText' style={{color: 'red'}}>{dotNumber}</Text>
-        </View>
-      ) : showDot ? (
-        <View className='dot' >
-        </View>
-      ) : null}
-      <View
-        onClick={onClick}
-        className={`fa fa-${name}`}
-        style={{
-          fontSize: (size || 14) + 'px',
-          color: color || '',
-          ...style
-        }}
-      />
+      <AtBadge value={dotNumber} dot={showDot}>
+        <View
+          onClick={onClick}
+          className={`fa fa-${name}`}
+          style={{
+            fontSize: (size || 14) + 'px',
+            color: color || '',
+            ...style
+          }}
+        />
+      </AtBadge>
     </View>
   )
 }

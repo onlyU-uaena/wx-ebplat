@@ -27,6 +27,14 @@ $borderColor: rgb(238, 238, 238);
   background: linear-gradient(to right, rgb(235, 105, 44), rgb(233, 133, 60));
 }
 
+.gradientYellow {
+  background: linear-gradient(to right, rgb(239, 153, 56), rgb(247, 198, 69));
+}
+
+.gradientRed {
+  background: linear-gradient(to right, rgb(234, 105, 44), rgb(234, 133, 60));
+}
+
 .smallText {
   font-size: 9PX;
 }

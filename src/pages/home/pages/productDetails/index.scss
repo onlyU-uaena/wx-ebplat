@@ -1,0 +1,23 @@
+@import "src/common/styles/style.scss";
+@import "src/common/styles/icon.scss";
+
+.tabText {
+  display: inline-block;
+  border-bottom: 2Px solid white;
+  font-weight: bold;
+}
+
+.at-rate__icon--on {
+  color: $themeRed;
+}
+
+.bottomGroup {
+  width: 100%;
+  background-color: white;
+  position: fixed;
+  bottom: 0;
+}
+
+button::after {
+  border: none;
+}
