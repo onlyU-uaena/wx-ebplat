@@ -17,7 +17,11 @@ class App extends Component {
 
   config: Config = {
     pages: [
+      'pages/home/pages/confirmOrder/index',
       'pages/home/index',
+      'pages/home/pages/chooseAddress/index',
+      'pages/home/pages/modifyAddress/index',
+      'pages/home/pages/addAddress/index',
       'pages/home/pages/productDetails/index',
       'pages/home/pages/search/index',
       'pages/home/pages/searchResult/index',

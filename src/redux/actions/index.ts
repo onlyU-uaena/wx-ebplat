@@ -1,4 +1,4 @@
-import { LOGIN_IN, LOGIN_OUT, SET_SHOP_ID } from '../constants'
+import { LOGIN_IN, LOGIN_OUT, SET_ADDRESS, SET_SHOP_DATA, SET_SHOP_ID } from '../constants'
 
 export const loginIn = (userLogin: object) => {
   return {
@@ -13,9 +13,16 @@ export const loginOut = () => {
   }
 }
 
-export const setShop = (shopId: number) => {
+export const setShop = (shopData) => {
   return {
-    type: SET_SHOP_ID,
-    payload: shopId
+    type: SET_SHOP_DATA,
+    payload: shopData
+  }
+}
+
+export const setAddress = (address) => {
+  return {
+    type: SET_ADDRESS,
+    payload: address
   }
 }

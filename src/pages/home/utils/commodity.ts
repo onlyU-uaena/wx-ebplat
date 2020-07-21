@@ -3,10 +3,7 @@ import { noEmpty, throttleFunc } from '@utils/decorator'
 import Taro from '@tarojs/taro'
 import httpRequest from '@utils/request'
 
-class Commodity extends AccountVerification {
-  constructor() {
-    super()
-  }
+class Commodity {
 
   private urls = {
     getAdv: '/api/app/adverting/queryadvert',

@@ -8,7 +8,7 @@ interface Props {
   size?: number
   color?: string
   name: string
-  onClick?: (e) => void
+  onClick?: () => void
   style?: CSSProperties
   showDot?: boolean
   dotNumber?: number

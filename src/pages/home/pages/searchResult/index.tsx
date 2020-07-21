@@ -13,6 +13,7 @@ import { commodityList } from '../../mock'
 import commodity from '../../utils/commodity'
 import { GetTopicSku } from '../../utils/interface'
 import { selectShopState } from '@redux/reducers/selector'
+import CardCommodity from '../../../../components/CardCommodity'
 
 interface Props {
 
@@ -27,8 +28,6 @@ const SearchResult: Taro.FC<Props> = () => {
   const [searchRes, setSearchRes] = useState<GetTopicSku[]>([])
 
   useReachBottom(() => {
-    if (freshList)
-      freshList.nextPage()
   })
 
   useEffect(() => {
@@ -57,7 +56,11 @@ const SearchResult: Taro.FC<Props> = () => {
             backgroundColor: 'white'
           }}
           >
-            <FreshList beRenderList={searchRes} hurdle onRef={setFreshList} dispatchListFunc={() => {}} />
+            <View>
+              {searchRes && searchRes.map((item, index) => (
+                <CardCommodity key={index} proId={item.id} hurdle imgUrl={item.imgurl} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
+              ))}
+            </View>
           </View>
         </View>
       ) : (
@@ -87,7 +90,7 @@ const SearchResult: Taro.FC<Props> = () => {
           </Text>
           <View className='normalMarginLeft normalMarginRight'>
             <FreshList onRef={setFreshList} dispatchListFunc={async (page: number, size: number) => {
-              return await commodity.getTopicSku('', Number(shopState.shopId), page, size)
+              return await commodity.getTopicSku('', Number(shopState.shopData.shopid), page, size)
             }}
             />
           </View>

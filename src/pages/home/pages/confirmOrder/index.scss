@@ -1,0 +1,12 @@
+@import "src/common/styles/style.scss";
+@import "src/common/styles/icon.scss";
+
+.tabText {
+  display: inline-block;
+  border-bottom: 2Px solid $themeRed;
+  color: $themeRed;
+}
+
+.at-list__item .item-content__info-title {
+  font-size: 15Px;
+}

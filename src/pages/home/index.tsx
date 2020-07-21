@@ -62,7 +62,7 @@ const Home: Taro.FC<Props> = () => {
       setHotList(hotListRes.data)
       setClassList(classListRes.data)
       setTabList(listRes.data)
-      dispatch(setShop(shopRes.data.shopid))
+      dispatch(setShop(shopRes.data))
       setShopInfo(shopRes.data)
       setAdvList(data)
     } finally {
@@ -350,7 +350,7 @@ const Home: Taro.FC<Props> = () => {
             <ScrollView scrollX>
               <View className='commonRowFlex'>
                 {hotList.map((item, index) => (
-                  <View className='normalMargin commonColumnFlex flexCenter' key={index}>
+                  <View onClick={() => navTo('home', 'productDetails', {id: item.id})} className='normalMargin commonColumnFlex flexCenter' key={index}>
                     <AtAvatar size='large' image={item.imgurl} />
                     <Text className='mediumText smallMarginTop smallMarginBottom'>{LimitStr(item.name, 3)}</Text>
                     <View className='commonRowFlex flexCenter'

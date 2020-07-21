@@ -26,7 +26,7 @@ export interface Comment {
   id: number
   createtime: string
   content: string
-  ShowImgList: {
+  showImgList: {
     imgurl: string
     id: number
   }[]

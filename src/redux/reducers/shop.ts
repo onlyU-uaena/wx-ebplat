@@ -1,17 +1,23 @@
-import { SET_SHOP_ID } from '../constants'
+import { SET_ADDRESS, SET_SHOP_DATA } from '../constants'
 
 const defaultState = {
-  shopId: ''
+  shopData: '',
+  address: {}
 }
 
 export type ShopState = typeof defaultState
 
 function shopReducer(state = defaultState, action) {
   switch (action.type) {
-    case SET_SHOP_ID:
+    case SET_SHOP_DATA:
       return {
         ...state,
-        shopId: action.payload
+        shopData: action.payload
+      }
+    case SET_ADDRESS:
+      return {
+        ...state,
+        address: action.payload
       }
     default:
       return state

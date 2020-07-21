@@ -18,7 +18,7 @@ interface Props {
   jumpToDetail?: boolean
 }
 
-// 该组件默认一列可以容纳2个,一般左右各16px间隔，中间16px最为美观
+// 该组件非通栏默认一列可以容纳2个,一般左右各16px间隔，中间16px最为美观
 
 const CardCommodity: Taro.FC<Props> = (props) => {
   const { imgUrl, title, oldPrice, price, hurdle, desc, jumpToDetail = true, proId } = props
@@ -103,7 +103,7 @@ const CardCommodity: Taro.FC<Props> = (props) => {
               <Text className='mediumText redText'>¥ {price}</Text>
               {/*<Text className='smallText grayText smallMarginLeft'>¥ {oldPrice}</Text>*/}
             </View>
-            <CustomIcon name='add' onClick={(e) => {}} color='rgb(239, 154, 151)' size={25} />
+            <CustomIcon name='add' onClick={() => {}} color='rgb(239, 154, 151)' size={25} />
           </View>
         </View>
       )}

@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useRouter } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Image, Text, View, RichText, Button } from '@tarojs/components'
 import './index.scss'
-import { AtAvatar, AtButton, AtRate } from 'taro-ui'
+import { AtAvatar, AtButton, AtRate, AtFloatLayout, AtInputNumber } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import commodity from '../../utils/commodity'
 import SwiperImg from '../../../../components/SwiperImg'
@@ -22,13 +22,16 @@ const ProductDetails: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const router = useRouter()
 
+  const [showFloat, setShowFloat] = useState<boolean>(false)
+
   useEffect(() => {
     getDetail()
-  }, [])
+  }, [getDetail])
 
   const [currentTab, setCurrentTab] = useState<number>(0)
   const [proDetail, setProDetail] = useState({})
   const [favorites, setFavorites] = useState<boolean>(false)
+  const [buyNum, setBuyNum] = useState<number>(1)
 
   const getDetail = async () => {
     console.log()
@@ -159,13 +162,13 @@ const ProductDetails: Taro.FC<Props> = () => {
                   <Text className='mediumText grayText'>
                     {item.content}
                   </Text>
-                  {item.ShowImgList.length && <View className='commonRowFlex normalMarginTop' style={{
+                  {item.showImgList.length && <View className='commonRowFlex normalMarginTop' style={{
                     justifyContent: 'space-between'
                   }}
                   >
-                    <Image src={item.ShowImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                    <Image src={item.ShowImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                    <Image src={item.ShowImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                    <Image src={item.showImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                    <Image src={item.showImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                    <Image src={item.showImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
                   </View>}
                 </View>
               </View>
@@ -203,7 +206,7 @@ const ProductDetails: Taro.FC<Props> = () => {
               >
                 <Text className='whiteText slightlySmallText'>加入购物车</Text>
               </View>
-              <View className='gradientTheme commonRowFlex flexCenter' style={{
+              <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
                 flex: 1,
                 justifyContent: 'center'
               }}
@@ -212,6 +215,43 @@ const ProductDetails: Taro.FC<Props> = () => {
               </View>
             </View>
           </View>
+          <AtFloatLayout isOpened={showFloat}
+                         onClose={() => setShowFloat(false)}
+          >
+            <View className='commonRowFlex normalMargin' style={{
+              justifyContent: 'space-between'
+            }}
+            >
+              <View className='commonRowFlex'>
+                <AtAvatar size='large' image={proDetail.imgurl} />
+                <View className='commonColumnFlex normalMarginLeft' style={{
+                  justifyContent: 'flex-end'
+                }}
+                >
+                  <Text className='redText mediumText'>¥{proDetail.price}</Text>
+                  <HeightView />
+                  <Text className='slightlySmallText grayText'>库存{proDetail.stock}件</Text>
+                </View>
+              </View>
+              <CustomIcon name='close' size={15} color='gray' onClick={() => setShowFloat(false)} />
+            </View>
+            <View className='commonRowFlex normalMargin flexCenter' style={{
+              justifyContent: 'space-between'
+            }}
+            >
+              <Text>数量</Text>
+              <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
+            </View>
+            <View className='commonRowFlex gradientTheme flexCenter normalPadding' style={{
+              justifyContent: 'center',
+              position: 'fixed',
+              width: '100%',
+              bottom: 0
+            }}
+            >
+              <Text className='whiteText mediumText'>确认</Text>
+            </View>
+          </AtFloatLayout>
         </View>
       )}
     </View>
