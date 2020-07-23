@@ -1,6 +1,6 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
-import { Text, View } from '@tarojs/components'
+import { Button, Text, View } from '@tarojs/components'
 import './index.scss'
 import TabBar from '../../components/TabBar'
 import { AtAvatar } from 'taro-ui'
@@ -151,6 +151,24 @@ const Mine: Taro.FC<Props> = () => {
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>
           ))}
+          <Button plain openType='contact' className='commonColumnFlex flexCenter'
+                style={{
+                  flex: 1,
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  lineHeight: 'initial',
+                  border: 'none'
+                }}
+                key={44}
+                onClick={() => {}}
+          >
+            <CustomIcon name='customerService'
+                        size={25}
+                        color='rgb(234, 114 ,49)'
+                        onClick={() => {}}
+            />
+            <Text className='slightlySmallText smallMarginTop grayText'>在线客服</Text>
+          </Button>
         </View>
       </View>
       <View className='normalMargin'>

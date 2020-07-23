@@ -60,7 +60,7 @@ const SearchResult: Taro.FC<Props> = () => {
           >
             <View>
               {searchRes && searchRes.map((item, index) => (
-                <CardCommodity key={index} proId={item.id} hurdle imgUrl={item.imgurl} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
+                <CardCommodity key={index} proId={item.id} hurdle imgUrl={item.img} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
               ))}
             </View>
           </View>

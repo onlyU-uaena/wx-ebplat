@@ -28,8 +28,14 @@ const OrderDetail: Taro.FC<Props> = () => {
           }},
         {
           title: '去支付',
-          func: (item) => {
-            order.payOrder(item.code, item.status)
+          func: async (item) => {
+            const {code} = await order.payOrder(item.groupcode, item.status)
+            if (code === 0) {
+              Taro.showToast({
+                title: '支付成功'
+              })
+              delayBack(1, 1000)
+            }
           }
         }
       ]},
@@ -51,13 +57,69 @@ const OrderDetail: Taro.FC<Props> = () => {
           }
         }
       ]},
-    8: '待收货',
-    10: '待评论',
-    1: '待受理',
-    2: '已受理',
-    11: '退货中',
-    12: '已退款',
-    13: '退款不通过',
+    1: {name: '待受理', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            delayBack(1, 1000)
+          }
+        }
+      ]},
+    8: {name: '待收货', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            delayBack(1, 1000)
+          }
+        }
+      ]},
+    10: {name: '待评论', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            delayBack(1, 1000)
+          }
+        }
+      ]},
+    2: {name: '已受理', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            delayBack(1, 1000)
+          }
+        }
+      ]},
+    11: {name: '退货中', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            delayBack(1, 1000)
+          }
+        }
+      ]},
+    12: {name: '已退款', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            delayBack(1, 1000)
+          }
+        }
+      ]},
+    13: {name: '退款不通过', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            delayBack(1, 1000)
+          }
+        }
+      ]},
   }
 
   const getDetail = async (id) => {
@@ -69,7 +131,7 @@ const OrderDetail: Taro.FC<Props> = () => {
     const props = JSON.parse(router.params.props)
     console.log(props)
     getDetail(props.id)
-  }, [])
+  }, [router.params.props])
 
   return (
     <View>
@@ -94,7 +156,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>配送方式</Text>
-              <Text className='mediumText'>{orderDetail.deliverymode === 0 ? '自配' : '第三方物流配送'}</Text>
+              <Text className='mediumText'>{orderDetail.deliverymode === 0 ? '物流配送' : '自提'}</Text>
             </View>
           </View>
           <HeightView />
@@ -151,7 +213,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>总计</Text>
-              <Text className='redText normalMarginLeft'>¥{orderDetail.actualpay}</Text>
+              <Text className='redText normalMarginLeft'>¥{orderDetail.actualpay.toFixed(2)}</Text>
             </View>
             <AtButton customStyle={{width: '100%'}} size='small' type='primary' openType='contact'>
               联系客服

@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, useRouter } from '@tarojs/taro'
+import Taro, { useState, useEffect, useRouter, useScope } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Image, Text, View, RichText, Button } from '@tarojs/components'
 import './index.scss'
@@ -9,6 +9,7 @@ import SwiperImg from '../../../../components/SwiperImg'
 import CustomIcon from '../../../../components/CustomIcon'
 import InputCard from '../../../../components/InputCard'
 import { Comment } from '../../utils/interface'
+import WxParse from '../../../../components/wxParse/wxParse'
 import HeightView from '../../../../components/HeightView'
 import colors from '../../../../common/styles/color'
 import { navTo } from '@utils/route'
@@ -26,6 +27,7 @@ const ProductDetails: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const shopState = useSelector(selectShopState)
   const router = useRouter()
+  const scope = useScope()
 
   const [showFloat, setShowFloat] = useState<boolean>(false)
 
@@ -51,6 +53,8 @@ const ProductDetails: Taro.FC<Props> = () => {
   const getDetail = async () => {
     const {data} = await commodity.getDetail(JSON.parse(router.params.props).id)
     setProDetail(data)
+    WxParse.wxParse('article', 'html', data.description, scope, 5)
+    WxParse.wxParse('serve', 'html', data.afterservice, scope, 5)
     setFavorites(data.isfavorites)
   }
 
@@ -221,17 +225,34 @@ const ProductDetails: Taro.FC<Props> = () => {
             display: 'block'
           }}
           >商品详情</Text>
-          <RichText nodes={proDetail.description.replace(/\<img/gi, '<img style="max-width:96%;display:block;height:auto;margin:0.4rem 2%;"')} />
           {/*售后*/}
-          <RichText nodes={proDetail.afterservice.replace(/\<img/gi, '<img style="max-width:96%;display:block;height:auto;margin:0.4rem 2%;"')} />
+          <View className='commonColumnFlex flexCenter normalMarginTop normalMarginBottom normalPadding' style={{
+            justifyContent: 'center',
+            backgroundColor: 'white'
+          }}
+          >
+            <import src='../../../../components/wxParse/wxParse.wxml' />
+            <template is='wxParse' data='{{wxParseData:article.nodes}}' />
+            <template is='wxParse' data='{{wxParseData:serve.nodes}}' />
+          </View>
           <HeightView high='large' />
           <HeightView high='large' />
           {/*底部按钮*/}
           <View className='bottomGroup commonRowFlex'>
-            <View className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginLeft normalMarginRight'>
+            <Button plain
+                    className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginLeft normalMarginRight'
+                    openType='contact'
+                    style={{
+                      paddingLeft: 0,
+                      paddingRight: 0,
+                      lineHeight: 'initial',
+                      border: 'none',
+                      fontSize: 'inherit'
+                    }}
+            >
               <CustomIcon name='customerService' size={20} color='gray' />
               <Text className='slightlySmallText grayText'>客服</Text>
-            </View>
+            </Button>
             <View onClick={() => Taro.reLaunch({url: '/pages/shoppingCart/index'})} className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginRight'>
               <CustomIcon onClick={() => Taro.reLaunch({url: '/pages/shoppingCart/index'})} name='shop' size={20} color='gray' />
               <Text className='slightlySmallText grayText'>购物车</Text>

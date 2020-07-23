@@ -29,7 +29,7 @@ const SwiperImg: Taro.FC<Props> = (props) => {
       {list && list.map((item, index) => (
         <SwiperItem key={index}>
           <Image className='swiperImg'
-            src={item.list[0].imgurl || item}
+            src={item.imgurl || item}
             style={{
               width: imgWidth ? `${imgWidth}%` : '100%'
             }}

@@ -68,13 +68,69 @@ const MyOrder: Taro.FC<Props> = () => {
           }
         }
       ]},
-    8: '待收货',
-    10: '待评论',
-    1: '待受理',
-    2: '已受理',
-    11: '退货中',
-    12: '已退款',
-    13: '退款不通过',
+    1: {name: '待受理', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]},
+    8: {name: '待收货', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]},
+    10: {name: '待评论', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]},
+    2: {name: '已受理', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]},
+    11: {name: '退货中', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]},
+    12: {name: '已退款', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]},
+    13: {name: '退款不通过', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]}
   }
 
   const [currentTabs, setCurrentTabs] = useState<number>(0)
@@ -178,7 +234,7 @@ const MyOrder: Taro.FC<Props> = () => {
                   <Text className='mediumText redText'>{item.lsitdetais.length}</Text>
                   <Text className='mediumText'>件</Text>
                   <Text className='smallMarginLeft mediumText'>需付款</Text>
-                  <Text className='mediumText redText smallMarginLeft'>¥{item.actualpay}</Text>
+                  <Text className='mediumText redText smallMarginLeft'>¥{item.actualpay.toFixed(2)}</Text>
                 </View>
                   {statusToTitle[item.status].button.length === 2 ? (
                     <View className='commonRowFlex normalPadding borderBottom flexCenter'

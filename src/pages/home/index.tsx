@@ -68,7 +68,7 @@ const Home: Taro.FC<Props> = () => {
   const initPage = async () => {
     try {
       const shopRes = await commodity.getShop()
-      const {data} = await commodity.getAdv(1)
+      const {data} = await commodity.getAdv(0)
       const listRes = await commodity.getSkuList(shopRes.data.shopid)
       const hotListRes = await commodity.getHotShop(shopRes.data.shopid)
       const classListRes = await commodity.getClassList()
@@ -77,7 +77,7 @@ const Home: Taro.FC<Props> = () => {
       setTabList(listRes.data)
       dispatch(setShop(shopRes.data))
       setShopInfo(shopRes.data)
-      setAdvList(data)
+      setAdvList(data[0])
     } finally {
       setShowPage(true)
     }
@@ -173,7 +173,7 @@ const Home: Taro.FC<Props> = () => {
             }}
           >
             {advList &&
-            <SwiperImg list={advList}>
+            <SwiperImg list={advList.list}>
             </SwiperImg>}
           </View>
           <View

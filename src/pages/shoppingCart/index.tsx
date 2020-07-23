@@ -132,7 +132,7 @@ const ShoppingCart: Taro.FC<Props> = () => {
           >
             {modifyMode ? '返回' : '编辑'}
           </Text>
-          {cartList && cartList.shops.map((item, index) => (
+          {cartList.shops.length ? cartList.shops.map((item, index) => (
             <View key={index}>
               {item.spuscd.map((shopItem, shopIndex) => (
                 <View key={shopIndex} className='commonRowFlex flexCenter borderBottom' style={{
@@ -177,7 +177,18 @@ const ShoppingCart: Taro.FC<Props> = () => {
               ))}
               <HeightView />
             </View>
-          ))}
+          )) : (
+            <View className='commonRowFlex flexCenter'
+                  style={{
+                    justifyContent: 'center',
+                    margin: '32px 0'
+                  }}
+            >
+              <Text className='grayText slightlySmallText'>
+                购物车内暂无商品～
+              </Text>
+            </View>
+          )}
           <View className='bottomGroup commonRowFlex' style={{
             zIndex: 999
           }}

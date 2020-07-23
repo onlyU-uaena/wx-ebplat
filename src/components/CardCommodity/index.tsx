@@ -37,9 +37,9 @@ const CardCommodity: Taro.FC<Props> = (props) => {
   const addToCart = async (id: number) => {
     console.log(id)
     const res = await shopCart.addCart(shopState.shopData.shopid, id, 1, 0, 0)
-    if (!res.code && onShopCart) {
+    if ((res.code === 0) && onShopCart) {
       onShopCart()
-    } else {
+    } else if (res.code === 0) {
       await Taro.showToast({
         title: '加入购物车成功'
       })

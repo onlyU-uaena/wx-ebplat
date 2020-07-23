@@ -76,14 +76,14 @@ const ConfirmOrder: Taro.FC<Props> = () => {
 
     skuString = JSON.stringify(data).replace('{', '').replace(new RegExp(/"/, 'g'), '').replace('}', '') + skuString
 
-    if (!shopState.address.id) {
+    if (!shopState.address.id && (currentTab === 0)) {
       return Taro.showToast({
         title: '请选择收货地址',
         icon: 'none'
       })
     }
 
-    const res = await order.addOrder(shopState.address.id, skuString, currentTab, 0, 0, 0)
+    const res = await order.addOrder(shopState.address.id || 0, skuString, currentTab, 0, 0, 0)
     if (res.code === 0)
       navTo('mine', 'orderDetail', {id: res.data})
   }
@@ -167,7 +167,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                            小计
                          </Text>
                          <Text className='mediumText redText normalMarginLeft'>
-                           {`¥${orderDetail.totalMoney + orderDetail.freightMoney}`}
+                           {`¥${(orderDetail.totalMoney + orderDetail.freightMoney).toFixed(2)}`}
                          </Text>
                        </View>}
             />
