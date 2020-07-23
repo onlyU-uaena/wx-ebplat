@@ -73,10 +73,7 @@ const ShoppingCart: Taro.FC<Props> = () => {
   }
 
   const deleteItem = async () => {
-    const ids = cartList.shops.map(item => item.spuscd.map(shopItem => {
-      if (shopItem.isselected === cartList.isselected)
-        return shopItem.shopcartproid
-    }))
+    const ids = cartList.shops.map(item => item.spuscd.filter(filterItem => filterItem.isselected).map(shopItem => shopItem.shopcartproid))
     Taro.showModal({
       title: '删除商品',
       content: '确认删除选中的商品?',

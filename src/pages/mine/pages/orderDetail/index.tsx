@@ -34,7 +34,9 @@ const OrderDetail: Taro.FC<Props> = () => {
               Taro.showToast({
                 title: '支付成功'
               })
-              delayBack(1, 1000)
+              setTimeout(() => {
+                navTo('mine', 'myOrder')
+              }, 1000)
             }
           }
         }

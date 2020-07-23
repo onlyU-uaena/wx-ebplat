@@ -8,6 +8,7 @@ class Commodity {
   private urls = {
     getAdv: '/api/app/adverting/queryadvert',
     getSkuList: '/api/app/topic/getlist',
+    getSortList: '/api/app/pro/shopskulist',
     search: '/api/app/pro/checkgoodsName',
     gettopicsku: '/api/app/topic/gettopicsku',
     productDetail: '/api/app/pro/getprodetail',
