@@ -24,7 +24,7 @@ class Account extends AccountVerification {
       name: account,
       pwd: password
     }
-    return await httpRequest(this.urls.loginWithPassword, data)
+    return await httpRequest(this.urls.loginWithPassword, data, true, true, false)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -34,7 +34,7 @@ class Account extends AccountVerification {
       mobile: phoneNum,
       smscode: sms
     }
-    return await httpRequest(this.urls.loginWithPhoneNumber, data)
+    return await httpRequest(this.urls.loginWithPhoneNumber, data, true, true, false)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -45,7 +45,7 @@ class Account extends AccountVerification {
       sms: sms,
       password: password
     }
-    return await httpRequest(this.urls.register, data)
+    return await httpRequest(this.urls.register, data, true, true, false)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -55,7 +55,7 @@ class Account extends AccountVerification {
       ph: phoneNum,
       smsType: type,
     }
-    return await httpRequest(this.urls.getSmsCode, data)
+    return await httpRequest(this.urls.getSmsCode, data, true, true, false)
   }
 
   @throttleFunc(1000)

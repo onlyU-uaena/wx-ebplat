@@ -83,7 +83,7 @@ const Mine: Taro.FC<Props> = () => {
             <CustomIcon name='order' color='black' />
             <Text className='mediumText smallMarginLeft'>全部订单</Text>
           </View>
-          <View className='commonRowFlex flexCenter'>
+          <View onClick={() => navTo('mine', 'myOrder', {tab: -1})} className='commonRowFlex flexCenter'>
             <Text className='slightlySmallText grayText'>查看全部订单</Text>
             <View className='smallMarginLeft horMirror'>
               <CustomIcon name='back' color='gray' />
@@ -102,8 +102,8 @@ const Mine: Taro.FC<Props> = () => {
         }}
         >
           {firstIconList.map((item, index) => (
-            <View className='commonColumnFlex flexCenter' style={{flex: 1}} key={index}>
-              <CustomIcon name={item.iconName} size={25} color='rgb(234, 114 ,49)' />
+            <View onClick={() => navTo('mine', 'myOrder', {tab: index})} className='commonColumnFlex flexCenter' style={{flex: 1}} key={index}>
+              <CustomIcon onClick={() => navTo('mine', 'myOrder', {tab: index})} name={item.iconName} size={25} color='rgb(234, 114 ,49)' />
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>
           ))}
@@ -119,7 +119,9 @@ const Mine: Taro.FC<Props> = () => {
         }}
         >
           {secondIconList.map((item, index) => (
-            <View className='commonColumnFlex flexCenter' style={{flex: 1}} key={index}>
+            <View className='commonColumnFlex flexCenter'
+                  style={{flex: 1}} key={index}
+            >
               <CustomIcon name={item.iconName} size={25} color={item.color || 'rgb(234, 114 ,49)'} />
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>
@@ -136,8 +138,16 @@ const Mine: Taro.FC<Props> = () => {
         }}
         >
           {thirdIconList.map((item, index) => (
-            <View className='commonColumnFlex flexCenter' style={{flex: 1}} key={index}>
-              <CustomIcon name={item.iconName} size={25} color={item.color || 'rgb(234, 114 ,49)'} />
+            <View className='commonColumnFlex flexCenter'
+                  style={{flex: 1}}
+                  key={index}
+                  onClick={() => navTo(item.nav.index, item.nav.name)}
+            >
+              <CustomIcon name={item.iconName}
+                          size={25}
+                          color={item.color || 'rgb(234, 114 ,49)'}
+                          onClick={() => navTo(item.nav.index, item.nav.name)}
+              />
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>
           ))}

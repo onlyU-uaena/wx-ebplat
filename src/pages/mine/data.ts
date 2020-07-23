@@ -15,8 +15,8 @@ export const secondIconList = [
 ]
 
 export const thirdIconList = [
-  {title: '收货地址', iconName: 'location', color: colors.pink},
-  {title: '设置', iconName: 'setting', color: colors.blue},
-  {title: '服务反馈', iconName: 'message', color: colors.green},
-  {title: '在线客服', iconName: 'customerService', color: ''}
+  {title: '收货地址', iconName: 'location', color: colors.pink, nav: {index: 'home', name: 'chooseAddress'}},
+  {title: '设置', iconName: 'setting', color: colors.blue, nav: {index: 'mine', name: 'setting'}},
+  {title: '服务反馈', iconName: 'message', color: colors.green, nav: {index: '', name: ''}},
+  {title: '在线客服', iconName: 'customerService', color: '', nav: {index: '', name: ''}}
 ]

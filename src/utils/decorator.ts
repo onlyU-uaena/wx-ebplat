@@ -25,7 +25,7 @@ export const throttleFunc = (waitTime: number) => {
         if (now - prev > waitTime) {
           prev = new Date().valueOf()
           return func.apply(this, args)
-        }
+        } else console.log('节流拦截')
       }
     }
   }
@@ -38,7 +38,8 @@ export const noEmpty = (failedCallback: () => void) => {
     if (typeof func === 'function') {
       descriptor.value = function (...args: any) {
         for (const item of args) {
-          if (!item) {
+          if (typeof(item) == "undefined" || item === '') {
+            console.log('检测到空值')
             failedCallback()
             return
           }

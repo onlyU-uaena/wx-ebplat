@@ -14,7 +14,7 @@ class Address {
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async addAddress (name: string, mobile: string, provinceCode: string, cityCode: string, areaCode: string, provinceName: string, cityName: string, areaName: string, address: string, isDefault: string) {
+  public async addAddress (name: string, mobile: string, provinceCode: string, cityCode: string, areaCode: string, provinceName: string, cityName: string, areaName: string, address: string, isDefault: string, latitude: string, longitude: string) {
     const data = {
       name,
       mobile,
@@ -26,8 +26,8 @@ class Address {
       address,
       areaName,
       isDefault,
-      longitude: '123123',
-      latitude: '12123'
+      latitude,
+      longitude
     }
     return await httpRequest(this.urls.addAddress, data)
   }
@@ -60,7 +60,7 @@ class Address {
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async modifyAddress (id: number, name: string, mobile: string, provinceCode: string, cityCode: string, areaCode: string, provinceName: string, cityName: string, areaName: string, address: string, isDefault: string) {
+  public async modifyAddress (id: number, name: string, mobile: string, provinceCode: string, cityCode: string, areaCode: string, provinceName: string, cityName: string, areaName: string, address: string, isDefault: string, latitude: string, longitude: string) {
     const data = {
       name,
       id,
@@ -73,8 +73,8 @@ class Address {
       address,
       areaName,
       isDefault,
-      longitude: '123123',
-      latitude: '12123'
+      latitude,
+      longitude
     }
     return await httpRequest(this.urls.modifyAddress, data)
   }

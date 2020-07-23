@@ -17,8 +17,12 @@ class App extends Component {
 
   config: Config = {
     pages: [
-      'pages/home/pages/confirmOrder/index',
       'pages/home/index',
+      'pages/mine/pages/myOrder/index',
+      'pages/mine/pages/orderDetail/index',
+      'pages/mine/pages/setting/index',
+      'pages/shoppingCart/index',
+      'pages/home/pages/confirmOrder/index',
       'pages/home/pages/chooseAddress/index',
       'pages/home/pages/modifyAddress/index',
       'pages/home/pages/addAddress/index',
@@ -29,7 +33,6 @@ class App extends Component {
       'pages/mine/pages/login/index',
       'pages/mine/pages/register/index',
       'pages/mine/pages/profile/index',
-      'pages/shoppingCart/index',
       'pages/classification/index'
     ],
     tabBar: {

@@ -5,7 +5,6 @@ import account from '../../utils/login'
 import TabBar from '../../../../components/TabBar'
 import './index.scss'
 import colors from '../../../../common/styles/color'
-import CustomIcon from '../../../../components/CustomIcon'
 import CountDownButton from '../../../../components/CountDownButton'
 import { delayBack, navTo } from '@utils/route'
 import { useDispatch } from '@tarojs/redux'
@@ -29,22 +28,28 @@ const Login: Taro.FC<Props> = () => {
         Taro.setStorageSync('token', token)
         const { data } = await account.getUserData()
         dispatch(loginIn(data))
+        delayBack(1, 0)
       }
-      delayBack(1, 0)
     } else {
       const { code, token } = await account.loginWithPassword(username, password)
       if (!code) {
         Taro.setStorageSync('token', token)
         const { data } = await account.getUserData()
         dispatch(loginIn(data))
+        delayBack(1, 0)
       }
-      delayBack(1, 0)
     }
   }
 
+  const wxLogin = () => {
+    Taro.showToast({
+      title: '暂不支持微信登录',
+      icon: 'none'
+    })
+  }
+
   const sendCode = async () => {
-    const res = await account.getSmsCode(username, '5')
-    return !res.code;
+    return await account.getSmsCode(username, '5');
   }
 
   return (
@@ -62,7 +67,7 @@ const Login: Taro.FC<Props> = () => {
               flex: 1
             }}
             >
-              <CountDownButton onClick={sendCode}
+              <CountDownButton onClick={() => sendCode()}
                                title='获取验证码'
               />
             </View>
@@ -86,10 +91,10 @@ const Login: Taro.FC<Props> = () => {
           >{!useSmsLogin ? '验证码登录' : '密码登录'}</Text>
         </View>
         <AtButton type='primary' onClick={login}>登录</AtButton>
-        <View className='commonColumnFlex flexCenter normalMarginTop'>
-          <CustomIcon name='weChat' color='rgb(90, 195, 58)' size={25} />
-          <Text className='slightlySmallText smallMarginTop'>微信登录</Text>
-        </View>
+        {/*<View onClick={() => wxLogin()} className='commonColumnFlex flexCenter normalMarginTop'>*/}
+        {/*  <CustomIcon name='weChat' color='rgb(90, 195, 58)' size={25} />*/}
+        {/*  <Text className='slightlySmallText smallMarginTop'>微信登录</Text>*/}
+        {/*</View>*/}
       </View>
     </View>
   )

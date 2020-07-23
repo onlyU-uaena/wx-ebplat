@@ -7,20 +7,22 @@ import { AtAvatar, AtButton } from 'taro-ui'
 interface Props {
   imgUrl: string
   title: string
-  desc: string
+  desc?: string
   price: string
   num: number
+  onClick?: () => void
 }
 
 const ReadCommodity: Taro.FC<Props> = (props) => {
   const dispatch = useDispatch()
-  const {imgUrl, title, num, desc, price} = props
-
+  const {imgUrl, title, num, desc, price, onClick} = props
 
   return (
-    <View className='normalPadding' style={{
-      backgroundColor: 'white'
-    }}
+    <View className='normalPadding'
+          onClick={onClick ? () => onClick() : () => {}}
+          style={{
+            backgroundColor: 'white'
+          }}
     >
       <View className='commonRowFlex'>
         <AtAvatar size='large' image={imgUrl} />

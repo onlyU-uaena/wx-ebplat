@@ -16,6 +16,7 @@ import { useDispatch } from '@tarojs/redux'
 import { loginIn, loginOut, setShop } from '@redux/actions'
 import LimitStr from '@utils/stringLimit'
 import account from '../mine/utils/login'
+import shopCart from '../shoppingCart/utils/shopCart'
 
 interface Props {
 
@@ -41,6 +42,8 @@ const Home: Taro.FC<Props> = () => {
 
   useEffect(() => {
     const autoLogin = async () => {
+      if (!Taro.getStorageSync('token'))
+        return
       const { code, data } = await account.getUserData()
       if (!code) {
         dispatch(loginIn(data))
@@ -51,6 +54,16 @@ const Home: Taro.FC<Props> = () => {
 
     autoLogin()
   }, [dispatch])
+
+  const addToCart = async (item) => {
+    console.log(item)
+    const res = await shopCart.addCart(shopInfo.shopid, item.id, 1, 0, 0)
+    if (!res.code) {
+      await Taro.showToast({
+        title: '加入购物车成功'
+      })
+    }
+  }
 
   const initPage = async () => {
     try {
@@ -351,8 +364,10 @@ const Home: Taro.FC<Props> = () => {
               <View className='commonRowFlex'>
                 {hotList.map((item, index) => (
                   <View onClick={() => navTo('home', 'productDetails', {id: item.id})} className='normalMargin commonColumnFlex flexCenter' key={index}>
-                    <AtAvatar size='large' image={item.imgurl} />
-                    <Text className='mediumText smallMarginTop smallMarginBottom'>{LimitStr(item.name, 3)}</Text>
+                    <View className='smallMarginLeft smallMarginRight'>
+                      <AtAvatar size='large' image={item.imgurl} />
+                    </View>
+                    <Text className='slightlySmallText smallMarginTop smallMarginBottom'>{LimitStr(item.name, 4)}</Text>
                     <View className='commonRowFlex flexCenter'
                           style={{
                             justifyContent: 'space-between',
@@ -363,7 +378,7 @@ const Home: Taro.FC<Props> = () => {
                         <Text className='slightlySmallText redText'>¥ {item.price}</Text>
                         {/*<Text className='smallText throughLineText grayText'>¥ {item.oldPrice}</Text>*/}
                       </View>
-                      <CustomIcon name='add' color='rgb(239, 154, 151)' size={25} />
+                      <CustomIcon name='add' onClick={() => addToCart(item)} color='rgb(239, 154, 151)' size={25} />
                     </View>
                   </View>
                 ))}

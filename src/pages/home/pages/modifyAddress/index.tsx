@@ -8,6 +8,7 @@ import address from '../../../mine/utils/address'
 import InputCard from '../../../../components/InputCard'
 import HeightView from '../../../../components/HeightView'
 import { delayBack } from '@utils/route'
+import { getLatitude } from '@utils/getLocation'
 
 interface Props {
 }
@@ -25,7 +26,7 @@ const ModifyAddress: Taro.FC<Props> = () => {
 
   useEffect(() => {
     console.log(router.params)
-  }, [])
+  }, [router.params])
 
   const [name, setName] = useState<string>(props.name)
   const [addressId, setAddressId] = useState<number>(props.id)
@@ -35,7 +36,10 @@ const ModifyAddress: Taro.FC<Props> = () => {
   const [origin, setOrigin] = useState<PickRes>(props.origin)
 
   const submitAddress = async () => {
-    const res = await address.modifyAddress(addressId, name, phoneNum, origin.code[0], origin.code[1], origin.code[2], origin.value[0], origin.value[1], origin.value[2], addressDetail, defaultAdd)
+    const location = await getLatitude(origin.value[2] + addressDetail)
+    const data = location.geocodes[0].location.split(',')
+    console.log(data)
+    const res = await address.modifyAddress(addressId, name, phoneNum, origin.code[0], origin.code[1], origin.code[2], origin.value[0], origin.value[1], origin.value[2], addressDetail, defaultAdd, data[1], data[0])
     if (!res.code) {
       Taro.showToast({
         title: res.desc

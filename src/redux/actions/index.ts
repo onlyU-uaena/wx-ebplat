@@ -1,4 +1,4 @@
-import { LOGIN_IN, LOGIN_OUT, SET_ADDRESS, SET_SHOP_DATA, SET_SHOP_ID } from '../constants'
+import { LOGIN_IN, LOGIN_OUT, SET_ADDRESS, SET_SHOP_DATA } from '../constants'
 
 export const loginIn = (userLogin: object) => {
   return {

@@ -18,3 +18,10 @@ export const getLocation = async () => {
   }
 }
 
+export const getLatitude = async (address: string) => {
+  const res = await Taro.request({
+    url: `http://restapi.amap.com/v3/geocode/geo?key=bb8109e1ffec2a1803bd9983b4b3a5a2&s=rsv3&city=&address=${address}`,
+    method: 'GET'
+  })
+  return res.data
+}

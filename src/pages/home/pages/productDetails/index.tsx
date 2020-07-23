@@ -11,6 +11,10 @@ import InputCard from '../../../../components/InputCard'
 import { Comment } from '../../utils/interface'
 import HeightView from '../../../../components/HeightView'
 import colors from '../../../../common/styles/color'
+import { navTo } from '@utils/route'
+import order from '../../../mine/utils/order'
+import shopCart from '../../../shoppingCart/utils/shopCart'
+import { selectShopState } from '@redux/reducers/selector'
 
 interface Props {
 
@@ -20,24 +24,61 @@ const tabList = ['商品', '评价', '详情', '推荐']
 
 const ProductDetails: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
+  const shopState = useSelector(selectShopState)
   const router = useRouter()
 
   const [showFloat, setShowFloat] = useState<boolean>(false)
 
   useEffect(() => {
     getDetail()
-  }, [getDetail])
+  }, [])
 
   const [currentTab, setCurrentTab] = useState<number>(0)
   const [proDetail, setProDetail] = useState({})
   const [favorites, setFavorites] = useState<boolean>(false)
   const [buyNum, setBuyNum] = useState<number>(1)
 
+  const addToCart = async (id: number) => {
+    console.log(id)
+    const res = await shopCart.addCart(shopState.shopData.shopid, id, 1, 0, 0)
+    if (res.code === 0) {
+      await Taro.showToast({
+        title: '加入购物车成功'
+      })
+    }
+  }
+
   const getDetail = async () => {
-    console.log()
     const {data} = await commodity.getDetail(JSON.parse(router.params.props).id)
     setProDetail(data)
     setFavorites(data.isfavorites)
+  }
+
+  const toOrder = async () => {
+
+    // const res = await order.getFreight(proDetail.shopid, buyNum, buyNum * proDetail.price)
+
+    const data = {
+      shopid: proDetail.shopid,
+      totalMoney: proDetail.price * buyNum,
+      freightMoney: 0,
+      activityId: 0,
+      skuID: [{
+        skuid: proDetail.id,
+        title: proDetail.title,
+        imgurl: proDetail.imgurl,
+        subtitle: proDetail.subtitle,
+        proCount: buyNum,
+        price: proDetail.price,
+        packageid: 0,
+        unitid: 0,
+        marketid: 0,
+        spikeid: 0,
+        type: proDetail.type
+      }]
+    }
+
+    navTo('home', 'confirmOrder', data)
   }
 
   const collect = async () => {
@@ -191,15 +232,15 @@ const ProductDetails: Taro.FC<Props> = () => {
               <CustomIcon name='customerService' size={20} color='gray' />
               <Text className='slightlySmallText grayText'>客服</Text>
             </View>
-            <View className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginRight'>
-              <CustomIcon name='shop' size={20} color='gray' />
+            <View onClick={() => Taro.reLaunch({url: '/pages/shoppingCart/index'})} className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginRight'>
+              <CustomIcon onClick={() => Taro.reLaunch({url: '/pages/shoppingCart/index'})} name='shop' size={20} color='gray' />
               <Text className='slightlySmallText grayText'>购物车</Text>
             </View>
             <View className='commonRowFlex' style={{
               flex: 1
             }}
             >
-              <View className='gradientYellow commonRowFlex flexCenter' style={{
+              <View onClick={() => addToCart(proDetail.id)} className='gradientYellow commonRowFlex flexCenter' style={{
                 flex: 1,
                 justifyContent: 'center'
               }}
@@ -242,12 +283,14 @@ const ProductDetails: Taro.FC<Props> = () => {
               <Text>数量</Text>
               <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
             </View>
-            <View className='commonRowFlex gradientTheme flexCenter normalPadding' style={{
-              justifyContent: 'center',
-              position: 'fixed',
-              width: '100%',
-              bottom: 0
-            }}
+            <View className='commonRowFlex gradientTheme flexCenter normalPadding'
+                  onClick={() => toOrder()}
+                  style={{
+                    justifyContent: 'center',
+                    position: 'fixed',
+                    width: '100%',
+                    bottom: 0
+                  }}
             >
               <Text className='whiteText mediumText'>确认</Text>
             </View>

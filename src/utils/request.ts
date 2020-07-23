@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro'
+import { delayBack, navTo } from '@utils/route'
 
 interface Method {
   /** HTTP 请求 OPTIONS */
@@ -23,12 +24,13 @@ export const baseUrl = 'http://mjsh.yl-mall.cn'
 
 let requestNum = 0
 
-const httpRequest = async (url: string, data = {}, showToast = true, showLoading = true, method: keyof Method = 'GET') => {
+const httpRequest = async (url: string, data = {}, showToast = true, showLoading = true, jumpToLogin = true, method: keyof Method = 'GET') => {
   requestNum++
-  await Taro.showLoading({
-    title: '',
-    mask: false
-  })
+  if (showLoading)
+    await Taro.showLoading({
+      title: '',
+      mask: true
+    })
   const result = await Taro.request({
     url: baseUrl + url,
     method: method,
@@ -44,12 +46,16 @@ const httpRequest = async (url: string, data = {}, showToast = true, showLoading
   if (requestNum === 0) {
     Taro.hideLoading()
   }
-  if (result.data.code !== 0 && showToast) {
+
+  if (result.data.code !== 0 && !Taro.getStorageSync('token') && jumpToLogin) {
+    navTo('mine', 'login')
+  } else if (result.data.code !== 0 && showToast) {
     await Taro.showToast({
       title: result.data.desc || '服务器开小差了～请稍后重试',
       icon: 'none'
     })
   }
+
   console.log(result)
   return result.data
 }

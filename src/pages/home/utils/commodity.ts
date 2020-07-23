@@ -33,7 +33,7 @@ class Commodity {
       page,
       size
     }
-    return await httpRequest(this.urls.gettopicsku, data, false)
+    return await httpRequest(this.urls.gettopicsku, data, false, false)
   }
 
   public async getDetail (skuid: number, type = 0, skiid: number | string = '') {

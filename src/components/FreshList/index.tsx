@@ -13,6 +13,7 @@ interface Props {
   beRenderList?: GetTopicSku[]
   hurdle?: boolean
   dispatchListFunc: (page: number, size: number, topicid: number, shopId?: number) => any
+  onShopCart?: () => void
 }
 
 export interface FreshListInterface {
@@ -29,6 +30,7 @@ class FreshList extends Taro.Component<Props, any> implements FreshListInterface
   }
 
   state = {
+    showPage: false,
     page: 1,
     list: [],
     size: 14
@@ -40,6 +42,9 @@ class FreshList extends Taro.Component<Props, any> implements FreshListInterface
   }
 
   async initGetList () {
+    this.setState({
+      showPage: false
+    })
     if (this.props.shopid) {
       const {data} = await this.props.dispatchListFunc(this.state.page, this.state.size, this.props.topicId, this.props.shopid)
       this.setState({
@@ -53,6 +58,9 @@ class FreshList extends Taro.Component<Props, any> implements FreshListInterface
         list: data
       })
     }
+    this.setState({
+      showPage: true
+    })
   }
 
   refreshList = async () => {
@@ -94,14 +102,14 @@ class FreshList extends Taro.Component<Props, any> implements FreshListInterface
   }
 
   render () {
-    const { beRenderList, hurdle } = this.props
-    const {list} = this.state
+    const { beRenderList, hurdle, onShopCart } = this.props
+    const {list, showPage} = this.state
     return (
-      <View>
+      <View>{showPage && <View>
         {hurdle ? (
           <View>
             {list && list.map((item, index) => (
-              <CardCommodity key={index} proId={item.id} hurdle imgUrl={item.imgurl} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
+              <CardCommodity onShopCart={onShopCart} key={index} proId={item.id} hurdle imgUrl={item.imgurl} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
             ))}
           </View>
         ) : (
@@ -111,10 +119,11 @@ class FreshList extends Taro.Component<Props, any> implements FreshListInterface
           }}
           >
             {list && list.map((item, index) => (
-              <CardCommodity key={index} proId={item.id} imgUrl={item.imgurl} title={item.name} price={item.price} oldPrice={item.oldPrice || ''} />
+              <CardCommodity onShopCart={onShopCart} key={index} proId={item.id} imgUrl={item.imgurl} title={item.name} price={item.price} oldPrice={item.oldPrice || ''} />
             ))}
           </View>
         )}
+      </View>}
       </View>
     )
   }

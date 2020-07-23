@@ -31,13 +31,13 @@ const CountDownButton: Taro.FC<Props> = ({onClick, title}) => {
   const startCount = async () => {
     const res = await onClick()
     console.log(res)
-    if (res) {
+    if (res.code === 0) {
       setDisabled(true)
     }
   }
 
   return (
-    <AtButton type='primary' size='small' onClick={startCount} disabled={disabled}>{buttonTitle}</AtButton>
+    <AtButton type='primary' size='small' onClick={() => startCount()} disabled={disabled}>{buttonTitle}</AtButton>
   )
 }
 

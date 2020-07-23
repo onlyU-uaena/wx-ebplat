@@ -28,6 +28,8 @@ const SearchResult: Taro.FC<Props> = () => {
   const [searchRes, setSearchRes] = useState<GetTopicSku[]>([])
 
   useReachBottom(() => {
+    if (freshList)
+      freshList.nextPage()
   })
 
   useEffect(() => {
