@@ -44,7 +44,8 @@ const config = {
   defineConstants: {
   },
   plugins: [
-    '@tarojs/plugin-sass'
+    '@tarojs/plugin-sass',
+    '@tarojs/plugin-uglify'
   ],
   mini: {
     postcss: {

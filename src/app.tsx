@@ -18,22 +18,33 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/home/index',
-      'pages/mine/pages/myOrder/index',
-      'pages/mine/pages/orderDetail/index',
-      'pages/mine/pages/setting/index',
       'pages/shoppingCart/index',
-      'pages/home/pages/confirmOrder/index',
-      'pages/home/pages/chooseAddress/index',
-      'pages/home/pages/modifyAddress/index',
-      'pages/home/pages/addAddress/index',
-      'pages/home/pages/productDetails/index',
-      'pages/home/pages/search/index',
-      'pages/home/pages/searchResult/index',
       'pages/mine/index',
-      'pages/mine/pages/login/index',
-      'pages/mine/pages/register/index',
-      'pages/mine/pages/profile/index',
       'pages/classification/index'
+    ],
+    subPackages:[
+      {
+        "root": "pages/mine/pages",
+        "pages": [
+          "myOrder/index",
+          "orderDetail/index",
+          "setting/index",
+          "login/index",
+          "register/index",
+          "profile/index",
+        ]
+      },{
+        "root": "pages/home/pages",
+        "pages": [
+          'confirmOrder/index',
+          'chooseAddress/index',
+          'modifyAddress/index',
+          'addAddress/index',
+          'productDetails/index',
+          'search/index',
+          'searchResult/index',
+        ]
+      }
     ],
     tabBar: {
       selectedColor: "#CB4842",

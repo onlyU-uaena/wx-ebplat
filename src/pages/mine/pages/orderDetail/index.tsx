@@ -29,7 +29,7 @@ const OrderDetail: Taro.FC<Props> = () => {
         {
           title: '去支付',
           func: (item) => {
-
+            order.payOrder(item.code, item.status)
           }
         }
       ]},

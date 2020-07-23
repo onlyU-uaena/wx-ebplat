@@ -18,6 +18,7 @@
 		"@tarojs/components": "2.2.8",
 		"@tarojs/components-qa": "2.2.8",
 		"@tarojs/plugin-sass": "2.2.8",
+		"@tarojs/plugin-uglify": "^2.2.10",
 		"@tarojs/redux": "2.2.8",
 		"@tarojs/redux-h5": "2.2.8",
 		"@tarojs/router": "2.2.8",

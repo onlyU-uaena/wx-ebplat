@@ -1010,6 +1010,32 @@
     swiper "4.4.2"
     weui "^1.1.2"
 
+"@tarojs/helper@2.2.11":
+  version "2.2.11"
+  resolved "https://registry.npm.taobao.org/@tarojs/helper/download/@tarojs/helper-2.2.11.tgz?cache=0&sync_timestamp=1594888249620&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tarojs%2Fhelper%2Fdownload%2F%40tarojs%2Fhelper-2.2.11.tgz#60e192c3e94872a93abd87c6ac718180c918e54d"
+  integrity sha1-YOGSw+lIcqk6vYfGrHGBgMkY5U0=
+  dependencies:
+    "@babel/core" "7.9.0"
+    "@babel/plugin-proposal-class-properties" "7.8.3"
+    "@babel/plugin-proposal-decorators" "7.8.3"
+    "@babel/plugin-proposal-object-rest-spread" "7.9.0"
+    "@babel/plugin-transform-runtime" "7.9.0"
+    "@babel/preset-env" "7.9.0"
+    "@babel/preset-typescript" "7.9.0"
+    "@babel/register" "7.9.0"
+    "@babel/runtime" "7.9.2"
+    "@tarojs/taro" "2.2.11"
+    babel-plugin-transform-react-jsx "^6.24.1"
+    chalk "3.0.0"
+    chokidar "3.3.1"
+    cross-spawn "7.0.1"
+    debug "4.1.1"
+    find-yarn-workspace-root "1.2.1"
+    fs-extra "8.1.0"
+    lodash "4.17.19"
+    resolve "^2.0.0-next.0"
+    yauzl "2.10.0"
+
 "@tarojs/helper@^2.2.10", "@tarojs/helper@^2.2.8":
   version "2.2.10"
   resolved "https://registry.npm.taobao.org/@tarojs/helper/download/@tarojs/helper-2.2.10.tgz?cache=0&sync_timestamp=1593610599765&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tarojs%2Fhelper%2Fdownload%2F%40tarojs%2Fhelper-2.2.10.tgz#323fd152aeee2043681a5a957aff43dbb2e7d7bb"
@@ -1087,6 +1113,15 @@
     resolve-url-loader "3.1.1"
     sass-loader "8.0.2"
 
+"@tarojs/plugin-uglify@^2.2.10":
+  version "2.2.10"
+  resolved "https://registry.npm.taobao.org/@tarojs/plugin-uglify/download/@tarojs/plugin-uglify-2.2.10.tgz#5c88d294dbd50ef8cf230fd18fe5bc0a110546fe"
+  integrity sha1-XIjSlNvVDvjPIw/Rj+W8ChEFRv4=
+  dependencies:
+    "@tarojs/runner-utils" "^2.2.10"
+    "@tarojs/service" "^2.2.10"
+    uglifyjs-webpack-plugin "2.2.0"
+
 "@tarojs/redux-h5@2.2.8":
   version "2.2.8"
   resolved "https://registry.npm.taobao.org/@tarojs/redux-h5/download/@tarojs/redux-h5-2.2.8.tgz?cache=0&sync_timestamp=1593525030117&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tarojs%2Fredux-h5%2Fdownload%2F%40tarojs%2Fredux-h5-2.2.8.tgz#cf213392e53ec86f204131465320b0b4a2c31b15"
@@ -1117,12 +1152,32 @@
     value-equal "0.4.0"
     warning "4.0.2"
 
+"@tarojs/runner-utils@^2.2.10":
+  version "2.2.11"
+  resolved "https://registry.npm.taobao.org/@tarojs/runner-utils/download/@tarojs/runner-utils-2.2.11.tgz?cache=0&sync_timestamp=1594888251847&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tarojs%2Frunner-utils%2Fdownload%2F%40tarojs%2Frunner-utils-2.2.11.tgz#f78ed02f1a4494343be3e54f49b307c09cded0a6"
+  integrity sha1-947QLxpElDQ74+VPSbMHwJze0KY=
+  dependencies:
+    scss-bundle "^3.0.2"
+
 "@tarojs/runner-utils@^2.2.8":
   version "2.2.10"
   resolved "https://registry.npm.taobao.org/@tarojs/runner-utils/download/@tarojs/runner-utils-2.2.10.tgz?cache=0&sync_timestamp=1593610699855&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tarojs%2Frunner-utils%2Fdownload%2F%40tarojs%2Frunner-utils-2.2.10.tgz#3d76891664fc66ed62078ae11032d3ee24ee69e8"
   integrity sha1-PXaJFmT8Zu1iB4rhEDLT7iTuaeg=
   dependencies:
     scss-bundle "^3.0.2"
+
+"@tarojs/service@^2.2.10":
+  version "2.2.11"
+  resolved "https://registry.npm.taobao.org/@tarojs/service/download/@tarojs/service-2.2.11.tgz#fe72d7fde5e44b6d5e2fff0e6d544a09a2283300"
+  integrity sha1-/nLX/eXkS21eL/8ObVRKCaIoMwA=
+  dependencies:
+    "@hapi/joi" "17.1.1"
+    "@tarojs/helper" "2.2.11"
+    "@tarojs/taro" "2.2.11"
+    fs-extra "8.1.0"
+    lodash "4.17.19"
+    resolve "1.15.1"
+    tapable "1.1.3"
 
 "@tarojs/service@^2.2.8":
   version "2.2.10"
@@ -1219,6 +1274,13 @@
     lodash "^4.17.10"
     prop-types "^15.6.1"
 
+"@tarojs/taro@2.2.11":
+  version "2.2.11"
+  resolved "https://registry.npm.taobao.org/@tarojs/taro/download/@tarojs/taro-2.2.11.tgz?cache=0&sync_timestamp=1594888248995&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tarojs%2Ftaro%2Fdownload%2F%40tarojs%2Ftaro-2.2.11.tgz#dcc4629e3c4ffd348b01b0d3b30ad4760ea3220e"
+  integrity sha1-3MRinjxP/TSLAbDTswrUdg6jIg4=
+  dependencies:
+    "@tarojs/utils" "2.2.11"
+
 "@tarojs/taro@2.2.8":
   version "2.2.8"
   resolved "https://registry.npm.taobao.org/@tarojs/taro/download/@tarojs/taro-2.2.8.tgz#73d7f3aa10a940fb5d3bf2108c096dcdade69290"
@@ -1263,6 +1325,11 @@
     lodash "^4.17.5"
     prettier "^1.14.2"
     typescript "^3.2.2"
+
+"@tarojs/utils@2.2.11":
+  version "2.2.11"
+  resolved "https://registry.npm.taobao.org/@tarojs/utils/download/@tarojs/utils-2.2.11.tgz#4df3d7a60313c349da09c7298677cd47bf478d8d"
+  integrity sha1-TfPXpgMTw0naCccphnfNR79HjY0=
 
 "@tarojs/utils@^2.2.10", "@tarojs/utils@^2.2.8":
   version "2.2.10"
@@ -6116,6 +6183,11 @@ lodash@4.17.15, lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha1-tEf2ZwoEVbv+7dETku/zMOoJdUg=
 
+lodash@4.17.19:
+  version "4.17.19"
+  resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.19.tgz?cache=0&sync_timestamp=1594226827854&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash%2Fdownload%2Flodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha1-5I3e2+MLMyF4PFtDAfvTU7weSks=
+
 log-symbols@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npm.taobao.org/log-symbols/download/log-symbols-2.2.0.tgz#5740e1c5d6f0dfda4ad9323b5332107ef6b4c40a"
@@ -8271,6 +8343,11 @@ send@0.17.1:
     range-parser "~1.2.1"
     statuses "~1.5.0"
 
+serialize-javascript@^1.7.0:
+  version "1.9.1"
+  resolved "https://registry.npm.taobao.org/serialize-javascript/download/serialize-javascript-1.9.1.tgz?cache=0&sync_timestamp=1591623621018&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fserialize-javascript%2Fdownload%2Fserialize-javascript-1.9.1.tgz#cfc200aef77b600c47da9bb8149c943e798c2fdb"
+  integrity sha1-z8IArvd7YAxH2pu4FJyUPnmML9s=
+
 serialize-javascript@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/serialize-javascript/download/serialize-javascript-2.1.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fserialize-javascript%2Fdownload%2Fserialize-javascript-2.1.2.tgz#ecec53b0e0317bdc95ef76ab7074b7384785fa61"
@@ -9113,6 +9190,26 @@ uglify-js@3.4.x:
   dependencies:
     commander "~2.19.0"
     source-map "~0.6.1"
+
+uglify-js@^3.6.0:
+  version "3.10.0"
+  resolved "https://registry.npm.taobao.org/uglify-js/download/uglify-js-3.10.0.tgz?cache=0&sync_timestamp=1592744803278&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuglify-js%2Fdownload%2Fuglify-js-3.10.0.tgz#397a7e6e31ce820bfd1cb55b804ee140c587a9e7"
+  integrity sha1-OXp+bjHOggv9HLVbgE7hQMWHqec=
+
+uglifyjs-webpack-plugin@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npm.taobao.org/uglifyjs-webpack-plugin/download/uglifyjs-webpack-plugin-2.2.0.tgz#e75bc80e7f1937f725954c9b4c5a1e967ea9d0d7"
+  integrity sha1-51vIDn8ZN/cllUybTFoeln6p0Nc=
+  dependencies:
+    cacache "^12.0.2"
+    find-cache-dir "^2.1.0"
+    is-wsl "^1.1.0"
+    schema-utils "^1.0.0"
+    serialize-javascript "^1.7.0"
+    source-map "^0.6.1"
+    uglify-js "^3.6.0"
+    webpack-sources "^1.4.0"
+    worker-farm "^1.7.0"
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"

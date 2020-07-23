@@ -10,7 +10,7 @@ class Order {
     confirmOrder: '/api/app/order/receiveOrder',
     cancelOrder: '/api/app/order/cancel',
     getFreight: '/api/app/order/getFreightByShop',
-    payOrder: '/api/app/pay/wechatpay'
+    payOrder: '/api/app/pay/balancepay'
   }
 
   public async getOrderList (page: number, size: number, status: string | number = '', ordercode = '') {
@@ -76,9 +76,10 @@ class Order {
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async payOrder (groupnum: number) {
+  public async payOrder (groupnum: number, status: number) {
     const data = {
-      groupnum
+      groupnum,
+      status
     }
     return await httpRequest(this.urls.payOrder, data)
   }
