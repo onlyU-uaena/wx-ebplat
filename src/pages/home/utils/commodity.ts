@@ -8,6 +8,7 @@ class Commodity {
   private urls = {
     getAdv: '/api/app/adverting/queryadvert',
     getSkuList: '/api/app/topic/getlist',
+    getSortSku: '/api/app/pro/shopskulist',
     getSortList: '/api/app/pro/shopskulist',
     search: '/api/app/pro/checkgoodsName',
     gettopicsku: '/api/app/topic/gettopicsku',
@@ -83,6 +84,18 @@ class Commodity {
       shopid, goodsname
     }
     return await httpRequest(this.urls.search, data)
+  }
+
+  public async getSortSku (shopid = '', classid: number, page: number, size: number, field: number, sort: number) {
+    const data = {
+      shopid,
+      classid,
+      page,
+      size,
+      field,
+      sort
+    }
+    return await httpRequest(this.urls.getSortSku, data)
   }
 
   @throttleFunc(1000)

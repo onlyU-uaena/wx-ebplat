@@ -17,8 +17,8 @@ class App extends Component {
 
   config: Config = {
     pages: [
-      'pages/classification/index',
       'pages/home/index',
+      'pages/classification/index',
       'pages/shoppingCart/index',
       'pages/mine/index'
     ],
