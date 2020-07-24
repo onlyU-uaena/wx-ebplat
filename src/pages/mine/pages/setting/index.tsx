@@ -7,7 +7,7 @@ import TabBar from '../../../../components/TabBar'
 import colors from '../../../../common/styles/color'
 import HeightView from '../../../../components/HeightView'
 import { loginOut } from '@redux/actions'
-import { delayBack } from '@utils/route'
+import { delayBack, navTo } from '@utils/route'
 
 interface Props {
 
@@ -48,6 +48,7 @@ const Setting: Taro.FC<Props> = () => {
           prefixClass: 'fa'
         }}
                     title='修改密码'
+                    onClick={() => navTo('mine', 'changePassword')}
                     arrow='right'
         />
         <AtListItem iconInfo={{
@@ -57,6 +58,7 @@ const Setting: Taro.FC<Props> = () => {
           prefixClass: 'fa'
         }}
                     title='支付密码'
+                    onClick={() => navTo('mine', 'payPwd')}
                     arrow='right'
         /><AtListItem iconInfo={{
         size: 20,

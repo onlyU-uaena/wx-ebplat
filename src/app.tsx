@@ -28,6 +28,9 @@ class App extends Component {
         "pages": [
           "myOrder/index",
           "orderDetail/index",
+          "findPayPwd/index",
+          "changePassword/index",
+          "payPwd/index",
           "setting/index",
           "login/index",
           "register/index",
