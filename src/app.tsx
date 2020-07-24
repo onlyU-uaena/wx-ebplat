@@ -36,7 +36,9 @@ class App extends Component {
       },{
         "root": "pages/home/pages",
         "pages": [
+          'groupHome/index',
           'confirmOrder/index',
+          'spikeHome/index',
           'chooseAddress/index',
           'modifyAddress/index',
           'addAddress/index',

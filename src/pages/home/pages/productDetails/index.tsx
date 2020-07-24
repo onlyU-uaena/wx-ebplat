@@ -51,7 +51,7 @@ const ProductDetails: Taro.FC<Props> = () => {
   }
 
   const getDetail = async () => {
-    const {data} = await commodity.getDetail(JSON.parse(router.params.props).id)
+    const {data} = await commodity.getDetail(JSON.parse(router.params.props).id, 0, JSON.parse(router.params.props).actid || 0)
     setProDetail(data)
     WxParse.wxParse('article', 'html', data.description, scope, 5)
     WxParse.wxParse('serve', 'html', data.afterservice, scope, 5)

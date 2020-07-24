@@ -1,0 +1,16 @@
+@import "src/common/styles/style.scss";
+@import "src/common/styles/icon.scss";
+
+.cusSearchBar {
+  flex: 1;
+  background-color: white;
+  border-radius: 30Px;
+  height: 35Px;
+}
+
+.displayImg {
+  flex-shrink: 0;
+  width: 200px;
+  height: 100Px;
+  margin-right: 8Px;
+}

@@ -6,7 +6,6 @@ import { getLocation } from '@utils/getLocation'
 import { AtAvatar, AtCountdown, AtTag } from 'taro-ui'
 import CustomIcon from '../../components/CustomIcon'
 import SwiperImg from '../../components/SwiperImg'
-import { classificationList, commodityList, fightTogether, hotShopping, imgList, spikeList, tabs } from './mock'
 import FreshList, { FreshListInterface } from '../../components/FreshList'
 import CusTabs from '../../components/CusTabs'
 import commodity from './utils/commodity'
@@ -28,6 +27,8 @@ const Home: Taro.FC<Props> = () => {
   const [location, setLocation] = useState<string>('')
   const [freshList, setFreshList] = useState<FreshListInterface>()
   const [advList, setAdvList] = useState<GetAdv[]>()
+  const [spikeList, setSpikeList] = useState()
+  const [groupList, setGroupList] = useState()
   const [shopInfo, setShopInfo] = useState()
   const [topicId, setTopicId] = useState<number>()
   const [showPage, setShowPage] = useState<boolean>(false)
@@ -65,13 +66,28 @@ const Home: Taro.FC<Props> = () => {
     }
   }
 
+  const toSort = (num?: string) => {
+    if (num)
+      Taro.reLaunch({
+        url: '/pages/classification/index?props=' + JSON.stringify({num: num})
+      })
+    else
+      Taro.reLaunch({
+        url: '/pages/classification/index'
+      })
+  }
+
   const initPage = async () => {
     try {
       const shopRes = await commodity.getShop()
       const {data} = await commodity.getAdv(0)
       const listRes = await commodity.getSkuList(shopRes.data.shopid)
       const hotListRes = await commodity.getHotShop(shopRes.data.shopid)
+      const spikeRes = await commodity.getSpikeHome(shopRes.data.shopid)
+      const groupRes = await commodity.getGroupHome(shopRes.data.shopid)
       const classListRes = await commodity.getClassList()
+      setSpikeList(spikeRes.data)
+      setGroupList(groupRes.data)
       setHotList(hotListRes.data)
       setClassList(classListRes.data)
       setTabList(listRes.data)
@@ -207,13 +223,13 @@ const Home: Taro.FC<Props> = () => {
               if (index > 3)
                 return
               return (
-                <View className='commonColumnFlex flexCenter' key={index}>
+                <View onClick={() => toSort(item.num)} className='commonColumnFlex flexCenter' key={index}>
                   <AtAvatar size='large' image={item.img} circle />
                   <Text className='slightlySmallText' style={{marginTop: '4px'}}>{item.name}</Text>
                 </View>
               )
             })}
-            <View className='commonColumnFlex flexCenter'>
+            <View onClick={() => toSort()} className='commonColumnFlex flexCenter'>
               <AtAvatar size='large' image='http://www.gx8899.com/uploads/allimg/160825/3-160R5093948-52.jpg' circle />
               <Text className='slightlySmallText' style={{marginTop: '4px'}}>查看更多</Text>
             </View>
@@ -233,115 +249,119 @@ const Home: Taro.FC<Props> = () => {
           {/*    swiperHeight='100px'*/}
           {/*  />*/}
           {/*</View>*/}
-          {/*<View className='commonRowFlex'*/}
-          {/*  style={{*/}
-          {/*    margin: '16px 16px 0 16px',*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  /!*秒杀*!/*/}
-          {/*  <View className='commonColumnFlex'*/}
-          {/*    style={{*/}
-          {/*      background: 'linear-gradient(to left top, white, rgb(253, 246, 246))',*/}
-          {/*      borderRadius: '15PX',*/}
-          {/*      padding: '8px',*/}
-          {/*      flex: 1,*/}
-          {/*      marginRight: '8px'*/}
-          {/*    }}*/}
-          {/*  >*/}
-          {/*    <View className='commonRowFlex'*/}
-          {/*      style={{*/}
-          {/*        justifyContent: 'space-between'*/}
-          {/*      }}*/}
-          {/*    >*/}
-          {/*      <Text>今日秒杀</Text>*/}
-          {/*      <View className='countDown commonRowFlex'>*/}
-          {/*        <CustomIcon name='lightning' color='white' size={15} style={{marginLeft: '4px'}} />*/}
-          {/*        <AtCountdown*/}
-          {/*          format={{*/}
-          {/*            hours: ':',*/}
-          {/*            minutes: ':',*/}
-          {/*            seconds: ''*/}
-          {/*          }}*/}
-          {/*          hours={1}*/}
-          {/*          minutes={1}*/}
-          {/*          seconds={10}*/}
-          {/*          onTimeUp={() => {}}*/}
-          {/*        />*/}
-          {/*      </View>*/}
-          {/*    </View>*/}
-          {/*    <Text className='slightlySmallText redText'>拼手速 低价抢好物</Text>*/}
-          {/*    <View className='commonRowFlex'*/}
-          {/*      style={{*/}
-          {/*        justifyContent: 'space-around',*/}
-          {/*        marginTop: '8px'*/}
-          {/*      }}*/}
-          {/*    >*/}
-          {/*      {spikeList.map((item, index) => (*/}
-          {/*        <View className='commonColumnFlex flexCenter'*/}
-          {/*          key={index}*/}
-          {/*          style={{*/}
-          {/*            justifyContent: 'center',*/}
-          {/*            flex: 1,*/}
-          {/*          }}*/}
-          {/*        >*/}
-          {/*          <AtAvatar image={item.imgUrl} />*/}
-          {/*          <View className='commonRowFlex flexCenter'>*/}
-          {/*            <Text className='slightlySmallText'>*/}
-          {/*              ¥ {item.price}*/}
-          {/*            </Text>*/}
-          {/*            <Text className='smallText grayText'*/}
-          {/*                  style={{*/}
-          {/*                    marginLeft: '4px',*/}
-          {/*                    textDecoration: 'line-through'*/}
-          {/*                  }}*/}
-          {/*            >*/}
-          {/*              ¥ {item.oldPrice}*/}
-          {/*            </Text>*/}
-          {/*          </View>*/}
-          {/*        </View>*/}
-          {/*      ))}*/}
-          {/*    </View>*/}
-          {/*  </View>*/}
-          {/*  /!*拼团*!/*/}
-          {/*  <View className='commonColumnFlex'*/}
-          {/*        style={{*/}
-          {/*          backgroundColor: 'white',*/}
-          {/*          borderRadius: '15PX',*/}
-          {/*          padding: '8px',*/}
-          {/*          flex: 1,*/}
-          {/*        }}*/}
-          {/*  >*/}
-          {/*    <View className='commonRowFlex'*/}
-          {/*          style={{*/}
-          {/*            justifyContent: 'space-between'*/}
-          {/*          }}*/}
-          {/*    >*/}
-          {/*      <Text>拼团特惠</Text>*/}
-          {/*    </View>*/}
-          {/*    <Text className='slightlySmallText grayText'>拼团享特价优惠</Text>*/}
-          {/*    <View className='commonRowFlex'*/}
-          {/*          style={{*/}
-          {/*            justifyContent: 'space-around',*/}
-          {/*            marginTop: '8px'*/}
-          {/*          }}*/}
-          {/*    >*/}
-          {/*      {fightTogether.map((item, index) => (*/}
-          {/*        <View className='commonColumnFlex flexCenter'*/}
-          {/*              key={index}*/}
-          {/*              style={{*/}
-          {/*                justifyContent: 'center',*/}
-          {/*                flex: 1,*/}
-          {/*              }}*/}
-          {/*        >*/}
-          {/*          <AtAvatar image={item.imgUrl} />*/}
-          {/*          <View className='commonRowFlex flexCenter'>*/}
-          {/*            <AtTag size='small' circle active>{`${item.person}人团${item.price}`}</AtTag>*/}
-          {/*          </View>*/}
-          {/*        </View>*/}
-          {/*      ))}*/}
-          {/*    </View>*/}
-          {/*  </View>*/}
-          {/*</View>*/}
+          <View className='commonRowFlex'
+            style={{
+              margin: '16px 16px 0 16px',
+            }}
+          >
+            {/*秒杀*/}
+            <View className='commonColumnFlex'
+                  onClick={() => navTo('home', 'spikeHome')}
+                  style={{
+                    background: 'linear-gradient(to left top, white, rgb(253, 246, 246))',
+                    borderRadius: '15PX',
+                    padding: '8px',
+                    flex: 1,
+                    marginRight: '8px'
+                  }}
+            >
+              <View className='commonRowFlex'
+                style={{
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Text>今日秒杀</Text>
+                <View className='countDown commonRowFlex'>
+                  <CustomIcon name='lightning' color='white' size={15} style={{marginLeft: '4px'}} />
+                  <AtCountdown
+                    format={{
+                      hours: ':',
+                      minutes: ':',
+                      seconds: ''
+                    }}
+                    hours={1}
+                    minutes={1}
+                    seconds={10}
+                    onTimeUp={() => {}}
+                  />
+                </View>
+              </View>
+              <Text className='slightlySmallText redText'>拼手速 低价抢好物</Text>
+              <View className='commonRowFlex'
+                style={{
+                  justifyContent: 'space-around',
+                  marginTop: '8px'
+                }}
+              >
+                {spikeList && spikeList.pros.map((item, index) => (
+                  <View className='commonColumnFlex flexCenter'
+                    key={index}
+                    style={{
+                      justifyContent: 'center',
+                      flex: 1,
+                    }}
+                  >
+                    <AtAvatar image={item.imgUrl} />
+                    <View className='commonRowFlex flexCenter'>
+                      <Text className='slightlySmallText'>
+                        ¥ {item.price}
+                      </Text>
+                      <Text className='smallText grayText'
+                            style={{
+                              marginLeft: '4px',
+                              textDecoration: 'line-through'
+                            }}
+                      >
+                        ¥ {item.oldPrice}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </View>
+            {/*拼团*/}
+            <View className='commonColumnFlex'
+                  onClick={() => navTo('home', 'groupHome')}
+                  style={{
+                    backgroundColor: 'white',
+                    borderRadius: '15PX',
+                    padding: '8px',
+                    flex: 1,
+                  }}
+            >
+              <View className='commonRowFlex'
+                    style={{
+                      justifyContent: 'space-between'
+                    }}
+              >
+                <Text>拼团特惠</Text>
+              </View>
+              <Text className='slightlySmallText grayText'>拼团享特价优惠</Text>
+              <View className='commonRowFlex'
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      justifyContent: 'space-around',
+                      marginTop: '8px'
+                    }}
+              >
+                {groupList && groupList.map((item, index) => (
+                  <View className='commonColumnFlex flexCenter'
+                        onClick={() => navTo('home', 'productDetails', {id: item.skuid, actid: item.actid})}
+                        key={index}
+                        style={{
+                          justifyContent: 'center',
+                          flex: 1,
+                        }}
+                  >
+                    <AtAvatar image={item.imgurl} />
+                    <View className='commonRowFlex flexCenter'>
+                      <AtTag size='small' circle active>{`${item.tgcount}人团${item.price}`}</AtTag>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
           {/*热门活动*/}
           <View className='normalMarginTop'
                 style={{
@@ -386,7 +406,7 @@ const Home: Taro.FC<Props> = () => {
             </ScrollView>
           </View>
           {/*商品列表*/}
-          <CusTabs tabs={tabList} active={0} changeTab={(id) => setTopicId(id)} />
+          <CusTabs tabs={tabList} active={0} changeTab={(id) => setTopicId(id)} defaultTitle='精选好物' />
           <View className='normalMarginLeft normalMarginRight'>
             <FreshList onRef={setFreshList} topicId={topicId} shopid={shopInfo.shopid} dispatchListFunc={async (page: number, size: number, topicid: number, shopId: number) => {
               return await commodity.getTopicSku(topicid, shopId, page, size)

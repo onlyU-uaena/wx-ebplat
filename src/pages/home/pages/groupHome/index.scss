@@ -1,0 +1,28 @@
+@import "src/common/styles/style.scss";
+@import "src/common/styles/icon.scss";
+
+.displayImg {
+  flex-shrink: 0;
+  width: 200px;
+  height: 100Px;
+  margin-right: 8Px;
+}
+
+.topBorder {
+  border-top-right-radius: 5Px;
+  border-top-left-radius: 5Px;
+  border: 1px solid $themeRed;
+  border-bottom: none;
+}
+
+.bottomBorder {
+  border-bottom-left-radius: 5Px;
+  border-bottom-right-radius: 5Px;
+}
+
+.cusSearchBar {
+  flex: 1;
+  background-color: white;
+  border-radius: 30Px;
+  height: 35Px;
+}

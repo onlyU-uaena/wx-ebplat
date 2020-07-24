@@ -17,7 +17,11 @@ class Commodity {
     cancelCollect: '/api/app/pro/recollectpro',
     getShop: '/api/app/shopInfo/getzuijinshop',
     getHotShop: '/api/app/pro/gethotpro',
-    getClassList: '/api/app/pro/classlist'
+    getClassList: '/api/app/pro/classlist',
+    getSpikeHome: '/api/app/act/indexms',
+    getSpikeList: '/api/app/act/mslist',
+    getGroupHome: '/api/app/act/indexgroup',
+    getGroupList: '/api/app/act/mslist'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -45,6 +49,34 @@ class Commodity {
       skiid
     }
     return await httpRequest(this.urls.productDetail, data, false)
+  }
+
+  public async getSpikeHome (shopid: number) {
+    const data = {
+      shopid
+    }
+    return await httpRequest(this.urls.getSpikeHome, data, false)
+  }
+
+  public async getSpikeList (shopid: number) {
+    const data = {
+      shopid
+    }
+    return await httpRequest(this.urls.getSpikeList, data, false)
+  }
+
+  public async getGroupList (shopid: number) {
+    const data = {
+      shopid
+    }
+    return await httpRequest(this.urls.getGroupList, data, false)
+  }
+
+  public async getGroupHome (shopid: number) {
+    const data = {
+      shopid
+    }
+    return await httpRequest(this.urls.getGroupHome, data, false)
   }
 
   public async getClassList (num = '') {
