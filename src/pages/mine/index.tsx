@@ -10,6 +10,7 @@ import { navTo } from '@utils/route'
 import { selectAuthState } from '@redux/reducers/selector'
 import account from './utils/login'
 import { loginIn, loginOut } from '@redux/actions'
+import user from './utils/user'
 
 interface Props {
 
@@ -17,6 +18,17 @@ interface Props {
 
 const Mine: Taro.FC<Props> = () => {
   const authState = useSelector(selectAuthState)
+  const [assets, setAssets] = useState()
+
+  const getAssets = async () => {
+    const {data} = await user.queryassets()
+    setAssets(data)
+  }
+
+  useEffect(() => {
+    if (authState.loginStatus)
+      getAssets()
+  }, [authState.loginStatus])
 
   return (
     <View>
@@ -59,7 +71,7 @@ const Mine: Taro.FC<Props> = () => {
           flex: 1
         }}
         >
-          <Text className='orangeText'>1</Text>
+          <Text className='orangeText'>{authState.userData.points}</Text>
           <Text className='mediumText grayText'>积分</Text>
         </View>
         <View className='commonColumnFlex flexCenter' style={{
@@ -121,8 +133,13 @@ const Mine: Taro.FC<Props> = () => {
           {secondIconList.map((item, index) => (
             <View className='commonColumnFlex flexCenter'
                   style={{flex: 1}} key={index}
+                  onClick={() => navTo(item.nav.index, item.nav.name)}
             >
-              <CustomIcon name={item.iconName} size={25} color={item.color || 'rgb(234, 114 ,49)'} />
+              <CustomIcon name={item.iconName}
+                          size={25}
+                          onClick={() => navTo(item.nav.index, item.nav.name)}
+                          color={item.color || 'rgb(234, 114 ,49)'}
+              />
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>
           ))}

@@ -9,7 +9,8 @@ const defaultState = {
     birthdaystr: '',
     email: '',
     userwork: '',
-    mobile: ''
+    mobile: '',
+    points: ''
   }
 }
 

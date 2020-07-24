@@ -29,6 +29,8 @@ class App extends Component {
           "myOrder/index",
           "orderDetail/index",
           "findPayPwd/index",
+          "feedback/index",
+          "myFoot/index",
           "changePassword/index",
           "payPwd/index",
           "setting/index",

@@ -99,6 +99,9 @@ const Setting: Taro.FC<Props> = () => {
                       value: 'clean',
                       prefixClass: 'fa'
                     }}
+                    onClick={() => Taro.showToast({
+                      title: '清除完成'
+                    })}
                     title='清除缓存'
                     arrow='right'
         />

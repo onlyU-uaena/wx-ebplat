@@ -6,7 +6,10 @@ class User {
   private urls = {
     changePassword: '/api/app/userinfo/findPwd',
     setPayPwd: '/api/app/userinfo/setpayPwd',
-    updatePayPwd: '/api/app/userinfo/updpayPwd'
+    updatePayPwd: '/api/app/userinfo/updpayPwd',
+    addFeedback: 'api/app/userinfo/addFeedBack',
+    queryassets: '/api/app/userinfo/queryassets',
+    getFoot: '/api/app/userinfo/browseHistory'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -19,6 +22,20 @@ class User {
       passwordagin
     }
     return await httpRequest(this.urls.changePassword, data)
+  }
+
+  public async queryassets () {
+    const data = {
+    }
+    return await httpRequest(this.urls.queryassets, data)
+  }
+
+  public async getFoot (pageindex: number, pagesize: number) {
+    const data = {
+      pageindex,
+      pagesize
+    }
+    return await httpRequest(this.urls.getFoot, data)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -34,12 +51,22 @@ class User {
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async setPayPwd (pwd: string, repwd: string) {
+  public async setPayPwd (pwd: string, repwd: string, ) {
     const data = {
       pwd,
       repwd
     }
     return await httpRequest(this.urls.setPayPwd, data)
+  }
+
+  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
+  @throttleFunc(1000)
+  public async addFeedback (content: string, mobile: string, ) {
+    const data = {
+      content,
+      mobile
+    }
+    return await httpRequest(this.urls.addFeedback, data)
   }
 }
 

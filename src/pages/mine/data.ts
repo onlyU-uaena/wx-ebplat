@@ -8,14 +8,14 @@ export const firstIconList = [
 ]
 
 export const secondIconList = [
-  {title: '我的收藏', iconName: 'collect', color: ''},
-  {title: '我的拼团', iconName: 'fightTogether', color: colors.green},
-  {title: '积分商城', iconName: 'point', color: colors.pink},
-  {title: '足迹', iconName: 'foot', color: colors.purple}
+  {title: '我的收藏', iconName: 'collect', color: '', nav: {index: 'home', name: 'chooseAddress'}},
+  {title: '我的拼团', iconName: 'fightTogether', color: colors.green, nav: {index: 'home', name: 'chooseAddress'}},
+  {title: '积分商城', iconName: 'point', color: colors.pink, nav: {index: 'home', name: 'chooseAddress'}},
+  {title: '足迹', iconName: 'foot', color: colors.purple, nav: {index: 'mine', name: 'myFoot'}}
 ]
 
 export const thirdIconList = [
   {title: '收货地址', iconName: 'location', color: colors.pink, nav: {index: 'home', name: 'chooseAddress'}},
   {title: '设置', iconName: 'setting', color: colors.blue, nav: {index: 'mine', name: 'setting'}},
-  {title: '服务反馈', iconName: 'message', color: colors.green, nav: {index: '', name: ''}}
+  {title: '服务反馈', iconName: 'message', color: colors.green, nav: {index: 'mine', name: 'feedback'}}
 ]
