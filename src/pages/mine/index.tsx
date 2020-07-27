@@ -67,9 +67,11 @@ const Mine: Taro.FC<Props> = () => {
         backgroundColor: 'white'
       }}
       >
-        <View className='commonColumnFlex flexCenter' style={{
-          flex: 1
-        }}
+        <View className='commonColumnFlex flexCenter'
+              onClick={() => navTo('mine', 'pointShop')}
+              style={{
+                flex: 1
+              }}
         >
           <Text className='orangeText'>{authState.userData.points}</Text>
           <Text className='mediumText grayText'>积分</Text>

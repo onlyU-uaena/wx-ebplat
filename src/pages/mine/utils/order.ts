@@ -10,7 +10,11 @@ class Order {
     confirmOrder: '/api/app/order/receiveOrder',
     cancelOrder: '/api/app/order/cancel',
     getFreight: '/api/app/order/getFreightByShop',
-    payOrder: '/api/app/pay/balancepay'
+    payOrder: '/api/app/pay/balancepay',
+    // 团购
+    addGroupOrder: '/api/app/grp/addorder',
+    getGroupList: '/api/app/grp/getlist',
+    myGroupDetail: '/api/app/grp/getdetail'
   }
 
   public async getOrderList (page: number, size: number, status: string | number = '', ordercode = '') {
@@ -82,6 +86,18 @@ class Order {
       status
     }
     return await httpRequest(this.urls.payOrder, data)
+  }
+
+  @throttleFunc(1000)
+  public async addGroupOrder (skuid: number, gid: number, receiveaddrid: number, disptype: number, timetype: string, remark: number, arrivetime: string) {
+    const data = {
+      skuid,
+      gid,
+      remark,
+      receiveaddrid,
+      timetype,arrivetime
+    }
+    return await httpRequest(this.urls.addGroupOrder, data)
   }
 
 

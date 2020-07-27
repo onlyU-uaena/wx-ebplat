@@ -147,6 +147,10 @@ $borderColor: rgb(238, 238, 238);
   border-bottom: 1px solid $borderColor;
 }
 
+.borderRight {
+  border-right: 1px solid $borderColor;
+}
+
 .borderTop {
   border-top: 1px solid $borderColor;
 }

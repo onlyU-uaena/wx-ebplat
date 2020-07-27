@@ -16,12 +16,13 @@ class Commodity {
     collect: '/api/app/pro/collectpro',
     cancelCollect: '/api/app/pro/recollectpro',
     getShop: '/api/app/shopInfo/getzuijinshop',
+    getShopList: '/api/app/shopInfo/getnearshop',
     getHotShop: '/api/app/pro/gethotpro',
     getClassList: '/api/app/pro/classlist',
     getSpikeHome: '/api/app/act/indexms',
     getSpikeList: '/api/app/act/mslist',
     getGroupHome: '/api/app/act/indexgroup',
-    getGroupList: '/api/app/act/mslist'
+    getGroupList: '/api/app/act/groupprolist'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -100,6 +101,15 @@ class Commodity {
       latitude: location.latitude
     }
     return await httpRequest(this.urls.getShop, data, false)
+  }
+
+  public async getShopList () {
+    const location = await Taro.getLocation({})
+    const data = {
+      longitude: location.longitude,
+      latitude: location.latitude
+    }
+    return await httpRequest(this.urls.getShopList, data, false)
   }
 
   public async getSkuList (shopid: number) {

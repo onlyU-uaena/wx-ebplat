@@ -19,14 +19,16 @@ interface Props {
 const GroupHome: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const shopState = useSelector(selectShopState)
+  const [groupList, setGroupList] = useState()
 
   const getGroup = async () => {
-    commodity.getGroupList(shopState.shopData.shopid || 10)
+    const {data} = await commodity.getGroupList(shopState.shopData.shopid || 10)
+    setGroupList(data)
   }
 
   useEffect(() => {
     getGroup()
-  })
+  }, [])
 
   useEffect(() => {
 
@@ -69,70 +71,73 @@ const GroupHome: Taro.FC<Props> = () => {
                 backgroundColor: 'white'
               }}
         >
-          <View className='commonRowFlex normalPadding borderBottom'
-                style={{
-                  justifyContent: 'space-between'
-                }}
-          >
-            <Image src='http://www.gx8899.com/uploads/allimg/160825/3-160R5093948-52.jpg'
-                   className='displayImg'
-            />
-            <View className='commonColumnFlex' style={{
-              justifyContent: 'space-between',
-              flex: 1
-            }}
+          {groupList && groupList.map(item => (
+            <View key={item.actid} className='commonRowFlex normalPadding'
+                  onClick={() => navTo('home', 'productDetails', {id: item.skuid, actid: item.actid})}
+                  style={{
+                    justifyContent: 'space-between'
+                  }}
             >
-              <View className='commonRowFlex flexCenter' style={{
-                justifyContent: 'space-between'
+              <Image src={item.imgurl}
+                     className='displayImg'
+              />
+              <View className='commonColumnFlex' style={{
+                justifyContent: 'space-between',
+                flex: 1
               }}
               >
-                <Text className='mediumText'>{LimitStr('测试商品', 12)}</Text>
-              </View>
-              <View className='commonRowFlex'
-                    style={{
-                      justifyContent: 'space-between'
-                    }}
-              >
-                <View className='commonColumnFlex'
+                <View className='commonRowFlex flexCenter' style={{
+                  justifyContent: 'space-between'
+                }}
+                >
+                  <Text className='mediumText'>{LimitStr(item.skuname, 12)}</Text>
+                </View>
+                <View className='commonRowFlex'
                       style={{
                         justifyContent: 'space-between'
                       }}
                 >
-                  <AtTag customStyle={{
-                    backgroundColor: colors.themeRed,
-                    color: 'white'
-                  }}
-                         circle
-                         size='small'
-                         type='primary'
-                  >已拼999件</AtTag>
-                  <Text className='mediumText redText'>¥ {40}</Text>
-                  {/*{oldPrice && <Text className='smallText grayText smallMarginLeft'>¥ {60}</Text>}*/}
-                </View>
-                <View className='commonColumnFlex radius' style={{
-                  width: '80px'
-                }}
-                >
-                  <View className='commonRowFlex topBorder' style={{
-                    backgroundColor: 'rgb(253, 245, 245)',
-                    padding: '4px',
-                    justifyContent: 'center'
-                  }}
-                  >
-                    <Text className='redText slightlySmallText'>2人团</Text>
-                  </View>
-                  <View className='gradientRed commonRowFlex bottomBorder'
+                  <View className='commonColumnFlex'
                         style={{
-                          padding: '4px',
-                          justifyContent: 'center'
+                          justifyContent: 'space-between'
                         }}
                   >
-                    <Text className='whiteText slightlySmallText'>2人团</Text>
+                    <AtTag customStyle={{
+                      backgroundColor: colors.themeRed,
+                      color: 'white'
+                    }}
+                           circle
+                           size='small'
+                           type='primary'
+                    >已拼{item.activitystock}件</AtTag>
+                    <Text className='mediumText redText'>¥ {item.activityprice}</Text>
+                    {/*{oldPrice && <Text className='smallText grayText smallMarginLeft'>¥ {60}</Text>}*/}
+                  </View>
+                  <View className='commonColumnFlex radius' style={{
+                    width: '80px'
+                  }}
+                  >
+                    <View className='commonRowFlex topBorder' style={{
+                      backgroundColor: 'rgb(253, 245, 245)',
+                      padding: '4px',
+                      justifyContent: 'center'
+                    }}
+                    >
+                      <Text className='redText slightlySmallText'>{item.tgcount}人团</Text>
+                    </View>
+                    <View className='gradientRed commonRowFlex bottomBorder'
+                          style={{
+                            padding: '4px',
+                            justifyContent: 'center'
+                          }}
+                    >
+                      <Text className='whiteText slightlySmallText'>立即开团</Text>
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
-          </View>
+          ))}
         </View>
       </View>
     </View>

@@ -32,6 +32,8 @@ export interface OrderDetail {
     marketid: number
     spikeid: number
     type: number
+    isgrp: number
+    skugrp: any
   }[]
 }
 
@@ -44,6 +46,8 @@ const ConfirmOrder: Taro.FC<Props> = () => {
 
   useEffect(() => {
     const data = JSON.parse(router.params.props)
+    if (data.skuID[0].isgrp)
+      data.price = data.skuID[0].skugrp.gprice
     setOrderDetail(data)
     console.log(data)
   }, [])
@@ -86,6 +90,16 @@ const ConfirmOrder: Taro.FC<Props> = () => {
     const res = await order.addOrder(shopState.address.id || 0, skuString, currentTab, 0, 0, 0)
     if (res.code === 0)
       navTo('mine', 'orderDetail', {id: res.data})
+  }
+
+  const addGroupOrder = async () => {
+    if (!shopState.address.id && (currentTab === 0)) {
+      return Taro.showToast({
+        title: '请选择收货地址',
+        icon: 'none'
+      })
+    }
+    order.addGroupOrder(orderDetail.skuID[0].skuid, orderDetail.skuID[0].skugrp.id, shopState.address.id, currentTab, '12:00', remark, '12:00')
   }
 
   return (
@@ -189,13 +203,23 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                 {`¥${orderDetail.totalMoney + orderDetail.freightMoney}`}
               </Text>
             </View>
-            <AtButton customStyle={{
-                        borderRadius: '30px',
-                        padding: '0 32px'
-                      }}
-                      onClick={() => confirmOrder()}
-                      type='primary'
-            >去支付</AtButton>
+            {orderDetail && orderDetail.skuID[0].isgrp ? (
+              <AtButton customStyle={{
+                borderRadius: '30px',
+                padding: '0 32px'
+              }}
+                        onClick={() => addGroupOrder()}
+                        type='primary'
+              >去开团</AtButton>
+            ) : (
+              <AtButton customStyle={{
+                borderRadius: '30px',
+                padding: '0 32px'
+              }}
+                        onClick={() => confirmOrder()}
+                        type='primary'
+              >去支付</AtButton>
+            )}
           </View>
         </View>
       ) : <View>
