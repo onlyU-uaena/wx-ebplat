@@ -11,11 +11,14 @@ import CusTabs from '../../components/CusTabs'
 import commodity from './utils/commodity'
 import { GetAdv } from './utils/interface'
 import { navTo } from '@utils/route'
-import { useDispatch } from '@tarojs/redux'
+import { useDispatch, useSelector } from '@tarojs/redux'
 import { loginIn, loginOut, setShop } from '@redux/actions'
 import LimitStr from '@utils/stringLimit'
 import account from '../mine/utils/login'
 import shopCart from '../shoppingCart/utils/shopCart'
+import { selectShopState } from '@redux/reducers/selector'
+
+let firstIn = true
 
 interface Props {
 
@@ -23,6 +26,7 @@ interface Props {
 
 const Home: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
+  const shopState = useSelector(selectShopState)
 
   const [location, setLocation] = useState<string>('')
   const [freshList, setFreshList] = useState<FreshListInterface>()
@@ -54,11 +58,11 @@ const Home: Taro.FC<Props> = () => {
     }
 
     autoLogin()
-  }, [dispatch])
+  }, [])
 
   const addToCart = async (item) => {
     console.log(item)
-    const res = await shopCart.addCart(shopInfo.shopid, item.id, 1, 0, 0)
+    const res = await shopCart.addCart(shopState.shopData.shopid, item.id, 1, 0, 0)
     if (!res.code) {
       await Taro.showToast({
         title: '加入购物车成功'
@@ -79,25 +83,34 @@ const Home: Taro.FC<Props> = () => {
 
   const initPage = async () => {
     try {
-      const shopRes = await commodity.getShop()
+      let shopRes
+      if (firstIn) {
+        shopRes = await commodity.getShop()
+        setShopInfo(shopRes.data)
+        dispatch(setShop(shopRes.data))
+        firstIn = false
+      }
       const {data} = await commodity.getAdv(0)
-      const listRes = await commodity.getSkuList(shopRes.data.shopid)
-      const hotListRes = await commodity.getHotShop(shopRes.data.shopid)
-      const spikeRes = await commodity.getSpikeHome(shopRes.data.shopid)
-      const groupRes = await commodity.getGroupHome(shopRes.data.shopid)
+      const listRes = await commodity.getSkuList(shopState.shopData.shopid || shopRes.data.shopid)
+      const hotListRes = await commodity.getHotShop(shopState.shopData.shopid || shopRes.data.shopid)
+      const spikeRes = await commodity.getSpikeHome(shopState.shopData.shopid || shopRes.data.shopid)
+      const groupRes = await commodity.getGroupHome(shopState.shopData.shopid || shopRes.data.shopid)
       const classListRes = await commodity.getClassList()
       setSpikeList(spikeRes.data)
       setGroupList(groupRes.data)
       setHotList(hotListRes.data)
       setClassList(classListRes.data)
       setTabList(listRes.data)
-      dispatch(setShop(shopRes.data))
-      setShopInfo(shopRes.data)
-      setAdvList(data[0])
+      setAdvList(data)
     } finally {
       setShowPage(true)
     }
   }
+
+  useEffect(() => {
+    if (!shopInfo || (shopState.shopData.shopid !== shopInfo.shopid))
+      initPage()
+  }, [shopState.shopData.shopid])
 
   useEffect(() => {
     if (freshList)
@@ -110,7 +123,6 @@ const Home: Taro.FC<Props> = () => {
       setLocation(res)
     }
     getLocationMes()
-    initPage()
   }, [])
 
   return (
@@ -130,6 +142,7 @@ const Home: Taro.FC<Props> = () => {
           >
             <View
               className='commonRowFlex'
+              onClick={() => navTo('home', 'chooseShop')}
               style={{
                 alignItems: 'center'
               }}
@@ -142,7 +155,7 @@ const Home: Taro.FC<Props> = () => {
                   marginLeft: '8Px'
                 }}
               >
-                {shopInfo.shopaddress}
+                {shopState.shopData.shopaddress}
               </Text>
             </View>
           </View>
@@ -189,7 +202,7 @@ const Home: Taro.FC<Props> = () => {
             }}
           >
             {advList &&
-            <SwiperImg list={advList.list}>
+            <SwiperImg list={advList[0].list}>
             </SwiperImg>}
           </View>
           <View
@@ -235,20 +248,20 @@ const Home: Taro.FC<Props> = () => {
             </View>
           </View>
           {/*促销活动*/}
-          {/*<View*/}
-          {/*  style={{*/}
-          {/*    margin: '16px 16px 0 16px',*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  <SwiperImg*/}
-          {/*    imgUrl={imgList}*/}
-          {/*    marginRight={20}*/}
-          {/*    autoplay={false}*/}
-          {/*    circular={false}*/}
-          {/*    imgWidth={95}*/}
-          {/*    swiperHeight='100px'*/}
-          {/*  />*/}
-          {/*</View>*/}
+          <View
+            style={{
+              margin: '16px 16px 0 16px',
+            }}
+          >
+            <SwiperImg
+              marginRight={20}
+              autoplay={false}
+              circular={false}
+              imgWidth={95}
+              swiperHeight='100px'
+              list={advList[1].list}
+            />
+          </View>
           <View className='commonRowFlex'
             style={{
               margin: '16px 16px 0 16px',
@@ -338,7 +351,6 @@ const Home: Taro.FC<Props> = () => {
               </View>
               <Text className='slightlySmallText grayText'>拼团享特价优惠</Text>
               <View className='commonRowFlex'
-                    onClick={(e) => e.stopPropagation()}
                     style={{
                       justifyContent: 'space-around',
                       marginTop: '8px'
@@ -346,7 +358,6 @@ const Home: Taro.FC<Props> = () => {
               >
                 {groupList && groupList.map((item, index) => (
                   <View className='commonColumnFlex flexCenter'
-                        onClick={() => navTo('home', 'productDetails', {id: item.skuid, actid: item.actid})}
                         key={index}
                         style={{
                           justifyContent: 'center',
@@ -355,7 +366,7 @@ const Home: Taro.FC<Props> = () => {
                   >
                     <AtAvatar image={item.imgurl} />
                     <View className='commonRowFlex flexCenter'>
-                      <AtTag size='small' circle active>{`${item.tgcount}人团${item.price}`}</AtTag>
+                      <AtTag size='small' circle active>{`${item.tgcount}人团${item.activityprice}`}</AtTag>
                     </View>
                   </View>
                 ))}
@@ -408,7 +419,7 @@ const Home: Taro.FC<Props> = () => {
           {/*商品列表*/}
           <CusTabs tabs={tabList} active={0} changeTab={(id) => setTopicId(id)} defaultTitle='精选好物' />
           <View className='normalMarginLeft normalMarginRight'>
-            <FreshList onRef={setFreshList} topicId={topicId} shopid={shopInfo.shopid} dispatchListFunc={async (page: number, size: number, topicid: number, shopId: number) => {
+            <FreshList onRef={setFreshList} topicId={topicId} shopid={shopState.shopData.shopid} dispatchListFunc={async (page: number, size: number, topicid: number, shopId: number) => {
               return await commodity.getTopicSku(topicid, shopId, page, size)
             }}
             />
