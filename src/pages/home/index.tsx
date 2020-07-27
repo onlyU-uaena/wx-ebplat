@@ -17,6 +17,7 @@ import LimitStr from '@utils/stringLimit'
 import account from '../mine/utils/login'
 import shopCart from '../shoppingCart/utils/shopCart'
 import { selectShopState } from '@redux/reducers/selector'
+import user from '../mine/utils/user'
 
 let firstIn = true
 
@@ -38,6 +39,7 @@ const Home: Taro.FC<Props> = () => {
   const [showPage, setShowPage] = useState<boolean>(false)
   const [tabList, setTabList] = useState()
   const [hotList, setHotList] = useState()
+  const [messageList, setMessageList] = useState()
   const [classList, setClassList] = useState()
 
   useReachBottom(() => {
@@ -96,6 +98,8 @@ const Home: Taro.FC<Props> = () => {
       const spikeRes = await commodity.getSpikeHome(shopState.shopData.shopid || shopRes.data.shopid)
       const groupRes = await commodity.getGroupHome(shopState.shopData.shopid || shopRes.data.shopid)
       const classListRes = await commodity.getClassList()
+      const messageRes = await user.getMessageCount(1, 0)
+      setMessageList(messageRes.data)
       setSpikeList(spikeRes.data)
       setGroupList(groupRes.data)
       setHotList(hotListRes.data)
@@ -108,8 +112,10 @@ const Home: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
-    if (!shopInfo || (shopState.shopData.shopid !== shopInfo.shopid))
+    if (!shopInfo || (shopState.shopData.shopid !== shopInfo.shopid)) {
       initPage()
+      setShopInfo(shopState.shopData)
+    }
   }, [shopState.shopData.shopid])
 
   useEffect(() => {
@@ -147,7 +153,10 @@ const Home: Taro.FC<Props> = () => {
                 alignItems: 'center'
               }}
             >
-              <CustomIcon size={20} name='location' color='white' />
+              <CustomIcon size={20}
+                          name='location'
+                          color='white'
+              />
               <Text
                 className='mediumText'
                 style={{
@@ -187,11 +196,16 @@ const Home: Taro.FC<Props> = () => {
             </View>
             <View
               className='commonColumnFlex flexCenter'
+              onClick={() => navTo('mine', 'myMessage')}
               style={{
                 marginRight: '16px'
               }}
             >
-              <CustomIcon name='ring' color='white' size={25} />
+              <CustomIcon name='ring'
+                          color='white'
+                          size={25}
+                          onClick={() => navTo('mine', 'myMessage')}
+              />
               <Text className='smallText whiteText'>消息</Text>
             </View>
           </View>

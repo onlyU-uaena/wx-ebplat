@@ -1,0 +1,14 @@
+@import "src/common/styles/style.scss";
+@import "src/common/styles/icon.scss";
+
+.at-list__item::after {
+  border-bottom: none;
+}
+
+.at-list__item .item-content__info-note {
+  font-size: 14Px;
+}
+
+.at-list__item .item-extra__info {
+  font-size: 9Px;
+}

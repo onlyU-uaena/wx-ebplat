@@ -9,7 +9,10 @@ class User {
     updatePayPwd: '/api/app/userinfo/updpayPwd',
     addFeedback: 'api/app/userinfo/addFeedBack',
     queryassets: '/api/app/userinfo/queryassets',
-    getFoot: '/api/app/userinfo/browseHistory'
+    getFoot: '/api/app/userinfo/browseHistory',
+    getMessageCount: '/api/app/messages/getMessageCount',
+    getMessageList: '/api/app/messages/queryMessages',
+    getMessageDetail: '/api/app/messages/getMessagesById'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -28,6 +31,26 @@ class User {
     const data = {
     }
     return await httpRequest(this.urls.queryassets, data)
+  }
+
+  public async getMessageCount (status: number, receType: number) {
+    const data = {
+      status, receType
+    }
+    return await httpRequest(this.urls.getMessageCount, data)
+  }
+
+  public async getMessageList () {
+    const data = {
+    }
+    return await httpRequest(this.urls.getMessageList, data)
+  }
+
+  public async getMessageDetail (id: number) {
+    const data = {
+      id
+    }
+    return await httpRequest(this.urls.getMessageDetail, data, false)
   }
 
   public async getFoot (pageindex: number, pagesize: number) {
