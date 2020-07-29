@@ -9,7 +9,7 @@ export const firstIconList = [
 
 export const secondIconList = [
   {title: '我的收藏', iconName: 'collect', color: '', nav: {index: 'home', name: 'chooseAddress'}},
-  {title: '我的拼团', iconName: 'fightTogether', color: colors.green, nav: {index: 'mine', name: 'groupDetail'}},
+  {title: '我的拼团', iconName: 'fightTogether', color: colors.green, nav: {index: 'mine', name: 'myGroup'}},
   {title: '积分商城', iconName: 'point', color: colors.pink, nav: {index: 'mine', name: 'pointShop'}},
   {title: '足迹', iconName: 'foot', color: colors.purple, nav: {index: 'mine', name: 'myFoot'}}
 ]

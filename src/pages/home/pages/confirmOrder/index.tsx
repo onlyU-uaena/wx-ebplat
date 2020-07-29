@@ -46,8 +46,6 @@ const ConfirmOrder: Taro.FC<Props> = () => {
 
   useEffect(() => {
     const data = JSON.parse(router.params.props)
-    if (data.skuID[0].isgrp)
-      data.price = data.skuID[0].skugrp.gprice
     setOrderDetail(data)
     console.log(data)
   }, [])
@@ -99,7 +97,10 @@ const ConfirmOrder: Taro.FC<Props> = () => {
         icon: 'none'
       })
     }
-    order.addGroupOrder(orderDetail.skuID[0].skuid, orderDetail.skuID[0].skugrp.id, shopState.address.id, currentTab, '12:00', remark, '12:00')
+    const addRes = await order.addGroupOrder(orderDetail.skuID[0].skuid, orderDetail.skuID[0].skugrp.id)
+    const {code, data} = await order.joinGroupOrder(orderDetail.skuID[0].skuid, addRes.data, shopState.address.id, currentTab, '12:00', remark, '12:00')
+    if (code === 0)
+      navTo('mine', 'orderDetail', {id: data})
   }
 
   return (

@@ -30,6 +30,21 @@ const ProductDetails: Taro.FC<Props> = () => {
   const scope = useScope()
 
   const [showFloat, setShowFloat] = useState<boolean>(false)
+  // 0 无 1秒杀 2拼团
+  const [controlShow, setControlShow] = useState<number>(0)
+
+  const judgeShow = (data) => {
+    const showGroup = JSON.parse(router.params.props).showGroup
+    if (showGroup) {
+      setControlShow(2)
+    } else if (data.isgrp && data.packings) {
+      setControlShow(1)
+    } else if (data.isgrp)
+      setControlShow(2)
+    else if (data.packings)
+      setControlShow(1)
+    else setControlShow(0)
+  }
 
   useEffect(() => {
     getDetail()
@@ -52,19 +67,20 @@ const ProductDetails: Taro.FC<Props> = () => {
 
   const getDetail = async () => {
     const {data} = await commodity.getDetail(JSON.parse(router.params.props).id, JSON.parse(router.params.props).type || 0, JSON.parse(router.params.props).actid || 0)
+    judgeShow(data)
     setProDetail(data)
     WxParse.wxParse('article', 'html', data.description, scope, 5)
     WxParse.wxParse('serve', 'html', data.afterservice, scope, 5)
     setFavorites(data.isfavorites)
   }
 
-  const toOrder = async (isgrp: boolean) => {
+  const toOrder = async (control: number) => {
 
     // const res = await order.getFreight(proDetail.shopid, buyNum, buyNum * proDetail.price)
 
     const data = {
       shopid: proDetail.shopid,
-      totalMoney: isgrp ? proDetail.skugrp.gprice * buyNum : proDetail.price * buyNum,
+      totalMoney: control === 2 ? proDetail.skugrp.gprice * buyNum : control === 1 ? proDetail.packings.skiprice * buyNum : proDetail.price * buyNum,
       freightMoney: 0,
       activityId: 0,
       skuID: [{
@@ -73,14 +89,15 @@ const ProductDetails: Taro.FC<Props> = () => {
         imgurl: proDetail.imgurl,
         subtitle: proDetail.subtitle,
         proCount: buyNum,
-        price: isgrp ? proDetail.skugrp.gprice : proDetail.price,
+        price: control === 2 ? proDetail.skugrp.gprice : control === 1 ? proDetail.packings.skiprice : proDetail.price,
         packageid: 0,
         unitid: 0,
         marketid: 0,
-        spikeid: 0,
+        spikeid: control === 1 ? proDetail.packings.skiid : 0,
         type: proDetail.type,
-        isgrp: isgrp,
-        skugrp: proDetail.skugrp
+        isgrp: control === 2,
+        skugrp: proDetail.skugrp,
+        packings: proDetail.packings
       }]
     }
 
@@ -151,10 +168,11 @@ const ProductDetails: Taro.FC<Props> = () => {
           {/*轮播图*/}
           {proDetail && <SwiperImg swiperHeight='300px' list={proDetail.imgs} />}
           {/*拼团秒杀*/}
-          {proDetail.isgrp && (
-            <View className='commonRowFlex flexCenter normalPadding gradientTheme radius'
+          {controlShow === 2 && (
+            <View className='commonRowFlex flexCenter gradientTheme radius'
                   style={{
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
+                    padding: '8px 16px'
                   }}
             >
               <View className='commonColumnFlex'>
@@ -163,7 +181,6 @@ const ProductDetails: Taro.FC<Props> = () => {
                   <Text className='whiteText'>{proDetail.skugrp.gprice}</Text>
                   <View className='normalMarginLeft'>
                     <AtTag size='small'
-                           onClick={() => navTo('mine', 'pointDetail')}
                            customStyle={{
                              backgroundColor: 'rgba(0, 0, 0, 0)',
                              color: 'white'
@@ -172,6 +189,26 @@ const ProductDetails: Taro.FC<Props> = () => {
                   </View>
                 </View>
                 <Text className='smallText whiteText throughLineText'>¥{proDetail.price}</Text>
+              </View>
+              {/*<Text className='mediumText whiteText'>已拼{1}份</Text>*/}
+            </View>
+          )}
+          {controlShow === 1 && (
+            <View className='commonRowFlex flexCenter gradientTheme radius'
+                  style={{
+                    justifyContent: 'space-between',
+                    padding: '8px 16px'
+                  }}
+            >
+              <View className='commonColumnFlex'>
+                <View className='commonRowFlex flexCenter'>
+                  <Text className='whiteText slightlySmallText'>¥</Text>
+                  <Text className='whiteText'>{proDetail.skugrp.gprice}</Text>
+                </View>
+                <View>
+                  <Text className='smallText whiteText throughLineText'>¥{proDetail.price}</Text>
+                  <Text className='smallText whiteText normalMarginLeft'>已售0份</Text>
+                </View>
               </View>
               {/*<Text className='mediumText whiteText'>已拼{1}份</Text>*/}
             </View>
@@ -291,30 +328,50 @@ const ProductDetails: Taro.FC<Props> = () => {
               flex: 1
             }}
             >
-              {!proDetail.isgrp ? (
-                <View onClick={() => addToCart(proDetail.id)} className='gradientYellow commonRowFlex flexCenter' style={{
-                  flex: 1,
-                  justifyContent: 'center'
-                }}
-                >
-                  <Text className='whiteText slightlySmallText'>加入购物车</Text>
-                </View>
-              ) : (
-                <View onClick={() => toOrder(true)} className='gradientYellow commonRowFlex flexCenter' style={{
-                  flex: 1,
-                  justifyContent: 'center'
-                }}
-                >
-                  <Text className='whiteText slightlySmallText'>我要开团</Text>
-                </View>
-              )}
-              <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
+              {controlShow === 0 && (<View onClick={() => addToCart(proDetail.id)} className='gradientYellow commonRowFlex flexCenter' style={{
                 flex: 1,
                 justifyContent: 'center'
               }}
               >
-                <Text className='whiteText slightlySmallText'>{proDetail.isgrp ? '直接购买' : '立即购买'}</Text>
+                <Text className='whiteText slightlySmallText'>加入购物车</Text>
               </View>
+              )}
+              {controlShow === 2 && (
+                <View onClick={() => toOrder(2)} className='gradientYellow commonRowFlex flexCenter' style={{
+                flex: 1,
+                justifyContent: 'center'
+              }}
+                >
+                <Text className='whiteText slightlySmallText'>我要开团</Text>
+                </View>
+              )}
+              {controlShow === 0 && (
+                <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
+                  flex: 1,
+                  justifyContent: 'center'
+                }}
+                >
+                  <Text className='whiteText slightlySmallText'>立即购买</Text>
+                </View>
+              )}
+              {controlShow === 1 && (
+                <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
+                  flex: 1,
+                  justifyContent: 'center'
+                }}
+                >
+                  <Text className='whiteText slightlySmallText'>立即购买</Text>
+                </View>
+              )}
+              {controlShow === 2 && (
+                <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
+                  flex: 1,
+                  justifyContent: 'center'
+                }}
+                >
+                  <Text className='whiteText slightlySmallText'>直接购买</Text>
+                </View>
+              )}
             </View>
           </View>
           <AtFloatLayout isOpened={showFloat}
@@ -330,7 +387,7 @@ const ProductDetails: Taro.FC<Props> = () => {
                   justifyContent: 'flex-end'
                 }}
                 >
-                  <Text className='redText mediumText'>¥{proDetail.price}</Text>
+                  <Text className='redText mediumText'>¥{controlShow === 1 ? proDetail.packings.skiprice : proDetail.price}</Text>
                   <HeightView />
                   <Text className='slightlySmallText grayText'>库存{proDetail.stock}件</Text>
                 </View>
@@ -345,7 +402,7 @@ const ProductDetails: Taro.FC<Props> = () => {
               <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
             </View>
             <View className='commonRowFlex gradientTheme flexCenter normalPadding'
-                  onClick={() => toOrder(false)}
+                  onClick={() => toOrder(controlShow === 1 ? 1 : 0)}
                   style={{
                     justifyContent: 'center',
                     position: 'fixed',

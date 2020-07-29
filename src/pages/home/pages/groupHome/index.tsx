@@ -73,7 +73,7 @@ const GroupHome: Taro.FC<Props> = () => {
         >
           {groupList && groupList.map(item => (
             <View key={item.actid} className='commonRowFlex normalPadding'
-                  onClick={() => navTo('home', 'productDetails', {id: item.skuid, actid: item.actid})}
+                  onClick={() => navTo('home', 'productDetails', {id: item.skuid, actid: item.actid, showGroup: true})}
                   style={{
                     justifyContent: 'space-between'
                   }}

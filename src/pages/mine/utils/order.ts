@@ -12,7 +12,8 @@ class Order {
     getFreight: '/api/app/order/getFreightByShop',
     payOrder: '/api/app/pay/balancepay',
     // 团购
-    addGroupOrder: '/api/app/grp/addorder',
+    addGroupOrder: '/api/app/grp/applypro',
+    joinGroupOrder: '/api/app/grp/addorder',
     getGroupList: '/api/app/grp/getlist',
     myGroupDetail: '/api/app/grp/getdetail'
   }
@@ -27,6 +28,14 @@ class Order {
     return await httpRequest(this.urls.getOrderList, data)
   }
 
+  public async getGroupList (pageindex, pagesize) {
+    const data = {
+      pageindex,
+      pagesize
+    }
+    return await httpRequest(this.urls.getGroupList, data)
+  }
+
   public async getFreight (shopid: number, procount: number, proprice: number) {
     const data = {
       shopid,
@@ -34,6 +43,13 @@ class Order {
       proprice
     }
     return await httpRequest(this.urls.getFreight, data)
+  }
+
+  public async myGroupDetail (gnum: number) {
+    const data = {
+      gnum
+    }
+    return await httpRequest(this.urls.myGroupDetail, data)
   }
 
   @throttleFunc(1000)
@@ -89,13 +105,23 @@ class Order {
   }
 
   @throttleFunc(1000)
-  public async addGroupOrder (skuid: number, gid: number, receiveaddrid: number, disptype: number, timetype: string, remark: number, arrivetime: string) {
+  public async joinGroupOrder (skuid: number, gid: number, receiveaddrid: number, disptype: number, timetype: string, remark: number, arrivetime: string) {
     const data = {
       skuid,
       gid,
       remark,
       receiveaddrid,
       timetype,arrivetime
+    }
+    return await httpRequest(this.urls.joinGroupOrder, data)
+  }
+
+  @throttleFunc(1000)
+  public async addGroupOrder (skuid: number, gid: number, gnum?: number) {
+    const data = {
+      skuid,
+      gid,
+      gnum: gnum || ''
     }
     return await httpRequest(this.urls.addGroupOrder, data)
   }

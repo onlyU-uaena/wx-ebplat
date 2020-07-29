@@ -328,10 +328,10 @@ const Home: Taro.FC<Props> = () => {
                       flex: 1,
                     }}
                   >
-                    <AtAvatar image={item.imgUrl} />
+                    <AtAvatar image={item.imgurl} />
                     <View className='commonRowFlex flexCenter'>
                       <Text className='slightlySmallText'>
-                        ¥ {item.price}
+                        ¥ {item.activityprice}
                       </Text>
                       <Text className='smallText grayText'
                             style={{
@@ -339,7 +339,7 @@ const Home: Taro.FC<Props> = () => {
                               textDecoration: 'line-through'
                             }}
                       >
-                        ¥ {item.oldPrice}
+                        ¥ {item.price}
                       </Text>
                     </View>
                   </View>

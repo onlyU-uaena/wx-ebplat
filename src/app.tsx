@@ -27,6 +27,7 @@ class App extends Component {
         "root": "pages/mine/pages",
         "pages": [
           "myOrder/index",
+          "coupon/index",
           "orderDetail/index",
           "findPayPwd/index",
           "feedback/index",

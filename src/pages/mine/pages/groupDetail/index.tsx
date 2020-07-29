@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
+import Taro, { useState, useEffect, useRouter } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
@@ -6,6 +6,7 @@ import { AtAvatar, AtButton, AtIcon, AtTag } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import HeightView from '../../../../components/HeightView'
 import colors from '../../../../common/styles/color'
+import order from '../../utils/order'
 
 interface Props {
 
@@ -13,6 +14,18 @@ interface Props {
 
 const GroupDetail: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
+  const router = useRouter()
+  const [detail, setDetail] = useState()
+
+  useEffect(() => {
+    const ugnum = JSON.parse(router.params.props).ugnum
+    getDetail(ugnum)
+  }, [])
+
+  const getDetail = async (gnum: number) => {
+    const {data} = await order.myGroupDetail(gnum)
+    setDetail(data)
+  }
 
   return (
     <View>

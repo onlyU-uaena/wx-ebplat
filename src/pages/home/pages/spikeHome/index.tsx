@@ -89,10 +89,10 @@ const SpikeHome: Taro.FC<Props> = () => {
           {(spikeList && topicId) && spikeList.filter(item => item.actid === topicId).map(item => (
             <View key={item.actid}
                   className='normalMarginBottom'
-                  onClick={() => navTo('home', 'productDetails', {id: item.skuid, actid: item.actid})}
             >
               {item.pros.map(shopItem => (
                 <View key={shopItem.actid} className='radius'
+                      onClick={() => navTo('home', 'productDetails', {id: shopItem.skuid, actid: shopItem.actid})}
                       style={{
                         backgroundColor: 'white'
                       }}
