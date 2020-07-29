@@ -1,2 +1,9 @@
 @import "src/common/styles/style.scss";
 @import "src/common/styles/icon.scss";
+
+.displayImg {
+  flex-shrink: 0;
+  width: 200px;
+  height: 100Px;
+  margin-right: 8Px;
+}

@@ -12,7 +12,14 @@ class User {
     getFoot: '/api/app/userinfo/browseHistory',
     getMessageCount: '/api/app/messages/getMessageCount',
     getMessageList: '/api/app/messages/queryMessages',
-    getMessageDetail: '/api/app/messages/getMessagesById'
+    getMessageDetail: '/api/app/messages/getMessagesById',
+    //优惠券
+    getWaitedCoupon: '/api/app/coupon/getCouponList',
+    takeCoupon: '/api/app/coupon/takeCoupon',
+    getCoupon: '/api/app/coupon/showCoupon',
+    getOrderCoupon: '/api/app/coupon/getOrderCoupon',
+    getCouponCount: '/api/app/coupon/couponCount',
+    swapCoupon: '/api/app/coupon/couponCount'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))

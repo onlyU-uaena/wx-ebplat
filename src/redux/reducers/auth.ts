@@ -4,6 +4,7 @@ const defaultState = {
   loginStatus: false,
   userData: {
     imgurl: '',
+    id: 0,
     nickname: '',
     sex: '',
     birthdaystr: '',
