@@ -19,10 +19,13 @@ interface Props {
 const Mine: Taro.FC<Props> = () => {
   const authState = useSelector(selectAuthState)
   const [assets, setAssets] = useState()
+  const [couponCount, setCouponCount] = useState()
 
   const getAssets = async () => {
     const {data} = await user.queryassets()
+    const couponRes = await user.getCouponCount()
     setAssets(data)
+    setCouponCount(couponRes.data)
   }
 
   useEffect(() => {
@@ -76,11 +79,13 @@ const Mine: Taro.FC<Props> = () => {
           <Text className='orangeText'>{authState.userData.points}</Text>
           <Text className='mediumText grayText'>积分</Text>
         </View>
-        <View className='commonColumnFlex flexCenter' style={{
-          flex: 1
-        }}
+        <View className='commonColumnFlex flexCenter'
+              onClick={() => navTo('mine', 'coupon')}
+              style={{
+                flex: 1
+              }}
         >
-          <Text className='orangeText'>1</Text>
+          <Text className='orangeText'>{couponCount || '获取中'}</Text>
           <Text className='mediumText grayText'>优惠券</Text>
         </View>
       </View>

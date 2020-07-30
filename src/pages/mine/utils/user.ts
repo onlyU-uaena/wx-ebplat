@@ -21,7 +21,7 @@ class User {
     getCoupon: '/api/app/coupon/showCoupon',
     getOrderCoupon: '/api/app/coupon/getOrderCoupon',
     getCouponCount: '/api/app/coupon/couponCount',
-    swapCoupon: '/api/app/coupon/couponCount'
+    swapCoupon: '/api/app/coupon/takeCoupon'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -76,6 +76,30 @@ class User {
       pagesize
     }
     return await httpRequest(this.urls.getCollect, data)
+  }
+
+  public async getCoupon (type: number, page: number, size: number) {
+    const data = {
+      type,
+      page,
+      size
+    }
+    return await httpRequest(this.urls.getCoupon, data)
+  }
+
+  public async getCouponCount () {
+    const data = {
+    }
+    return await httpRequest(this.urls.getCouponCount, data)
+  }
+
+  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
+  @throttleFunc(1000)
+  public async swapCoupon (couponid) {
+    const data = {
+      couponid
+    }
+    return await httpRequest(this.urls.swapCoupon, data)
   }
 
   public async deleteCollect (ids: string) {

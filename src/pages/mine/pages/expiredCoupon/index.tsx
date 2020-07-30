@@ -1,11 +1,11 @@
-import Taro, { useState, useEffect, useReachBottom } from '@tarojs/taro'
+import Taro, { useState, useEffect, useReachBottom} from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtButton, AtSearchBar } from 'taro-ui'
+import { AtButton } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
+import CustomIcon from '../../../../components/CustomIcon'
 import user from '../../utils/user'
-import { navTo } from '@utils/route'
 
 interface Props {
 
@@ -18,9 +18,9 @@ const couponStatus = {
   3: '全场通用'
 }
 
-const Coupon: Taro.FC<Props> = () => {
+const ExpiredCoupon: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
-  const [swapCode, setSwapCode] = useState<string>('')
+
   const [couponList, setCouponList] = useState()
   const [page, setPage] = useState(1)
 
@@ -29,7 +29,7 @@ const Coupon: Taro.FC<Props> = () => {
   }, [])
 
   useReachBottom(async () => {
-    const {data} = await user.getCoupon(1, page + 1, 14)
+    const {data} = await user.getCoupon(3, page + 1, 14)
     if (data.length) {
       setPage(page + 1)
       setCouponList(couponList.concat(data))
@@ -37,45 +37,20 @@ const Coupon: Taro.FC<Props> = () => {
   })
 
   const getCouponList = async () => {
-    const {data} = await user.getCoupon(1, page, 14)
+    const {data} = await user.getCoupon(3, page, 14)
     setCouponList(data)
-  }
-
-  const swapCoupon = async () => {
-    const {code} = await user.swapCoupon(swapCode)
-    if (code === 0) {
-      const {data} = await user.getCoupon(1, 1, 14)
-      setPage(1)
-      setCouponList(data)
-      Taro.showToast({
-        title: '兑换成功'
-      })
-    }
   }
 
   return (
     <View>
-      <TabBar title='优惠券' />
-      <View style={{
-              backgroundColor: 'white',
-              padding: '8px'
-            }}
-      >
-        <AtSearchBar
-          placeholder='请输入优惠券号码'
-          showActionButton
-          value={swapCode}
-          onChange={setSwapCode}
-          actionName='兑换'
-          onActionClick={() => swapCoupon()}
-        />
-      </View>
+      <TabBar title='过期券' />
       {couponList && couponList.map(item => (
         <View key={item.couponid} className='normalMargin'>
           <View className='commonRowFlex'>
-            <View className='commonColumnFlex normalPadding flexCenter gradientTheme'
+            <View className='commonColumnFlex normalPadding flexCenter'
                   style={{
                     flex: 1,
+                    backgroundColor: 'rgb(200, 200, 200)',
                     justifyContent: 'center'
                   }}
             >
@@ -87,6 +62,7 @@ const Coupon: Taro.FC<Props> = () => {
             </View>
             <View className='commonColumnFlex normalPadding'
                   style={{
+                    position: 'relative',
                     backgroundColor: 'white',
                     flex: 2,
                     justifyContent: 'space-around'
@@ -94,22 +70,20 @@ const Coupon: Taro.FC<Props> = () => {
             >
               <Text className='slightlySmallText'>{couponStatus[item.couponusetype]}</Text>
               <Text className='grayText slightlySmallText'>{item.providetimetr}-{item.outtimetr}</Text>
+              <View style={{
+                position: 'absolute',
+                right: '21px',
+                top: 'calc(50% - 25px)'
+              }}
+              >
+                <CustomIcon name='expired' color='rgb(200, 200, 200)' size={50} />
+              </View>
             </View>
           </View>
         </View>
       ))}
-      <View className='normalMargin commonRowFlex flexCenter'
-            style={{
-              justifyContent: 'center'
-            }}
-      >
-        <Text className='grayText slightlySmallText borderRight normalPaddingRight'>没有更多可用券</Text>
-        <Text className='redText slightlySmallText normalPaddingLeft'
-              onClick={() => navTo('mine', 'expiredCoupon')}
-        >{`查看过期的券 >`}</Text>
-      </View>
     </View>
   )
 }
 
-export default Coupon
+export default ExpiredCoupon

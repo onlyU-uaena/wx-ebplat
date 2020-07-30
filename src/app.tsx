@@ -28,6 +28,7 @@ class App extends Component {
         "pages": [
           "myOrder/index",
           "coupon/index",
+          "expiredCoupon/index",
           "orderDetail/index",
           "findPayPwd/index",
           "myFavorites/index",
