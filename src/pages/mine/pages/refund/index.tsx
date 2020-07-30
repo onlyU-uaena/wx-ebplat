@@ -30,7 +30,7 @@ const Refund: Taro.FC<Props> = () => {
       skuStatus = 2
     else skuStatus = 1
     console.log(filesUrl.toString())
-    const {data, code} = await order.toRefund(itemDetail.code, reason, skuStatus, filesUrl.toString())
+    const {data, code} = await order.toRefund(itemDetail.id, reason, skuStatus, filesUrl.toString() || 0)
     if (code === 0) {
       Taro.showToast({
         title: '退款提交成功',

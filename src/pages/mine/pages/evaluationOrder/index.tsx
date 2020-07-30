@@ -64,7 +64,7 @@ const EvaluationOrder: Taro.FC<Props> = () => {
       }
     })
 
-    const {code} = await order.toComment(itemDetail.code, shopState.shopData.shopid, list, gooddescription, sellerattitude, logisticsspeed)
+    const {code} = await order.toComment(itemDetail.id, shopState.shopData.shopid, list, gooddescription, sellerattitude, logisticsspeed)
     if (code === 0) {
       Taro.showToast({
         title: '评论成功'
@@ -113,7 +113,7 @@ const EvaluationOrder: Taro.FC<Props> = () => {
       console.log(item)
       list.push({
         orderdetaileid: item.id,
-        type: 0,
+        type: 1,
         spuid: item.skuid,
         star: 5,
         title: '',

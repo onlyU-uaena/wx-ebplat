@@ -266,7 +266,7 @@ const MyOrder: Taro.FC<Props> = () => {
                   onRefresherRefresh={() => refreshList()}
                   refresherEnabled
       >
-        {orderList ? (
+        {orderList.length ? (
           orderList.map((item, index) => (
             <View key={index}>
               <View style={{
@@ -328,7 +328,17 @@ const MyOrder: Taro.FC<Props> = () => {
               <HeightView />
             </View>
           ))
-        ) : null}
+        ) : (
+          <View className='commonRowFlex flexCenter'
+                   style={{
+                     justifyContent: 'center',
+                     margin: '32px 0'
+                   }}
+          >
+            <Text className='grayText slightlySmallText'>
+              没有订单哦～
+            </Text>
+          </View>)}
       </ScrollView>
     </View>
   )

@@ -13,6 +13,8 @@ class User {
     getMessageCount: '/api/app/messages/getMessageCount',
     getMessageList: '/api/app/messages/queryMessages',
     getMessageDetail: '/api/app/messages/getMessagesById',
+    getCollect: '/api/app/userinfo/getcollectspu',
+    deleteCollect: '/api/app/userinfo/deletecollect',
     //优惠券
     getWaitedCoupon: '/api/app/coupon/getCouponList',
     takeCoupon: '/api/app/coupon/takeCoupon',
@@ -66,6 +68,21 @@ class User {
       pagesize
     }
     return await httpRequest(this.urls.getFoot, data)
+  }
+
+  public async getCollect (pageindex: number, pagesize: number) {
+    const data = {
+      pageindex,
+      pagesize
+    }
+    return await httpRequest(this.urls.getCollect, data)
+  }
+
+  public async deleteCollect (ids: string) {
+    const data = {
+      ids
+    }
+    return await httpRequest(this.urls.deleteCollect, data)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
