@@ -12,6 +12,7 @@ class Order {
     getFreight: '/api/app/order/getFreightByShop',
     payOrder: '/api/app/pay/balancepay',
     toRefund: '/api/app/order/afterreturn',
+    toComment: '/api/app/order/addordercomment',
     // 团购
     addGroupOrder: '/api/app/grp/applypro',
     joinGroupOrder: '/api/app/grp/addorder',
@@ -89,6 +90,20 @@ class Order {
       imgs
     }
     return await httpRequest(this.urls.toRefund, data)
+  }
+
+  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
+  @throttleFunc(1000)
+  public async toComment (orderid: number, shopid: number, commentstr: [], gooddescription: string, sellerattitude: string, logisticsspeed: string) {
+    const data = {
+      orderid,
+      shopid,
+      commentstr,
+      gooddescription,
+      sellerattitude,
+      logisticsspeed
+    }
+    return await httpRequest(this.urls.toComment, data)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))

@@ -32,6 +32,8 @@ const CustomIcon: Taro.FC<Props> = (props) => {
           onClick={onClick}
           className={`fa fa-${name}`}
           style={{
+            position: 'relative',
+            top: '-1.5px',
             fontSize: (size || 14) + 'px',
             color: color || '',
             ...style

@@ -78,8 +78,15 @@ const MyOrder: Taro.FC<Props> = () => {
         },{
           title: '确认收货',
           func: async (item) => {
-            await toConfirmOrder(item.id)
-            refreshList()
+            if (item.deliverymode !== 1) {
+              await toConfirmOrder(item.id)
+              refreshList()
+            } else {
+              Taro.showToast({
+                title: '自提订单需线下收货',
+                icon: 'none'
+              })
+            }
           }
         }
       ]},
@@ -92,25 +99,44 @@ const MyOrder: Taro.FC<Props> = () => {
         },{
           title: '确认收货',
           func: async (item) => {
-            await toConfirmOrder(item.id)
-            refreshList()
+            if (item.deliverymode !== 1) {
+              await toConfirmOrder(item.id)
+              refreshList()
+            } else {
+              Taro.showToast({
+                title: '自提订单需线下收货',
+                icon: 'none'
+              })
+            }
           }
         }
       ]},
-    10: {name: '待评论', button: [
+    10: {name: '已完成', button: [
         {
           title: '删除订单',
           func: async (item) => {
             await toDeleteOrder(item.id)
             refreshList()
           }
+        },{
+          title: '评价订单',
+          func: async (item) => {
+            navTo('mine','evaluationOrder', {item})
+            refreshList()
+          }
         }
       ]},
-    9: {name: '待评论', button: [
+    9: {name: '已完成', button: [
         {
           title: '删除订单',
           func: async (item) => {
             await toDeleteOrder(item.id)
+            refreshList()
+          }
+        },{
+          title: '评价订单',
+          func: async (item) => {
+            navTo('mine','evaluationOrder', {item})
             refreshList()
           }
         }
@@ -124,8 +150,15 @@ const MyOrder: Taro.FC<Props> = () => {
         },{
           title: '确认收货',
           func: async (item) => {
-            await toConfirmOrder(item.id)
-            refreshList()
+            if (item.deliverymode !== 1) {
+              await toConfirmOrder(item.id)
+              refreshList()
+            } else {
+              Taro.showToast({
+                title: '自提订单需线下收货',
+                icon: 'none'
+              })
+            }
           }
         }
       ]},
@@ -179,7 +212,7 @@ const MyOrder: Taro.FC<Props> = () => {
   })
 
   useReachBottom( async () => {
-    getOrderList()
+    getOrderList(currentTabs - 1)
   })
 
   const getOrderList = async (status?: string | number) => {
@@ -269,16 +302,18 @@ const MyOrder: Taro.FC<Props> = () => {
                           }}
                     >
                       <AtButton onClick={() => statusToTitle[item.status].button[0].func(item)} size='small'>{statusToTitle[item.status].button[0].title}</AtButton>
-                      <View className='smallMarginLeft'>
-                        <AtButton type='primary'
-                                  onClick={() => statusToTitle[item.status].button[1].func(item)}
-                                  customStyle={{
-                                    padding: '0 16px'
-                                  }} size='small'
-                        >
-                          {statusToTitle[item.status].button[1].title}
-                        </AtButton>
-                      </View>
+                      {!item.iscomment && (
+                        <View className='smallMarginLeft'>
+                          <AtButton type='primary'
+                                    onClick={() => statusToTitle[item.status].button[1].func(item)}
+                                    customStyle={{
+                                      padding: '0 16px'
+                                    }} size='small'
+                          >
+                            {statusToTitle[item.status].button[1].title}
+                          </AtButton>
+                        </View>
+                      )}
                     </View>
                   ) : (
                     <View className='commonRowFlex normalPadding borderBottom flexCenter'

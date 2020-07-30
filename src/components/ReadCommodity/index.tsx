@@ -31,7 +31,9 @@ const ReadCommodity: Taro.FC<Props> = (props) => {
           flex: 1
         }}
         >
-          <Text className='mediumText'>{title}</Text>
+          <Text style={{
+            fontSize: '14px'
+          }}>{title}</Text>
           <View className='commonRowFlex'
                 style={{
                   justifyContent: 'space-between'

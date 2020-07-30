@@ -40,6 +40,7 @@ class App extends Component {
           "pointShop/index",
           "pointDetail/index",
           "pointRule/index",
+          "evaluationOrder/index",
           "swapRecord/index",
           "changePassword/index",
           "payPwd/index",
