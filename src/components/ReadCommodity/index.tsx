@@ -24,7 +24,7 @@ const ReadCommodity: Taro.FC<Props> = (props) => {
             backgroundColor: 'white'
           }}
     >
-      <View className='commonRowFlex'>
+      <View className='commonRowFlex flexCenter'>
         <AtAvatar size='large' image={imgUrl} />
         <View className='commonColumnFlex smallMarginLeft' style={{
           justifyContent: 'space-between',

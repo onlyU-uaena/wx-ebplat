@@ -75,12 +75,14 @@ const GroupDetail: Taro.FC<Props> = () => {
                     backgroundColor: 'white'
                   }}
             >
-              <View>
-                {detail.status === 1 && (<AtIcon value='check-circle' size='25' color={colors.green} />)}
-                {detail.status === 0 && (<AtIcon value='clock' size='25' color={colors.themeRed} />)}
-                {detail.status === 2 && (<AtIcon value='close-circle' size='25' color={colors.themeColor} />)}
-                <Text className='normalMarginLeft'>{listStatus[detail.status]}</Text>
-              </View>
+              {detail.status && (
+                <View>
+                  {detail.status === 1 && (<AtIcon value='check-circle' size='25' color={colors.green} />)}
+                  {detail.status === 0 && (<AtIcon value='clock' size='25' color={colors.themeRed} />)}
+                  {detail.status === 2 && (<AtIcon value='close-circle' size='25' color={colors.themeColor} />)}
+                  <Text className='normalMarginLeft'>{listStatus[detail.status]}</Text>
+                </View>
+              )}
               <HeightView high='large' />
               <View className='commonRowFlex'
                     style={{

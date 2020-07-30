@@ -25,6 +25,28 @@ export const toDeleteOrder = async (id) => {
   )
 }
 
+export const toConfirmOrder = async (id) => {
+  return new Promise((resolve, reject) =>
+    Taro.showModal({
+      title: '确认收货',
+      content: '确认签收吗?',
+      success: async function (res) {
+        if (res.confirm) {
+          const deleteRes = await order.confirmOrder(id)
+          if (deleteRes.code === 0) {
+            Taro.showToast({
+              title: '收货成功'
+            })
+            resolve()
+          }
+        } else if (res.cancel) {
+          reject()
+        }
+      }
+    })
+  )
+}
+
 export const toCancelOrder = async (id, status) => {
   return new Promise((resolve, reject) => {
     const itemList = [

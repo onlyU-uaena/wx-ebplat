@@ -8,7 +8,7 @@ import ReadCommodity from '../../../../components/ReadCommodity'
 import HeightView from '../../../../components/HeightView'
 import { delayBack, navTo } from '@utils/route'
 import order from '../../utils/order'
-import { toCancelOrder, toDeleteOrder } from '../../utils/modalOrder'
+import { toCancelOrder, toConfirmOrder, toDeleteOrder } from '../../utils/modalOrder'
 
 interface Props {
 
@@ -68,20 +68,31 @@ const MyOrder: Taro.FC<Props> = () => {
           }
         }
       ]},
-    1: {name: '待受理', button: [
+    1: {name: '待收货', button: [
         {
-          title: '删除订单',
+          title: '去退款',
           func: async (item) => {
-            await toDeleteOrder(item.id)
+            navTo('mine','refund', {item})
+            navTo('mine','refund', {item})
+          }
+        },{
+          title: '确认收货',
+          func: async (item) => {
+            await toConfirmOrder(item.id)
             refreshList()
           }
         }
       ]},
     8: {name: '待收货', button: [
         {
-          title: '删除订单',
+          title: '去退款',
           func: async (item) => {
-            await toDeleteOrder(item.id)
+            navTo('mine','refund', {item})
+          }
+        },{
+          title: '确认收货',
+          func: async (item) => {
+            await toConfirmOrder(item.id)
             refreshList()
           }
         }
@@ -95,11 +106,25 @@ const MyOrder: Taro.FC<Props> = () => {
           }
         }
       ]},
-    2: {name: '已受理', button: [
+    9: {name: '待评论', button: [
         {
           title: '删除订单',
           func: async (item) => {
             await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]},
+    2: {name: '待收货', button: [
+        {
+          title: '去退款',
+          func: async (item) => {
+            navTo('mine','refund', {item})
+          }
+        },{
+          title: '确认收货',
+          func: async (item) => {
+            await toConfirmOrder(item.id)
             refreshList()
           }
         }
@@ -161,6 +186,7 @@ const MyOrder: Taro.FC<Props> = () => {
     const {data} = await order.getOrderList(page, size, status)
     if (data.length && !waitReset) {
       setOrderList(orderList.concat(data))
+      page = page + 1
     } else if (waitReset) {
       setOrderList(data)
       waitReset = false
@@ -223,7 +249,7 @@ const MyOrder: Taro.FC<Props> = () => {
                   <Text className='mediumText orangeText'>{statusToTitle[item.status].name}</Text>
                 </View>
                 {item.lsitdetais.map((shopItem, shopIndex) => (
-                  <ReadCommodity key={index} onClick={() => navTo('mine', 'orderDetail', {id: item.code})} imgUrl={shopItem.productimg} title={shopItem.productname} price={shopItem.proprice} num={shopItem.productcount} />
+                  <ReadCommodity key={shopIndex} onClick={() => navTo('mine', 'orderDetail', {id: item.code})} imgUrl={shopItem.productimg} title={shopItem.productname} price={shopItem.proprice} num={shopItem.productcount} />
                 ))}
                 <View className='commonRowFlex normalPadding borderBottom borderTop flexCenter'
                       style={{

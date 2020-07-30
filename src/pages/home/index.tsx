@@ -215,7 +215,7 @@ const Home: Taro.FC<Props> = () => {
               margin: '0 16px 8px 16px'
             }}
           >
-            {advList &&
+            {advList[0] &&
             <SwiperImg list={advList[0].list}>
             </SwiperImg>}
           </View>
@@ -267,6 +267,7 @@ const Home: Taro.FC<Props> = () => {
               margin: '16px 16px 0 16px',
             }}
           >
+            {advList[1] &&
             <SwiperImg
               marginRight={20}
               autoplay={false}
@@ -274,7 +275,7 @@ const Home: Taro.FC<Props> = () => {
               imgWidth={95}
               swiperHeight='100px'
               list={advList[1].list}
-            />
+            />}
           </View>
           <View className='commonRowFlex'
             style={{

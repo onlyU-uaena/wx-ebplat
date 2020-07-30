@@ -33,6 +33,7 @@ class App extends Component {
           "feedback/index",
           "myFoot/index",
           "myGroup/index",
+          "refund/index",
           'myMessage/index',
           "groupDetail/index",
           "messageDetail/index",

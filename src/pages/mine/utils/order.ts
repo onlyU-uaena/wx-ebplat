@@ -7,10 +7,11 @@ class Order {
     getOrderList: '/api/app/order/getorderBycode',
     addOrder: '/api/app/order/add',
     deleteOrder: '/api/app/order/delOrder',
-    confirmOrder: '/api/app/order/receiveOrder',
+    confirmOrder: '/api/app/order/comfirmreceive',
     cancelOrder: '/api/app/order/cancel',
     getFreight: '/api/app/order/getFreightByShop',
     payOrder: '/api/app/pay/balancepay',
+    toRefund: '/api/app/order/afterreturn',
     // 团购
     addGroupOrder: '/api/app/grp/applypro',
     joinGroupOrder: '/api/app/grp/addorder',
@@ -76,6 +77,18 @@ class Order {
       status
     }
     return await httpRequest(this.urls.cancelOrder, data)
+  }
+
+  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
+  @throttleFunc(1000)
+  public async toRefund (orderid: number, reason: string, skustatus: number, imgs: string) {
+    const data = {
+      orderid,
+      reason,
+      skustatus,
+      imgs
+    }
+    return await httpRequest(this.urls.toRefund, data)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
