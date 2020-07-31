@@ -121,7 +121,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                 width: '70%'
               }}
               >
-                {detail.status === 1 && (
+                {detail && detail.status === 1 && (
                   <View>
                     <AtButton circle
                               onClick={() => navTo('home', 'groupHome')}
@@ -133,7 +133,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                     <HeightView />
                   </View>
                 )}
-                {detail.status === 0 && (
+                {detail && detail.status === 0 && (
                   <View>
                     <AtButton circle
                               openType='share'
@@ -146,7 +146,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                     <HeightView />
                   </View>
                 )}
-                {detail.status === 2 && (
+                {detail && detail.status === 2 && (
                   <View>
                     <AtButton circle
                               onClick={() => navTo('home', 'groupHome')}

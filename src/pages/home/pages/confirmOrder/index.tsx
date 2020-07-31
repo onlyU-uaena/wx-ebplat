@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useRouter } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtButton, AtInput, AtListItem, AtRadio } from 'taro-ui'
+import { AtAvatar, AtButton, AtFloatLayout, AtInput, AtInputNumber, AtListItem, AtRadio } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import HeightView from '../../../../components/HeightView'
 import { selectShopState } from '@redux/reducers/selector'
@@ -10,6 +10,8 @@ import { navTo } from '@utils/route'
 import ReadCommodity from '../../../../components/ReadCommodity'
 import InputCard from '../../../../components/InputCard'
 import order from '../../../mine/utils/order'
+import CustomIcon from '../../../../components/CustomIcon'
+import user from '../../../mine/utils/user'
 
 interface Props {
 
@@ -44,24 +46,55 @@ const ConfirmOrder: Taro.FC<Props> = () => {
   const router = useRouter()
   const shopState = useSelector(selectShopState)
 
-  useEffect(() => {
-    const data = JSON.parse(router.params.props)
-    setOrderDetail(data)
-    console.log(data)
-  }, [])
-
+  const [showFloat, setShowFloat] = useState<boolean>(false)
   const [currentTab, setCurrentTab] = useState<number>(0)
   const [discount, setDiscount] = useState<number>(0)
   const [orderDetail, setOrderDetail] = useState<OrderDetail>()
   const [remark, setRemark] = useState<string>('')
+  const [coupon, setCoupon] = useState()
+  const [couponList, setCouponList] = useState([])
+
+  useEffect(() => {
+    const data = JSON.parse(router.params.props)
+    setOrderDetail(data)
+    console.log(data)
+    getOrderCoupon(data)
+  }, [])
+
+  const getOrderCoupon = async (detail) => {
+    const param = [{
+      shopid: shopState.shopData.shopid,
+      money: detail.totalMoney,
+      prolist: detail.skuID.map(item => {
+        return {
+          proid: item.skuid,
+          promoney: item.price * item.proCount
+        }
+      })
+    }]
+    const {data} = await user.getOrderCoupon(param)
+    const newList = data.map(item => {
+      return {
+        label: `${item.couponname} 减${item.facevalue}`,
+        value: JSON.stringify(item),
+        desc: `有效期至${item.outtimetr}`
+      }
+    })
+    setCouponList(newList)
+  }
+
+  const chooseCoupon = (e) => {
+    setDiscount(JSON.parse(e).facevalue)
+    setCoupon(e)
+  }
 
   const confirmOrder = async () => {
     const data = {
       shopID: orderDetail.shopid,
       totalMoney: orderDetail.totalMoney,
-      delMoney: 0,
+      delMoney: discount,
       freightMoney: orderDetail.freightMoney,
-      couponID: 0,
+      couponID: JSON.parse(coupon).couponid,
       activityid: orderDetail.activityId,
       isInvoice: 0,
       remark: remark || '无'
@@ -165,6 +198,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
           }}
           >
             <AtListItem title='商品金额' extraText={`¥${orderDetail.totalMoney}`} />
+            <AtListItem title='优惠金额' extraText={`¥${discount}`} />
             <AtListItem title='配送费' extraText={`¥${orderDetail.freightMoney}`} />
           </View>
           <HeightView />
@@ -172,8 +206,10 @@ const ConfirmOrder: Taro.FC<Props> = () => {
             backgroundColor: 'white'
           }}
           >
-            <InputCard title='优惠券' rightTitle='暂无可用' />
-            <InputCard title='积分抵扣' rightTitle='暂未开放' />
+            <InputCard title='优惠券'
+                       onClick={() => setShowFloat(true)}
+                       rightTitle={couponList.length ? `${couponList.length}张可用` : `暂无可用`}
+            />
             <AtInput name='remark' title='备注' placeholder='请输入备注' onChange={(e) => setRemark(String(e))} />
             <InputCard title=''
                        link={false}
@@ -182,7 +218,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                            小计
                          </Text>
                          <Text className='mediumText redText normalMarginLeft'>
-                           {`¥${(orderDetail.totalMoney + orderDetail.freightMoney).toFixed(2)}`}
+                           {`¥${(orderDetail.totalMoney + orderDetail.freightMoney - discount).toFixed(2)}`}
                          </Text>
                        </View>}
             />
@@ -201,7 +237,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                 合计
               </Text>
               <Text className='mediumText redText smallMarginLeft'>
-                {`¥${orderDetail.totalMoney + orderDetail.freightMoney}`}
+                {`¥${orderDetail.totalMoney + orderDetail.freightMoney - discount}`}
               </Text>
             </View>
             {orderDetail && orderDetail.skuID[0].isgrp ? (
@@ -226,6 +262,34 @@ const ConfirmOrder: Taro.FC<Props> = () => {
       ) : <View>
         <TabBar title='确认订单' />
       </View>}
+      <AtFloatLayout isOpened={showFloat}
+                     scrollY
+                     onClose={() => setShowFloat(false)}
+      >
+        <View className='commonRowFlex flexCenter'
+              style={{
+                justifyContent: 'space-between'
+              }}
+        >
+          <View  style={{
+            width: '50px'
+          }}
+          />
+          <Text className='mediumText'>优惠详情</Text>
+          <View style={{
+            width: '50px'
+          }}
+          >
+            <CustomIcon name='close' size={19} color='gray' onClick={() => setShowFloat(false)} />
+          </View>
+        </View>
+        <HeightView high='normal' />
+        <AtRadio
+          options={couponList}
+          value={coupon}
+          onClick={(e) => chooseCoupon(e)}
+        />
+      </AtFloatLayout>
     </View>
   )
 }

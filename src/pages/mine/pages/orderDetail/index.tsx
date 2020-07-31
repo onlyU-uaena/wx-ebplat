@@ -9,7 +9,7 @@ import ReadCommodity from '../../../../components/ReadCommodity'
 import CustomIcon from '../../../../components/CustomIcon'
 import order from '../../utils/order'
 import { delayBack, navTo } from '@utils/route'
-import { toCancelOrder, toDeleteOrder } from '../../utils/modalOrder'
+import { toCancelOrder, toConfirmOrder, toDeleteOrder } from '../../utils/modalOrder'
 
 interface Props {
 
@@ -46,7 +46,7 @@ const OrderDetail: Taro.FC<Props> = () => {
           title: '删除订单',
           func: async (item) => {
             await toDeleteOrder(item.id)
-            delayBack(1, 1000)
+            delayBack()
           }
         }
       ]},
@@ -55,43 +55,99 @@ const OrderDetail: Taro.FC<Props> = () => {
           title: '删除订单',
           func: async (item) => {
             await toDeleteOrder(item.id)
-            delayBack(1, 1000)
+            delayBack()
           }
         }
       ]},
-    1: {name: '待受理', button: [
+    1: {name: '待收货', button: [
         {
-          title: '删除订单',
+          title: '去退款',
           func: async (item) => {
-            await toDeleteOrder(item.id)
-            delayBack(1, 1000)
+            navTo('mine','refund', {item})
+            navTo('mine','refund', {item})
+          }
+        },{
+          title: '确认收货',
+          func: async (item) => {
+            if (item.deliverymode !== 1) {
+              await toConfirmOrder(item.id)
+              delayBack()
+            } else {
+              Taro.showToast({
+                title: '自提订单需线下收货',
+                icon: 'none'
+              })
+            }
           }
         }
       ]},
     8: {name: '待收货', button: [
         {
-          title: '删除订单',
+          title: '去退款',
           func: async (item) => {
-            await toDeleteOrder(item.id)
-            delayBack(1, 1000)
+            navTo('mine','refund', {item})
+          }
+        },{
+          title: '确认收货',
+          func: async (item) => {
+            if (item.deliverymode !== 1) {
+              await toConfirmOrder(item.id)
+              delayBack()
+            } else {
+              Taro.showToast({
+                title: '自提订单需线下收货',
+                icon: 'none'
+              })
+            }
           }
         }
       ]},
-    10: {name: '待评论', button: [
+    10: {name: '已完成', button: [
         {
-          title: '删除订单',
+          title: '去退款',
           func: async (item) => {
-            await toDeleteOrder(item.id)
-            delayBack(1, 1000)
+            navTo('mine','refund', {item})
+          }
+        },{
+          title: '评价订单',
+          func: async (item) => {
+            navTo('mine','evaluationOrder', {item})
+            delayBack()
           }
         }
       ]},
-    2: {name: '已受理', button: [
+    9: {name: '已完成', button: [
         {
-          title: '删除订单',
+          title: '去退款',
           func: async (item) => {
-            await toDeleteOrder(item.id)
-            delayBack(1, 1000)
+            navTo('mine','refund', {item})
+          }
+        },{
+          title: '评价订单',
+          func: async (item) => {
+            navTo('mine','evaluationOrder', {item})
+            delayBack()
+          }
+        }
+      ]},
+    2: {name: '待收货', button: [
+        {
+          title: '去退款',
+          func: async (item) => {
+            navTo('mine','refund', {item})
+          }
+        },{
+          title: '确认收货',
+          func: async (item) => {
+            if (item.deliverymode !== 1) {
+              await toConfirmOrder(item.id)
+              delayBack()
+            } else {
+              Taro.showToast({
+                title: '自提订单需线下收货',
+                icon: 'none'
+              })
+            }
           }
         }
       ]},
@@ -100,7 +156,7 @@ const OrderDetail: Taro.FC<Props> = () => {
           title: '删除订单',
           func: async (item) => {
             await toDeleteOrder(item.id)
-            delayBack(1, 1000)
+            delayBack()
           }
         }
       ]},
@@ -109,7 +165,7 @@ const OrderDetail: Taro.FC<Props> = () => {
           title: '删除订单',
           func: async (item) => {
             await toDeleteOrder(item.id)
-            delayBack(1, 1000)
+            delayBack()
           }
         }
       ]},
@@ -118,10 +174,10 @@ const OrderDetail: Taro.FC<Props> = () => {
           title: '删除订单',
           func: async (item) => {
             await toDeleteOrder(item.id)
-            delayBack(1, 1000)
+            delayBack()
           }
         }
-      ]},
+      ]}
   }
 
   const getDetail = async (id) => {
@@ -201,7 +257,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>优惠券</Text>
-              <Text className='slightlySmallText'>¥0.00</Text>
+              <Text className='slightlySmallText'>¥{(orderDetail.price - orderDetail.actualpay).toFixed(2)}</Text>
             </View>
           </View>
           <View className='normalPadding commonColumnFlex'
@@ -241,16 +297,18 @@ const OrderDetail: Taro.FC<Props> = () => {
                     }}
               >
                 <AtButton onClick={() => statusToTitle[orderDetail.status].button[0].func(orderDetail)} size='small'>{statusToTitle[orderDetail.status].button[0].title}</AtButton>
-                <View className='smallMarginLeft'>
-                  <AtButton type='primary'
-                            onClick={() => statusToTitle[orderDetail.status].button[1].func(orderDetail)}
-                            customStyle={{
-                              padding: '0 16px'
-                            }} size='small'
-                  >
-                    {statusToTitle[orderDetail.status].button[1].title}
-                  </AtButton>
-                </View>
+                {orderDetail && !orderDetail.iscomment && (
+                  <View className='smallMarginLeft'>
+                    <AtButton type='primary'
+                              onClick={() => statusToTitle[orderDetail.status].button[1].func(orderDetail)}
+                              customStyle={{
+                                padding: '0 16px'
+                              }} size='small'
+                    >
+                      {statusToTitle[orderDetail.status].button[1].title}
+                    </AtButton>
+                  </View>
+                )}
               </View>
             ) : (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'

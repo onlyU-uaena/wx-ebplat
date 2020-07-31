@@ -93,6 +93,13 @@ class User {
     return await httpRequest(this.urls.getCouponCount, data)
   }
 
+  public async getOrderCoupon (paramstr) {
+    const data = {
+      paramstr
+    }
+    return await httpRequest(this.urls.getOrderCoupon, data)
+  }
+
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
   public async swapCoupon (couponid) {
