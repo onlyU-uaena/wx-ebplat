@@ -74,11 +74,11 @@ const Classification: Taro.FC<Props> = () => {
 
   const nextPage = async (id: number, reset: boolean) => {
     const {data} = await commodity.getSortSku(shopState.shopData.shopid, id, page, 14, 0, 1)
+    if (reset)
+      setSkuList(data)
     if (data.length) {
       page = page + 1
-      if (reset)
-        setSkuList(data)
-      else setSkuList(skuList.concat(data))
+      setSkuList(skuList.concat(data))
     }
   }
 
@@ -88,6 +88,7 @@ const Classification: Taro.FC<Props> = () => {
 
   const chooseSec = async (num: string, id: number, name: string) => {
     setSecIndex(num)
+    page = 1
     setSecTitle(name)
     outId = id
     nextPage(id, true)
