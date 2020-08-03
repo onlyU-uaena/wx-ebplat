@@ -19,6 +19,7 @@ const Setting: Taro.FC<Props> = () => {
   const toLogOut = () => {
     dispatch(loginOut())
     Taro.setStorageSync('token', '')
+    Taro.setStorageSync('openid', '')
     Taro.showToast({
       title: '退出登录成功',
       icon: 'none'

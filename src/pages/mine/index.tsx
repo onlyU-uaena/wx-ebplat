@@ -66,29 +66,31 @@ const Mine: Taro.FC<Props> = () => {
         </View>
       </View>
       {/*个人积分*/}
-      <View className='personPoint commonRowFlex' style={{
-        backgroundColor: 'white'
-      }}
-      >
-        <View className='commonColumnFlex flexCenter'
-              onClick={() => navTo('mine', 'pointShop')}
-              style={{
-                flex: 1
-              }}
+      {authState.loginStatus && (
+        <View className='personPoint commonRowFlex' style={{
+          backgroundColor: 'white'
+        }}
         >
-          <Text className='orangeText'>{authState.userData.points}</Text>
-          <Text className='mediumText grayText'>积分</Text>
+          <View className='commonColumnFlex flexCenter'
+                onClick={() => navTo('mine', 'pointShop')}
+                style={{
+                  flex: 1
+                }}
+          >
+            <Text className='orangeText'>{authState.userData.points || 0}</Text>
+            <Text className='mediumText grayText'>积分</Text>
+          </View>
+          <View className='commonColumnFlex flexCenter'
+                onClick={() => navTo('mine', 'coupon')}
+                style={{
+                  flex: 1
+                }}
+          >
+            <Text className='orangeText'>{couponCount || 0}</Text>
+            <Text className='mediumText grayText'>优惠券</Text>
+          </View>
         </View>
-        <View className='commonColumnFlex flexCenter'
-              onClick={() => navTo('mine', 'coupon')}
-              style={{
-                flex: 1
-              }}
-        >
-          <Text className='orangeText'>{couponCount || '获取中'}</Text>
-          <Text className='mediumText grayText'>优惠券</Text>
-        </View>
-      </View>
+      )}
       {/*全部订单*/}
       <View className='smallMarginTop normalPadding borderBottom' style={{
         backgroundColor: 'white'

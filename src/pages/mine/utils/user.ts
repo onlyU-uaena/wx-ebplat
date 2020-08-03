@@ -21,7 +21,11 @@ class User {
     getCoupon: '/api/app/coupon/showCoupon',
     getOrderCoupon: '/api/app/coupon/getOrderCoupon',
     getCouponCount: '/api/app/coupon/couponCount',
-    swapCoupon: '/api/app/coupon/takeCoupon'
+    swapCoupon: '/api/app/coupon/takeCoupon',
+    // 微信接口
+    wxAuth: '/api/app/ys/auth',
+    wxRegister: '/api/app/userinfo/wxregister',
+    wxLogin: '/api/app/userinfo/wxlogin'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -125,6 +129,35 @@ class User {
       repwd
     }
     return await httpRequest(this.urls.updatePayPwd, data)
+  }
+
+  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
+  @throttleFunc(1000)
+  public async wxAuth (code: string) {
+    const data = {
+      code
+    }
+    return await httpRequest(this.urls.wxAuth, data, false, true, false)
+  }
+
+  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
+  @throttleFunc(1000)
+  public async wxRegister (openid: string, nickname: string, imgurl: string) {
+    const data = {
+      openid,
+      nickname,
+      imgurl
+    }
+    return await httpRequest(this.urls.wxRegister, data)
+  }
+
+  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
+  @throttleFunc(1000)
+  public async wxLogin (openid: string) {
+    const data = {
+      openid
+    }
+    return await httpRequest(this.urls.wxLogin, data)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))

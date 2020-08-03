@@ -16,7 +16,7 @@ import { loginIn, loginOut, setShop } from '@redux/actions'
 import LimitStr from '@utils/stringLimit'
 import account from '../mine/utils/login'
 import shopCart from '../shoppingCart/utils/shopCart'
-import { selectShopState } from '@redux/reducers/selector'
+import { selectAuthState, selectShopState } from '@redux/reducers/selector'
 import user from '../mine/utils/user'
 
 let firstIn = true
@@ -28,6 +28,7 @@ interface Props {
 const Home: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const shopState = useSelector(selectShopState)
+  const authState = useSelector(selectAuthState)
 
   const [location, setLocation] = useState<string>('')
   const [freshList, setFreshList] = useState<FreshListInterface>()
@@ -98,8 +99,10 @@ const Home: Taro.FC<Props> = () => {
       const spikeRes = await commodity.getSpikeHome(shopState.shopData.shopid || shopRes.data.shopid)
       const groupRes = await commodity.getGroupHome(shopState.shopData.shopid || shopRes.data.shopid)
       const classListRes = await commodity.getClassList()
-      const messageRes = await user.getMessageCount(1, 0)
-      setMessageList(messageRes.data)
+      if (authState.loginStatus) {
+        const messageRes = await user.getMessageCount(1, 0)
+        setMessageList(messageRes.data)
+      }
       setSpikeList(spikeRes.data)
       setGroupList(groupRes.data)
       setHotList(hotListRes.data)

@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, useRouter } from '@tarojs/taro'
+import Taro, { useState, useEffect, useRouter, useDidShow } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
@@ -29,14 +29,35 @@ const OrderDetail: Taro.FC<Props> = () => {
         {
           title: '去支付',
           func: async (item) => {
-            const {code} = await order.payOrder(item.groupcode, item.status)
-            if (code === 0) {
-              Taro.showToast({
-                title: '支付成功'
+            if (!Taro.getStorageSync('openid'))
+              return Taro.showToast({
+                title: '请使用微信登录才可使用支付功能',
+                icon: 'none'
               })
-              setTimeout(() => {
-                navTo('mine', 'myOrder')
-              }, 1000)
+            const {code, data} = await order.payOrder(item.groupcode, Taro.getStorageSync('openid'))
+            if (code === 0) {
+              Taro.requestPayment({
+                fail: () => {
+                  Taro.showToast({
+                    title: '支付取消',
+                    icon: 'none'
+                  })
+                },
+                success: () => {
+                  Taro.showToast({
+                    title: '支付成功',
+                    icon: 'none'
+                  })
+                  setTimeout(() => {
+                    navTo('mine', 'myOrder')
+                  }, 1000)
+                },
+                nonceStr: data.nonceStr,
+                signType: data.signType,
+                paySign: data.paySign,
+                timeStamp: data.timeStamp,
+                package: data.packages
+              })
             }
           }
         }
@@ -185,11 +206,11 @@ const OrderDetail: Taro.FC<Props> = () => {
     setOrderDetail(data[0])
   }
 
-  useEffect(() => {
+  useDidShow(() => {
     const props = JSON.parse(router.params.props)
     console.log(props)
     getDetail(props.id)
-  }, [router.params.props])
+  })
 
   return (
     <View>

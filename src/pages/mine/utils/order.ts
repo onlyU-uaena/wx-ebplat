@@ -10,7 +10,7 @@ class Order {
     confirmOrder: '/api/app/order/comfirmreceive',
     cancelOrder: '/api/app/order/cancel',
     getFreight: '/api/app/order/getFreightByShop',
-    payOrder: '/api/app/pay/balancepay',
+    payOrder: '/api/app/pay/getwxconfig',
     toRefund: '/api/app/order/afterreturn',
     toComment: '/api/app/order/addordercomment',
     // 团购
@@ -122,12 +122,11 @@ class Order {
     return await httpRequest(this.urls.addOrder, data)
   }
 
-  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async payOrder (groupnum: number, status: number) {
+  public async payOrder (groupnum: number, openid: number) {
     const data = {
       groupnum,
-      status
+      openid
     }
     return await httpRequest(this.urls.payOrder, data)
   }

@@ -20,7 +20,7 @@ interface Method {
   CONNECT
 }
 
-export const baseUrl = 'http://mjsh.yl-mall.cn'
+export const baseUrl = 'https://mjsh.yl-mall.cn/'
 
 let requestNum = 0
 

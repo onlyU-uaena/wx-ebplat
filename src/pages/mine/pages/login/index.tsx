@@ -1,5 +1,5 @@
 import Taro, { useState } from '@tarojs/taro'
-import { Text, View } from '@tarojs/components'
+import { Button, Text, View } from '@tarojs/components'
 import { AtButton, AtInput } from 'taro-ui'
 import account from '../../utils/login'
 import TabBar from '../../../../components/TabBar'
@@ -9,6 +9,8 @@ import CountDownButton from '../../../../components/CountDownButton'
 import { delayBack, navTo } from '@utils/route'
 import { useDispatch } from '@tarojs/redux'
 import { loginIn } from '@redux/actions'
+import CustomIcon from '../../../../components/CustomIcon'
+import user from '../../utils/user'
 
 interface Props {
 
@@ -41,10 +43,34 @@ const Login: Taro.FC<Props> = () => {
     }
   }
 
-  const wxLogin = () => {
-    Taro.showToast({
-      title: '暂不支持微信登录',
-      icon: 'none'
+  const wxLogin = async () => {
+    Taro.login({
+      success: (e) => {
+        Taro.getUserInfo({
+          withCredentials: true,
+          success: async (info) => {
+            console.log(info)
+            console.log(e)
+            const {data, code} = await user.wxAuth(e.code)
+            Taro.setStorageSync('openid', data)
+            if (code === 0) {
+              const loginRes = await user.wxLogin(data)
+              if (loginRes.code === 0) {
+                Taro.setStorageSync('token', loginRes.token)
+                dispatch(loginIn(JSON.parse(loginRes.data)))
+                delayBack(1, 0)
+              }
+            } else {
+              const regRes = await user.wxRegister(data, info.userInfo.nickName, info.userInfo.avatarUrl)
+              if (regRes.code === 0) {
+                Taro.setStorageSync('token', regRes.token)
+                dispatch(loginIn(JSON.parse(regRes.data)))
+                delayBack(1, 0)
+              }
+            }
+          }
+        })
+      }
     })
   }
 
@@ -91,10 +117,24 @@ const Login: Taro.FC<Props> = () => {
           >{!useSmsLogin ? '验证码登录' : '密码登录'}</Text>
         </View>
         <AtButton type='primary' onClick={login}>登录</AtButton>
-        {/*<View onClick={() => wxLogin()} className='commonColumnFlex flexCenter normalMarginTop'>*/}
-        {/*  <CustomIcon name='weChat' color='rgb(90, 195, 58)' size={25} />*/}
-        {/*  <Text className='slightlySmallText smallMarginTop'>微信登录</Text>*/}
-        {/*</View>*/}
+        <View className='commonColumnFlex flexCenter normalMarginTop'>
+          <Button plain
+                  openType='getUserInfo'
+                  onClick={() => wxLogin()}
+                  className='commonColumnFlex flexCenter'
+                  style={{
+                    flex: 1,
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                    lineHeight: 'initial',
+                    border: 'none'
+                  }}
+                  key={44}
+          >
+            <CustomIcon onClick={() => wxLogin()} name='weChat' color='rgb(90, 195, 58)' size={25} />
+            <Text className='slightlySmallText smallMarginTop'>微信登录</Text>
+          </Button>
+        </View>
       </View>
     </View>
   )

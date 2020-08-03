@@ -94,7 +94,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
       totalMoney: orderDetail.totalMoney,
       delMoney: discount,
       freightMoney: orderDetail.freightMoney,
-      couponID: JSON.parse(coupon).couponid,
+      couponID: coupon ? JSON.parse(coupon).couponid : 0,
       activityid: orderDetail.activityId,
       isInvoice: 0,
       remark: remark || '无'
