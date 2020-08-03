@@ -25,7 +25,7 @@ const AddAddress: Taro.FC<Props> = () => {
   const [name, setName] = useState<string>('')
   const [phoneNum, setPhoneNum] = useState<string>('')
   const [addressDetail, setAddress] = useState<string>('')
-  const [defaultAdd, setDefaultAdd] = useState<string>('')
+  const [defaultAdd, setDefaultAdd] = useState<string>(0)
   const [origin, setOrigin] = useState<PickRes>({
     value: [],
     code: [],
@@ -34,6 +34,11 @@ const AddAddress: Taro.FC<Props> = () => {
 
   const submitAddress = async () => {
     const location = await getLatitude(origin.value[2] + addressDetail)
+    if (!location.geocodes.length)
+      return Taro.showToast({
+        title: '请输入完整的地址信息',
+        icon: 'none'
+      })
     const data = location.geocodes[0].location.split(',')
     const res = await address.addAddress(name, phoneNum, origin.code[0], origin.code[1], origin.code[2], origin.value[0], origin.value[1], origin.value[2], addressDetail, defaultAdd, data[1], data[0])
     if (!res.code) {

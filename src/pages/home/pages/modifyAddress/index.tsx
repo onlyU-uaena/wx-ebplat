@@ -37,6 +37,11 @@ const ModifyAddress: Taro.FC<Props> = () => {
 
   const submitAddress = async () => {
     const location = await getLatitude(origin.value[2] + addressDetail)
+    if (!location.geocodes.length)
+      return Taro.showToast({
+        title: '请输入完整的地址信息',
+        icon: 'none'
+      })
     const data = location.geocodes[0].location.split(',')
     console.log(data)
     const res = await address.modifyAddress(addressId, name, phoneNum, origin.code[0], origin.code[1], origin.code[2], origin.value[0], origin.value[1], origin.value[2], addressDetail, defaultAdd, data[1], data[0])
