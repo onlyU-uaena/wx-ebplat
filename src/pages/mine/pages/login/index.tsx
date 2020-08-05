@@ -57,14 +57,15 @@ const Login: Taro.FC<Props> = () => {
               const loginRes = await user.wxLogin(data)
               if (loginRes.code === 0) {
                 Taro.setStorageSync('token', loginRes.token)
-                dispatch(loginIn(JSON.parse(loginRes.data)))
+                const userData = await account.getUserData()
+                dispatch(loginIn(userData.data))
                 delayBack(1, 0)
               }
             } else {
               const regRes = await user.wxRegister(data, info.userInfo.nickName, info.userInfo.avatarUrl)
               if (regRes.code === 0) {
-                Taro.setStorageSync('token', regRes.token)
-                dispatch(loginIn(JSON.parse(regRes.data)))
+                const userData = await account.getUserData()
+                dispatch(loginIn(userData.data))
                 delayBack(1, 0)
               }
             }
