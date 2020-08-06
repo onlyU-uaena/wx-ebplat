@@ -78,7 +78,10 @@ const Classification: Taro.FC<Props> = () => {
       setSkuList(data)
     if (data.length) {
       page = page + 1
-      setSkuList(skuList.concat(data))
+      if (reset)
+        setSkuList(data)
+      else
+        setSkuList(skuList.concat(data))
     }
   }
 

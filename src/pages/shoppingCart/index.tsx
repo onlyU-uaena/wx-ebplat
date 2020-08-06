@@ -89,6 +89,13 @@ const ShoppingCart: Taro.FC<Props> = () => {
     })
   }
 
+  const deleteNone = async (id) => {
+    const deleteRes = await shopCart.deleteItem(id)
+    if (deleteRes) {
+      getCart()
+    }
+  }
+
   const selectAll = async () => {
     const ids = cartList.shops.map(item => item.spuscd.map(shopItem => {
       return shopItem.shopcartproid
@@ -136,10 +143,13 @@ const ShoppingCart: Taro.FC<Props> = () => {
                   backgroundColor: 'white'
                 }}
                 >
-                  <AtCheckbox onChange={(e) => changeSelect(shopItem.shopcartproid, e.length === 0 ? '0' : '1')}  options={[{
-                    value: shopItem.shopcartproid,
-                    label: ''
-                  }]} selectedList={[shopItem.isselected ? shopItem.shopcartproid : '']}
+                  <AtCheckbox onChange={(e) => changeSelect(shopItem.shopcartproid, e.length === 0 ? '0' : '1')}
+                              options={[{
+                                value: shopItem.shopcartproid,
+                                label: '',
+                                disabled: !shopItem.stock
+                              }]}
+                              selectedList={[shopItem.isselected ? shopItem.shopcartproid : '']}
                   />
                   <View className='commonRowFlex normalPadding' style={{flex: 1}}>
                     <Image src={shopItem.img}
@@ -166,7 +176,14 @@ const ShoppingCart: Taro.FC<Props> = () => {
                           <Text className='redText slightlySmallText'>¥{shopItem.price}</Text>
                           {/*<Text className='grayText throughLineText slightlySmallText smallMarginLeft'>¥{shopItem.oldprice}</Text>*/}
                         </View>
-                        <AtInputNumber type='number' value={shopItem.count} max={shopItem.stock} min={1} onChange={(e) => changeNum(shopItem.shopcartproid, e)} />
+                        {shopItem.stock ? (
+                          <AtInputNumber type='number' value={shopItem.count} max={shopItem.stock} min={1} onChange={(e) => changeNum(shopItem.shopcartproid, e)} />
+                        ) : (
+                          <View>
+                            <Text className='slightlySmallText grayText'>已售罄</Text>
+                            <Text onClick={() => deleteNone(shopItem.shopcartproid)} className='slightlySmallText orangeText smallMarginLeft'>删除</Text>
+                          </View>
+                        )}
                       </View>
                     </View>
                   </View>

@@ -33,8 +33,8 @@ const Home: Taro.FC<Props> = () => {
   const [location, setLocation] = useState<string>('')
   const [freshList, setFreshList] = useState<FreshListInterface>()
   const [advList, setAdvList] = useState<GetAdv[]>()
-  const [spikeList, setSpikeList] = useState()
-  const [groupList, setGroupList] = useState()
+  const [spikeList, setSpikeList] = useState({pros: []})
+  const [groupList, setGroupList] = useState([])
   const [shopInfo, setShopInfo] = useState()
   const [topicId, setTopicId] = useState<number>()
   const [showPage, setShowPage] = useState<boolean>(false)
@@ -93,6 +93,7 @@ const Home: Taro.FC<Props> = () => {
         dispatch(setShop(shopRes.data))
         firstIn = false
       }
+      getLocationMes()
       const {data} = await commodity.getAdv(0)
       const listRes = await commodity.getSkuList(shopState.shopData.shopid || shopRes.data.shopid)
       const hotListRes = await commodity.getHotShop(shopState.shopData.shopid || shopRes.data.shopid)
@@ -103,15 +104,15 @@ const Home: Taro.FC<Props> = () => {
         const messageRes = await user.getMessageCount(1, 0)
         setMessageList(messageRes.data)
       }
-      setSpikeList(spikeRes.data)
-      setGroupList(groupRes.data)
+      setSpikeList(spikeRes.data || {pros: []})
+      setGroupList(groupRes.data || [])
       setHotList(hotListRes.data)
       setClassList(classListRes.data)
       setTabList(listRes.data)
       setAdvList(data)
-    } finally {
-      setShowPage(true)
+    } catch (e) {
     }
+    setShowPage(true)
   }
 
   useEffect(() => {
@@ -126,13 +127,11 @@ const Home: Taro.FC<Props> = () => {
       freshList.refreshList()
   }, [topicId])
 
-  useEffect(() => {
-    const getLocationMes = async () => {
-      const res = await getLocation()
-      setLocation(res)
-    }
-    getLocationMes()
-  }, [])
+  const getLocationMes = async () => {
+    const res = await getLocation()
+    setLocation(res)
+    console.log(res)
+  }
 
   return (
     <View>
@@ -157,6 +156,7 @@ const Home: Taro.FC<Props> = () => {
               }}
             >
               <CustomIcon size={20}
+                          onClick={() => navTo('home', 'chooseShop')}
                           name='location'
                           color='white'
               />
@@ -167,7 +167,7 @@ const Home: Taro.FC<Props> = () => {
                   marginLeft: '8Px'
                 }}
               >
-                {shopState.shopData.shopaddress}
+                {location}
               </Text>
             </View>
           </View>
@@ -324,7 +324,7 @@ const Home: Taro.FC<Props> = () => {
                   marginTop: '8px'
                 }}
               >
-                {spikeList && spikeList.pros.map((item, index) => (
+                {spikeList.pros.map((item, index) => (
                   <View className='commonColumnFlex flexCenter'
                     key={index}
                     style={{
@@ -374,7 +374,7 @@ const Home: Taro.FC<Props> = () => {
                       marginTop: '8px'
                     }}
               >
-                {groupList && groupList.map((item, index) => (
+                {groupList.map((item, index) => (
                   <View className='commonColumnFlex flexCenter'
                         key={index}
                         style={{

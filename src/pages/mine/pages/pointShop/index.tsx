@@ -1,6 +1,6 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
-import { Text, View } from '@tarojs/components'
+import { Image, Text, View } from '@tarojs/components'
 import './index.scss'
 import { AtButton, AtTag } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
@@ -9,6 +9,8 @@ import HeightView from '../../../../components/HeightView'
 import { selectAuthState } from '@redux/reducers/selector'
 import CustomIcon from '../../../../components/CustomIcon'
 import { navTo } from '@utils/route'
+import commodity from '../../../home/utils/commodity'
+import LimitStr from '@utils/stringLimit'
 
 interface Props {
 
@@ -17,6 +19,23 @@ interface Props {
 const PointShop: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const authState = useSelector(selectAuthState)
+  const [list, setList] = useState()
+  const [width, setWidth] = useState<number>(0)
+
+  const getWindowWidth = async () => {
+    const result = await Taro.getSystemInfo()
+    setWidth((result.windowWidth - 64) / 3)
+  }
+
+  const getItems = async () => {
+    const {data} = await commodity.getPointItem(1, 14)
+    setList(data)
+  }
+
+  useEffect(() => {
+    getItems()
+    getWindowWidth()
+  }, [])
 
   return (
     <View>
@@ -77,14 +96,31 @@ const PointShop: Taro.FC<Props> = () => {
         </View>
       </View>
       <HeightView />
-      <View className='normalPadding'
+      <View className='normalPadding commonRowFlex'
             style={{
-              backgroundColor: 'white'
+              backgroundColor: 'white',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap'
             }}
       >
-        <View className='commonColumnFlex flexCenter'>
-
-        </View>
+        {list && list.map(item => (
+          <View className='commonColumnFlex flexCenter'
+                key={item.id}
+                style={{
+                  width: `${width}px`,
+                  padding: '8px'
+                }}
+          >
+            <Image style={{
+                     width: `${width}px`,
+                     height: `${width}px`
+                   }}
+                   src={item.imgurl}
+            />
+            <HeightView />
+            <Text className='slightlySmallText'>{LimitStr(item.goodname, 10)}</Text>
+          </View>
+        ))}
       </View>
     </View>
   )

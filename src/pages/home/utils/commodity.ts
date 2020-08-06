@@ -2,6 +2,7 @@ import AccountVerification from '@utils/accountVerification'
 import { noEmpty, throttleFunc } from '@utils/decorator'
 import Taro from '@tarojs/taro'
 import httpRequest from '@utils/request'
+import order from '../../mine/utils/order'
 
 class Commodity {
 
@@ -22,7 +23,10 @@ class Commodity {
     getSpikeHome: '/api/app/act/indexms',
     getSpikeList: '/api/app/act/mslist',
     getGroupHome: '/api/app/act/indexgroup',
-    getGroupList: '/api/app/act/groupprolist'
+    getGroupList: '/api/app/act/groupprolist',
+
+    //积分商品
+    getPointItem: '/api/app/pointspro/getpagelist'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -95,10 +99,35 @@ class Commodity {
   }
 
   public async getShop () {
-    const location = await Taro.getLocation({})
-    const data = {
-      longitude: location.longitude,
-      latitude: location.latitude
+    let data
+    try {
+      const location = await Taro.getLocation({})
+      data = {
+        longitude: location.longitude,
+        latitude: location.latitude
+      }
+    } catch (e) {
+      await new Promise((resolve, reject) => {
+        Taro.showModal({
+          title: '请打开地理位置获取权限来获取店铺信息',
+          success: async function (res) {
+            if (res.confirm) {
+              await Taro.openSetting({
+                complete: async () => {
+                  const location = await Taro.getLocation({})
+                  data = {
+                    longitude: location.longitude,
+                    latitude: location.latitude
+                  }
+                  resolve()
+                }
+              })
+            } else if (res.cancel) {
+              resolve()
+            }
+          }
+        })
+      })
     }
     return await httpRequest(this.urls.getShop, data, false)
   }
@@ -146,6 +175,15 @@ class Commodity {
       sid
     }
     return await httpRequest(this.urls.collect, data)
+  }
+
+  @throttleFunc(1000)
+  public async getPointItem (index: number, size: number) {
+    const data = {
+      index,
+      size
+    }
+    return await httpRequest(this.urls.getPointItem, data)
   }
 
   @throttleFunc(1000)

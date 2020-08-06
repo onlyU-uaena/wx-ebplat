@@ -56,28 +56,66 @@ const CardCommodity: Taro.FC<Props> = (props) => {
 
   return (
     <View onClick={jumpToDetail ? () => toDetail(proId) : () => {}}>
-      {hurdle ? (
-        <View className='commonRowFlex normalPadding borderBottom'
-              style={{
-                backgroundColor: 'white',
-                justifyContent: 'space-between'
-              }}
-        >
-          <Image src={imgUrl}
-                 className='displayImg'
-          />
-          <View className='commonColumnFlex' style={{
-            justifyContent: 'space-between',
-            flex: 1
-          }}
+      {width === 0 ? null : (
+        <View>
+        {hurdle ? (
+          <View className='commonRowFlex normalPadding borderBottom'
+                style={{
+                  backgroundColor: 'white',
+                  justifyContent: 'space-between'
+                }}
           >
-            <View className='commonRowFlex flexCenter' style={{
-              justifyContent: 'space-between'
+            <Image src={imgUrl}
+                   className='displayImg'
+            />
+            <View className='commonColumnFlex' style={{
+              justifyContent: 'space-between',
+              flex: 1
             }}
             >
-              <Text className='mediumText'>{LimitStr(title, 12)}</Text>
+              <View className='commonRowFlex flexCenter' style={{
+                justifyContent: 'space-between'
+              }}
+              >
+                <Text className='mediumText'>{LimitStr(title, 12)}</Text>
+              </View>
+              <Text className='slightlySmallText grayText'>{desc}</Text>
+              <View className='commonRowFlex'
+                    style={{
+                      justifyContent: 'space-between'
+                    }}
+              >
+                <View className='commonRowFlex flexCenter'>
+                  <Text className='mediumText redText'>¥ {price}</Text>
+                  {oldPrice && <Text className='smallText grayText smallMarginLeft'>¥ {oldPrice}</Text>}
+                </View>
+                <CustomIcon name='add' onClick={() => addToCart(proId)} color='rgb(239, 154, 151)' size={25} />
+              </View>
             </View>
-            <Text className='slightlySmallText grayText'>{desc}</Text>
+          </View>
+        ) : (
+          <View className='radius'
+                style={{
+                  width: `${width + 16}px`,
+                  backgroundColor: 'white',
+                  padding: '8px',
+                  marginBottom: '8px'
+                }}
+          >
+            <Image src={imgUrl}
+                   style={{
+                     width: `${width}px`,
+                     height: `${width}px`
+                   }}
+            />
+            <Text className='mediumText smallMarginTop'>{LimitStr(title, 18)}</Text>
+            <View className='commonRowFlex smallMarginTop normalMarginBottom'>
+              <View className='commodityLabel gradientTheme'>
+                <Text className='smallText whiteText'>
+                  明日达
+                </Text>
+              </View>
+            </View>
             <View className='commonRowFlex'
                   style={{
                     justifyContent: 'space-between'
@@ -85,48 +123,14 @@ const CardCommodity: Taro.FC<Props> = (props) => {
             >
               <View className='commonRowFlex flexCenter'>
                 <Text className='mediumText redText'>¥ {price}</Text>
-                {oldPrice && <Text className='smallText grayText smallMarginLeft'>¥ {oldPrice}</Text>}
+                {/*<Text className='smallText grayText smallMarginLeft'>¥ {oldPrice}</Text>*/}
               </View>
               <CustomIcon name='add' onClick={() => addToCart(proId)} color='rgb(239, 154, 151)' size={25} />
             </View>
           </View>
+        )}
         </View>
-      ) : (
-        <View className='radius'
-              style={{
-                width: `${width + 16}px`,
-                backgroundColor: 'white',
-                padding: '8px',
-                marginBottom: '8px'
-              }}
-        >
-          <Image src={imgUrl}
-                 style={{
-                   width: `${width}px`,
-                   height: `${width}px`
-                 }}
-          />
-          <Text className='mediumText smallMarginTop'>{LimitStr(title, 18)}</Text>
-          <View className='commonRowFlex smallMarginTop normalMarginBottom'>
-            <View className='commodityLabel gradientTheme'>
-              <Text className='smallText whiteText'>
-                明日达
-              </Text>
-            </View>
-          </View>
-          <View className='commonRowFlex'
-                style={{
-                  justifyContent: 'space-between'
-                }}
-          >
-            <View className='commonRowFlex flexCenter'>
-              <Text className='mediumText redText'>¥ {price}</Text>
-              {/*<Text className='smallText grayText smallMarginLeft'>¥ {oldPrice}</Text>*/}
-            </View>
-            <CustomIcon name='add' onClick={() => addToCart(proId)} color='rgb(239, 154, 151)' size={25} />
-          </View>
-        </View>
-      )}
+        )}
     </View>
 
   )
