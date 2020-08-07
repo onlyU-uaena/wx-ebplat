@@ -23,6 +23,7 @@ export interface OrderDetail {
   freightMoney: number
   activityId: number
   scids?: string
+  gnum?: number
   skuID: {
     title: string
     subtitle: string
@@ -131,10 +132,12 @@ const ConfirmOrder: Taro.FC<Props> = () => {
         icon: 'none'
       })
     }
-    const addRes = await order.addGroupOrder(orderDetail.skuID[0].skuid, orderDetail.skuID[0].skugrp.id)
-    const {code, data} = await order.joinGroupOrder(orderDetail.skuID[0].skuid, addRes.data, shopState.address.id, currentTab, '12:00', remark, '12:00')
-    if (code === 0)
-      navTo('mine', 'orderDetail', {id: data})
+    const addRes = await order.addGroupOrder(orderDetail.skuID[0].skuid, orderDetail.skuID[0].skugrp.id, orderDetail.gnum)
+    if (addRes.code === 0) {
+      const {code, data} = await order.joinGroupOrder(orderDetail.skuID[0].skuid, addRes.data, shopState.address.id, currentTab, '12:00', remark, '12:00')
+      if (code === 0)
+        navTo('mine', 'orderDetail', {id: data})
+    }
   }
 
   return (
@@ -248,7 +251,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
               }}
                         onClick={() => addGroupOrder()}
                         type='primary'
-              >去开团</AtButton>
+              >{orderDetail.gnum ? '参加团购' : '去开团'}</AtButton>
             ) : (
               <AtButton customStyle={{
                 borderRadius: '30px',

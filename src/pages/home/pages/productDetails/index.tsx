@@ -16,6 +16,7 @@ import { navTo } from '@utils/route'
 import order from '../../../mine/utils/order'
 import shopCart from '../../../shoppingCart/utils/shopCart'
 import { selectShopState } from '@redux/reducers/selector'
+import LimitStr from '@utils/stringLimit'
 
 interface Props {
 
@@ -74,7 +75,7 @@ const ProductDetails: Taro.FC<Props> = () => {
     setFavorites(data.isfavorites)
   }
 
-  const toOrder = async (control: number) => {
+  const toOrder = async (control: number, gnum?: number) => {
 
     // const res = await order.getFreight(proDetail.shopid, buyNum, buyNum * proDetail.price)
 
@@ -83,6 +84,7 @@ const ProductDetails: Taro.FC<Props> = () => {
       totalMoney: control === 2 ? proDetail.skugrp.gprice * buyNum : control === 1 ? proDetail.packings.skiprice * buyNum : proDetail.price * buyNum,
       freightMoney: 0,
       activityId: 0,
+      gnum: gnum,
       skuID: [{
         skuid: proDetail.id,
         title: proDetail.title,
@@ -190,7 +192,7 @@ const ProductDetails: Taro.FC<Props> = () => {
                 </View>
                 <Text className='smallText whiteText throughLineText'>¥{proDetail.price}</Text>
               </View>
-              {/*<Text className='mediumText whiteText'>已拼{1}份</Text>*/}
+              <Text className='mediumText whiteText'>已拼{proDetail.salescount}份</Text>
             </View>
           )}
           {controlShow === 1 && (
@@ -243,6 +245,38 @@ const ProductDetails: Taro.FC<Props> = () => {
               </View>
             )}
           </View>
+          <HeightView />
+          {controlShow === 2 && (proDetail.grpusers.length) && (
+            <View className='normalPaddingTop normalPaddingBottom'
+                  style={{
+                    backgroundColor: 'white'
+                  }}
+            >
+              <View className='normalMarginRight normalMarginLeft borderBottom'>
+                <Text className='mediumText'><Text className='mediumText redText'>{proDetail.grpusers.length}</Text>人在拼单,可直接参与</Text>
+                <HeightView />
+              </View>
+              {proDetail.grpusers.map(item => (
+                <View className='commonRowFlex flexCenter normalPadding borderBottom'
+                      key={item.gid}
+                      style={{
+                        justifyContent: 'space-between'
+                      }}
+                >
+                  <View className='commonRowFlex flexCenter'>
+                    <AtAvatar circle size='normal' image={item.userimg} />
+                    <Text className='mediumText normalMarginLeft'>{LimitStr(item.username, 6)}</Text>
+                  </View>
+                  <View className='commonRowFlex flexCenter'>
+                    <Text className='mediumText normalMarginLeft smallMarginRight'>还差<Text className='mediumText redText'>{item.count}人</Text>拼成</Text>
+                    <AtButton size='small'
+                              onClick={() => toOrder(2, item.gnum)}
+                    >去参团</AtButton>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
           <View id='detail1' className='smallMarginTop'>
             <InputCard title='选择包装' onClick={() => Taro.showToast({title: '暂无包装', icon: 'none'})} link />
             <InputCard title={`商品评价(${proDetail.cmtcount})`} renderRight={() => <Text className='redText slightlySmallText'>{`好评率：${proDetail.cmtgood}`}</Text>} link={false} />
