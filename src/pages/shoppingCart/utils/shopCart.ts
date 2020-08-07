@@ -1,6 +1,25 @@
 import { noEmpty, throttleFunc } from '@utils/decorator'
 import Taro from '@tarojs/taro'
 import httpRequest from '@utils/request'
+import store from '@redux/store'
+import { setCartNum } from '@redux/actions'
+
+export const setCartBadge = async (shopid) => {
+  const state = store.getState()
+  const {data} = await shopCart.getCart(state.shopState.shopData.shopid || shopid)
+  if (data.shops.length) {
+    store.dispatch(setCartNum(data.shops[0].spuscd.length))
+    Taro.setTabBarBadge({
+      index: 2,
+      text: `${data.shops[0].spuscd.length}`
+    })
+  } else {
+    store.dispatch(setCartNum(0))
+    Taro.removeTabBarBadge({
+      index: 2
+    })
+  }
+}
 
 class ShopCart {
 
@@ -25,7 +44,7 @@ class ShopCart {
       latitude: '37.895693',
       longitude: '112.583698'
     }
-    return await httpRequest(this.urls.addCart, data)
+    return await httpRequest(this.urls.addCart, data, true, true, true, 'GET', setCartBadge)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -54,7 +73,7 @@ class ShopCart {
     const data = {
       ids: ids.toString()
     }
-    return await httpRequest(this.urls.deleteItem, data)
+    return await httpRequest(this.urls.deleteItem, data, true, true, true, 'GET', setCartBadge)
   }
 
   public async getCart (shopid) {

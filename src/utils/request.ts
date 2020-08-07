@@ -24,7 +24,7 @@ export const baseUrl = 'https://mjsh.yl-mall.cn/'
 
 let requestNum = 0
 
-const httpRequest = async (url: string, data = {}, showToast = true, showLoading = true, jumpToLogin = true, method: keyof Method = 'GET') => {
+const httpRequest = async (url: string, data = {}, showToast = true, showLoading = true, jumpToLogin = true, method: keyof Method = 'GET', backFn?) => {
   requestNum++
   if (showLoading)
     await Taro.showLoading({
@@ -57,6 +57,8 @@ const httpRequest = async (url: string, data = {}, showToast = true, showLoading
   }
 
   console.log(result)
+  if (typeof backFn === 'function')
+    backFn()
   return result.data
 }
 

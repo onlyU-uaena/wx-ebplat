@@ -4,7 +4,7 @@ import { Checkbox, CheckboxGroup, Image, Text, View } from '@tarojs/components'
 import './index.scss'
 import { AtButton, AtCheckbox, AtInputNumber } from 'taro-ui'
 import TabBar from '../../components/TabBar'
-import shopCart from './utils/shopCart'
+import shopCart, { setCartBadge } from './utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
 import HeightView from '../../components/HeightView'
 import FreshList, { FreshListInterface } from '../../components/FreshList'
@@ -43,6 +43,10 @@ const ShoppingCart: Taro.FC<Props> = () => {
     }
   }
 
+  const toDetail = (id: number) => {
+    navTo('home', 'productDetails', {id: id})
+  }
+
   const jumpToConfirm = () => {
     const item = cartList.shops[0]
     const data: OrderDetail = {
@@ -50,6 +54,7 @@ const ShoppingCart: Taro.FC<Props> = () => {
       totalMoney: item.totalmoney,
       freightMoney: item.freightMoney,
       activityId: item.activityid,
+      scids: cartList.shops.map(item => item.spuscd.filter(filterItem => filterItem.isselected).map(shopItem => shopItem.shopcartproid)).toString(),
       skuID: item.spuscd.filter(sku => sku.isselected).map(sku => {
         return {
           title: sku.name,
@@ -117,8 +122,10 @@ const ShoppingCart: Taro.FC<Props> = () => {
   }
 
   useDidShow(() => {
-    if (authState.loginStatus)
+    if (authState.loginStatus) {
       getCart()
+      setCartBadge(shopState.shopData.shopid)
+    }
   })
 
   return (
@@ -130,7 +137,7 @@ const ShoppingCart: Taro.FC<Props> = () => {
                 onClick={() => setModifyMode(!modifyMode)}
                 style={{
                   display: 'block',
-                  textAlign: 'right',
+                  textAlign: 'left',
                   color: colors.themeColor
                 }}
           >
@@ -139,9 +146,11 @@ const ShoppingCart: Taro.FC<Props> = () => {
           {cartList.shops.length ? cartList.shops.map((item, index) => (
             <View key={index}>
               {item.spuscd.map((shopItem, shopIndex) => (
-                <View key={shopIndex} className='commonRowFlex flexCenter borderBottom' style={{
-                  backgroundColor: 'white'
-                }}
+                <View key={shopIndex}
+                      className='commonRowFlex flexCenter borderBottom'
+                      style={{
+                        backgroundColor: 'white'
+                      }}
                 >
                   <AtCheckbox onChange={(e) => changeSelect(shopItem.shopcartproid, e.length === 0 ? '0' : '1')}
                               options={[{
@@ -151,7 +160,10 @@ const ShoppingCart: Taro.FC<Props> = () => {
                               }]}
                               selectedList={[shopItem.isselected ? shopItem.shopcartproid : '']}
                   />
-                  <View className='commonRowFlex normalPadding' style={{flex: 1}}>
+                  <View className='commonRowFlex normalPadding'
+                        style={{flex: 1}}
+                        onClick={() => toDetail(shopItem.id)}
+                  >
                     <Image src={shopItem.img}
                            className='displayImg'
                     />
@@ -176,14 +188,16 @@ const ShoppingCart: Taro.FC<Props> = () => {
                           <Text className='redText slightlySmallText'>¥{shopItem.price}</Text>
                           {/*<Text className='grayText throughLineText slightlySmallText smallMarginLeft'>¥{shopItem.oldprice}</Text>*/}
                         </View>
-                        {shopItem.stock ? (
-                          <AtInputNumber type='number' value={shopItem.count} max={shopItem.stock} min={1} onChange={(e) => changeNum(shopItem.shopcartproid, e)} />
-                        ) : (
-                          <View>
-                            <Text className='slightlySmallText grayText'>已售罄</Text>
-                            <Text onClick={() => deleteNone(shopItem.shopcartproid)} className='slightlySmallText orangeText smallMarginLeft'>删除</Text>
-                          </View>
-                        )}
+                        <View onClick={(event => event.stopPropagation())}>
+                          {shopItem.stock ? (
+                            <AtInputNumber type='number' value={shopItem.count} max={shopItem.stock} min={1} onChange={(e) => changeNum(shopItem.shopcartproid, e)} />
+                          ) : (
+                            <View>
+                              <Text className='slightlySmallText grayText'>已售罄</Text>
+                              <Text onClick={() => deleteNone(shopItem.shopcartproid)} className='slightlySmallText orangeText smallMarginLeft'>删除</Text>
+                            </View>
+                          )}
+                        </View>
                       </View>
                     </View>
                   </View>
@@ -280,6 +294,23 @@ const ShoppingCart: Taro.FC<Props> = () => {
             <AtButton customStyle={{padding: '0 16px'}} onClick={() => navTo('mine', 'login')} size='small' circle type='primary'>登录</AtButton>
             <Text className='slightlySmallText grayText normalMarginLeft'>登录后可获得更好的使用体验</Text>
           </View>
+          <HeightView />
+          <Text className='normalMarginTop normalMarginBottom' style={{
+            display: 'block',
+            fontSize: '20px',
+            textAlign: 'center'
+          }}
+          >
+            为您推荐
+          </Text>
+          <View onClick={() => console.log(1)} className='normalMarginLeft normalMarginRight'>
+            <FreshList onShopCart={() => getCart()} onRef={setFreshList} dispatchListFunc={async (page: number, size: number) => {
+              return await commodity.getTopicSku('', Number(shopState.shopData.shopid), page, size)
+            }}
+            />
+          </View>
+          <HeightView high='large' />
+          <HeightView high='large' />
         </View>
       )}
     </View>

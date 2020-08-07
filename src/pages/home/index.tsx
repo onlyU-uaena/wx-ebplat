@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from '@tarojs/redux'
 import { loginIn, loginOut, setShop } from '@redux/actions'
 import LimitStr from '@utils/stringLimit'
 import account from '../mine/utils/login'
-import shopCart from '../shoppingCart/utils/shopCart'
+import shopCart, { setCartBadge } from '../shoppingCart/utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
 import user from '../mine/utils/user'
 
@@ -99,6 +99,7 @@ const Home: Taro.FC<Props> = () => {
       const hotListRes = await commodity.getHotShop(shopState.shopData.shopid || shopRes.data.shopid)
       const spikeRes = await commodity.getSpikeHome(shopState.shopData.shopid || shopRes.data.shopid)
       const groupRes = await commodity.getGroupHome(shopState.shopData.shopid || shopRes.data.shopid)
+      setCartBadge(shopState.shopData.shopid || shopRes.data.shopid)
       const classListRes = await commodity.getClassList()
       if (authState.loginStatus) {
         const messageRes = await user.getMessageCount(1, 0)

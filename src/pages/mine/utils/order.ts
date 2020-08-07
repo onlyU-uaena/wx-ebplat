@@ -1,6 +1,7 @@
 import { noEmpty, throttleFunc } from '@utils/decorator'
 import Taro from '@tarojs/taro'
 import httpRequest from '@utils/request'
+import { setCartBadge } from '../../shoppingCart/utils/shopCart'
 
 class Order {
   private urls = {
@@ -108,7 +109,7 @@ class Order {
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async addOrder (receiveaddrid: number, orderparams: string, disptype: number, datetype: number, timetype: number, invoicetype: number, scids?: number) {
+  public async addOrder (receiveaddrid: number, orderparams: string, disptype: number, datetype: number, timetype: number, invoicetype: number, scids?: string) {
     const data = {
       orderparams,
       receiveaddrid,
@@ -119,7 +120,7 @@ class Order {
       scids,
       arrivetime: '16:00'
     }
-    return await httpRequest(this.urls.addOrder, data)
+    return await httpRequest(this.urls.addOrder, data, true, true, true, 'GET', setCartBadge)
   }
 
   @throttleFunc(1000)

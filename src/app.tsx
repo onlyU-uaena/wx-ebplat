@@ -30,6 +30,7 @@ class App extends Component {
           "coupon/index",
           "expiredCoupon/index",
           "orderDetail/index",
+          "pointItem/index",
           "findPayPwd/index",
           "myFavorites/index",
           "feedback/index",

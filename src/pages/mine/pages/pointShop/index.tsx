@@ -99,12 +99,13 @@ const PointShop: Taro.FC<Props> = () => {
       <View className='normalPadding commonRowFlex'
             style={{
               backgroundColor: 'white',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
+              paddingRight: 0
             }}
       >
         {list && list.map(item => (
-          <View className='commonColumnFlex flexCenter'
+          <View className='commonColumnFlex flexCenter normalMarginRight'
+                onClick={() => navTo('mine', 'pointItem', {pro: item})}
                 key={item.id}
                 style={{
                   width: `${width}px`,
@@ -115,10 +116,12 @@ const PointShop: Taro.FC<Props> = () => {
                      width: `${width}px`,
                      height: `${width}px`
                    }}
-                   src={item.imgurl}
+                   src={item.img}
             />
             <HeightView />
             <Text className='slightlySmallText'>{LimitStr(item.goodname, 10)}</Text>
+            <HeightView />
+            <AtButton size='small' type='primary'>{item.points}积分</AtButton>
           </View>
         ))}
       </View>

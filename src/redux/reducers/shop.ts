@@ -1,7 +1,8 @@
-import { SET_ADDRESS, SET_SHOP_DATA } from '../constants'
+import { SET_ADDRESS, SET_CART_NUM, SET_SHOP_DATA } from '../constants'
 
 const defaultState = {
   shopData: '',
+  cartNum: 0,
   address: {}
 }
 
@@ -13,6 +14,11 @@ function shopReducer(state = defaultState, action) {
       return {
         ...state,
         shopData: action.payload
+      }
+    case SET_CART_NUM:
+      return {
+        ...state,
+        cartNum: action.payload
       }
     case SET_ADDRESS:
       return {
