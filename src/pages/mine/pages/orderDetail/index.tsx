@@ -80,27 +80,36 @@ const OrderDetail: Taro.FC<Props> = () => {
           }
         }
       ]},
-    1: {name: '待收货', button: [
+    3: {name: '待配送', button: [
         {
           title: '去退款',
           func: async (item) => {
             navTo('mine','refund', {item})
-            navTo('mine','refund', {item})
           }
-        },{
-          title: '确认收货',
+        },
+      ]},
+    1: {name: '待受理', button: [
+        {
+          title: '删除订单',
           func: async (item) => {
-            if (item.deliverymode !== 1) {
-              await toConfirmOrder(item.id)
-              delayBack()
-            } else {
-              Taro.showToast({
-                title: '自提订单需线下收货',
-                icon: 'none'
-              })
-            }
+            await toDeleteOrder(item.id)
+            delayBack()
           }
         }
+        // ,{
+        //   title: '确认收货',
+        //   func: async (item) => {
+        //     if (item.deliverymode !== 1) {
+        //       await toConfirmOrder(item.id)
+        //       delayBack()
+        //     } else {
+        //       Taro.showToast({
+        //         title: '自提订单需线下收货',
+        //         icon: 'none'
+        //       })
+        //     }
+        //   }
+        // }
       ]},
     8: {name: '待收货', button: [
         {
@@ -151,26 +160,28 @@ const OrderDetail: Taro.FC<Props> = () => {
           }
         }
       ]},
-    2: {name: '待收货', button: [
+    2: {name: '已受理', button: [
         {
-          title: '去退款',
+          title: '删除订单',
           func: async (item) => {
-            navTo('mine','refund', {item})
-          }
-        },{
-          title: '确认收货',
-          func: async (item) => {
-            if (item.deliverymode !== 1) {
-              await toConfirmOrder(item.id)
-              delayBack()
-            } else {
-              Taro.showToast({
-                title: '自提订单需线下收货',
-                icon: 'none'
-              })
-            }
+            await toDeleteOrder(item.id)
+            delayBack()
           }
         }
+        // ,{
+        //   title: '确认收货',
+        //   func: async (item) => {
+        //     if (item.deliverymode !== 1) {
+        //       await toConfirmOrder(item.id)
+        //       delayBack()
+        //     } else {
+        //       Taro.showToast({
+        //         title: '自提订单需线下收货',
+        //         icon: 'none'
+        //       })
+        //     }
+        //   }
+        // }
       ]},
     11: {name: '退货中', button: [
         {
