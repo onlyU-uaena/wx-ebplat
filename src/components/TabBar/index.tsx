@@ -34,7 +34,7 @@ const TabBar: Taro.FC<Props> = ({beforeBackFuc, title, hideContent, backButton =
 
   return (
     <View style={{
-      height: `${!hideContent ? 60 : ''}px`
+      height: `${!hideContent ? 40 + safeTop : ''}px`
     }}
     >
       {!hideContent ? (
@@ -42,6 +42,7 @@ const TabBar: Taro.FC<Props> = ({beforeBackFuc, title, hideContent, backButton =
           className='tabBarContainer gradientTheme commonRowFlex'
           style={{
             paddingTop: `${safeTop}px`,
+            height: `${40 + safeTop}px`,
             ...styles.tabBarContainer
           }}
         >
@@ -86,7 +87,6 @@ const TabBar: Taro.FC<Props> = ({beforeBackFuc, title, hideContent, backButton =
 
 const styles = {
   tabBarContainer: {
-    height: '60px',
     position: 'fixed',
     width: '100%',
     zIndex: 999
