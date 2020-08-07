@@ -109,7 +109,7 @@ const GroupHome: Taro.FC<Props> = () => {
                            circle
                            size='small'
                            type='primary'
-                    >已拼{item.activitystock}件</AtTag>
+                    >已拼{item.salecount}件</AtTag>
                     <Text className='mediumText redText'>¥ {item.activityprice}</Text>
                     {/*{oldPrice && <Text className='smallText grayText smallMarginLeft'>¥ {60}</Text>}*/}
                   </View>

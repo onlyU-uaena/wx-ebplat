@@ -11,7 +11,7 @@ class Commodity {
     getSkuList: '/api/app/topic/getlist',
     getSortSku: '/api/app/pro/shopskulist',
     getSortList: '/api/app/pro/shopskulist',
-    search: '/api/app/pro/checkgoodsName',
+    search: '/api/app/pro/shopskulist',
     gettopicsku: '/api/app/topic/gettopicsku',
     productDetail: '/api/app/pro/getprodetail',
     collect: '/api/app/pro/collectpro',
@@ -150,9 +150,14 @@ class Commodity {
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async search (goodsname: string, shopid = '') {
+  public async search (field: number, shopid: number, sort: number, keys: string, index: number, size: number) {
     const data = {
-      shopid, goodsname
+      shopid,
+      field,
+      sort,
+      keys,
+      index,
+      size
     }
     return await httpRequest(this.urls.search, data)
   }

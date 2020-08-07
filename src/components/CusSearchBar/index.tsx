@@ -1,9 +1,11 @@
 import Taro from '@tarojs/taro'
-import { useDispatch, useSelector } from '@tarojs/redux'
+import { connect, useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
 import { AtListItem, AtSearchBar } from 'taro-ui'
 import commodity from '../../pages/home/utils/commodity'
+import { RootState } from '@redux/reducers'
+import store from '@redux/store'
 
 interface Props {
   showActionButton?: boolean
@@ -31,7 +33,8 @@ class CusSearchBar extends Taro.Component<Props, any> {
   }
 
   async search () {
-    const {code, data} = await commodity.search(this.state.value, '-1')
+    const state = store.getState()
+    const {code, data} = await commodity.search(0, state.shopState.shopData.shopid, 1, this.state.value, 1, 10000)
     if (!code) {
       this.props.onChangeResult(data)
     }

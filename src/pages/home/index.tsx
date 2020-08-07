@@ -79,7 +79,7 @@ const Home: Taro.FC<Props> = () => {
         url: '/pages/classification/index?props=' + JSON.stringify({num: num})
       })
     else
-      Taro.reLaunch({
+      Taro.switchTab({
         url: '/pages/classification/index'
       })
   }

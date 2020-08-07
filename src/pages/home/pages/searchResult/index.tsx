@@ -47,8 +47,14 @@ const SearchResult: Taro.FC<Props> = () => {
         <View style={{flex: 1}}>
           <CusSearchBar onChangeResult={setSearchRes} />
         </View>
-        <View className='commonRowFlex flexCenter normalMarginLeft normalMarginRight'>
-          <CustomIcon name='shop' color='gray' size={25} />
+        <View className='commonRowFlex flexCenter normalMarginLeft normalMarginRight'
+              onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})}
+        >
+          <CustomIcon name='shop'
+                      onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})}
+                      color='gray'
+                      size={25}
+          />
         </View>
       </View>
       {/*搜索结果*/}
@@ -60,7 +66,7 @@ const SearchResult: Taro.FC<Props> = () => {
           >
             <View>
               {searchRes && searchRes.map((item, index) => (
-                <CardCommodity key={index} proId={item.id} hurdle imgUrl={item.img} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
+                <CardCommodity key={index} proId={item.id} hurdle imgUrl={item.imgurl} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
               ))}
             </View>
           </View>

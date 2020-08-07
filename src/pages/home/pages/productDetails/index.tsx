@@ -320,8 +320,8 @@ const ProductDetails: Taro.FC<Props> = () => {
               <CustomIcon name='customerService' size={20} color='gray' />
               <Text className='slightlySmallText grayText'>客服</Text>
             </Button>
-            <View onClick={() => Taro.reLaunch({url: '/pages/shoppingCart/index'})} className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginRight'>
-              <CustomIcon onClick={() => Taro.reLaunch({url: '/pages/shoppingCart/index'})} name='shop' size={20} color='gray' />
+            <View onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})} className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginRight'>
+              <CustomIcon onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})} name='shop' size={20} color='gray' />
               <Text className='slightlySmallText grayText'>购物车</Text>
             </View>
             <View className='commonRowFlex' style={{

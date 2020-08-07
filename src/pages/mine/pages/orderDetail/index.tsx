@@ -90,6 +90,12 @@ const OrderDetail: Taro.FC<Props> = () => {
       ]},
     1: {name: '待受理', button: [
         {
+          title: '去退款',
+          func: async (item) => {
+            navTo('mine','refund', {item})
+          }
+        },
+        {
           title: '删除订单',
           func: async (item) => {
             await toDeleteOrder(item.id)
@@ -161,6 +167,12 @@ const OrderDetail: Taro.FC<Props> = () => {
         }
       ]},
     2: {name: '已受理', button: [
+        {
+          title: '去退款',
+          func: async (item) => {
+            navTo('mine','refund', {item})
+          }
+        },
         {
           title: '删除订单',
           func: async (item) => {

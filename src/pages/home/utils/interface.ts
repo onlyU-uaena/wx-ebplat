@@ -14,7 +14,7 @@ export interface GetAdv {
 
 export interface GetTopicSku {
   id: number
-  img: string
+  imgurl: string
   name: string
   num: string
 }

@@ -31,7 +31,7 @@ const PointItem: Taro.FC<Props> = () => {
   return (
     <View>
       <TabBar title='兑换详情' />
-      {proDetail.id && (
+      {proDetail && (
         <View id='detail0'>
           {/*轮播图*/}
           {proDetail && <SwiperImg swiperHeight='300px' list={imgList} />}
