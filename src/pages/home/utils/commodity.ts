@@ -157,11 +157,11 @@ class Commodity {
     return await httpRequest(this.urls.search, data)
   }
 
-  public async getSortSku (shopid = '', classid: number, page: number, size: number, field: number, sort: number) {
+  public async getSortSku (shopid = '', classid: number, index: number, size: number, field: number, sort: number) {
     const data = {
       shopid,
       classid,
-      page,
+      index,
       size,
       field,
       sort
