@@ -5,6 +5,9 @@ import store from '@redux/store'
 import { setCartNum } from '@redux/actions'
 
 export const setCartBadge = async (shopid) => {
+  if (!shopid) {
+    return
+  }
   const state = store.getState()
   const {data} = await shopCart.getCart(state.shopState.shopData.shopid || shopid)
   if (data.shops.length) {

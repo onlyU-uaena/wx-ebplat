@@ -99,11 +99,11 @@ const Home: Taro.FC<Props> = () => {
       const hotListRes = await commodity.getHotShop(shopState.shopData.shopid || shopRes.data.shopid)
       const spikeRes = await commodity.getSpikeHome(shopState.shopData.shopid || shopRes.data.shopid)
       const groupRes = await commodity.getGroupHome(shopState.shopData.shopid || shopRes.data.shopid)
-      setCartBadge(shopState.shopData.shopid || shopRes.data.shopid)
       const classListRes = await commodity.getClassList()
       if (authState.loginStatus) {
         const messageRes = await user.getMessageCount(1, 0)
         setMessageList(messageRes.data)
+        setCartBadge(shopState.shopData.shopid || shopRes.data.shopid)
       }
       setSpikeList(spikeRes.data || {pros: []})
       setGroupList(groupRes.data || [])

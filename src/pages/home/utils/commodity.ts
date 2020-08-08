@@ -114,15 +114,27 @@ class Commodity {
             if (res.confirm) {
               await Taro.openSetting({
                 complete: async () => {
-                  const location = await Taro.getLocation({})
-                  data = {
-                    longitude: location.longitude,
-                    latitude: location.latitude
+                  let location
+                  try {
+                    location = await Taro.getLocation({})
+                    data = {
+                      longitude: location.longitude,
+                      latitude: location.latitude
+                    }
+                  } catch (error) {
+                    data = {
+                      longitude: 0,
+                      latitude: 0
+                    }
                   }
                   resolve()
                 }
               })
             } else if (res.cancel) {
+              data = {
+                longitude: 0,
+                latitude: 0
+              }
               resolve()
             }
           }
@@ -133,10 +145,47 @@ class Commodity {
   }
 
   public async getShopList () {
-    const location = await Taro.getLocation({})
-    const data = {
-      longitude: location.longitude,
-      latitude: location.latitude
+    let data
+    try {
+      const location = await Taro.getLocation({})
+      data = {
+        longitude: location.longitude,
+        latitude: location.latitude
+      }
+    } catch (e) {
+      await new Promise((resolve, reject) => {
+        Taro.showModal({
+          title: '请打开地理位置获取权限来获取店铺信息',
+          success: async function (res) {
+            if (res.confirm) {
+              await Taro.openSetting({
+                complete: async () => {
+                  let location
+                  try {
+                    location = await Taro.getLocation({})
+                    data = {
+                      longitude: location.longitude,
+                      latitude: location.latitude
+                    }
+                  } catch (error) {
+                    data = {
+                      longitude: 0,
+                      latitude: 0
+                    }
+                  }
+                  resolve()
+                }
+              })
+            } else if (res.cancel) {
+              data = {
+                longitude: 0,
+                latitude: 0
+              }
+              resolve()
+            }
+          }
+        })
+      })
     }
     return await httpRequest(this.urls.getShopList, data, false)
   }

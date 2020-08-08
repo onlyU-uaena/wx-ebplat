@@ -46,11 +46,12 @@ const OrderDetail: Taro.FC<Props> = () => {
                 success: () => {
                   Taro.showToast({
                     title: '支付成功',
-                    icon: 'none'
+                    icon: 'none',
+                    mask: true
                   })
                   setTimeout(() => {
                     navTo('mine', 'myOrder')
-                  }, 1000)
+                  }, 1500)
                 },
                 nonceStr: data.nonceStr,
                 signType: data.signType,
