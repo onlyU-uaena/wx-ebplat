@@ -50,7 +50,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                     mask: true
                   })
                   setTimeout(() => {
-                    navTo('mine', 'myOrder')
+                    navTo('home', 'paySuccess', {detail: orderDetail})
                   }, 1500)
                 },
                 nonceStr: data.nonceStr,

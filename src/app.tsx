@@ -59,6 +59,7 @@ class App extends Component {
         "root": "pages/home/pages",
         "pages": [
           'groupHome/index',
+          'paySuccess/index',
           'confirmOrder/index',
           'spikeHome/index',
           'chooseShop/index',
