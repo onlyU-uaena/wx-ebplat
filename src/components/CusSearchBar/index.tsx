@@ -33,9 +33,13 @@ class CusSearchBar extends Taro.Component<Props, any> {
   }
 
   async search () {
+    let list = Taro.getStorageSync('historySearch') || []
+    list.push(this.state.value)
+    list = Array.from(new Set(list))
+    Taro.setStorageSync('historySearch', list)
     const state = store.getState()
     const {code, data} = await commodity.search(0, state.shopState.shopData.shopid, 1, this.state.value, 1, 10000)
-    if (!code) {
+    if (code === 0) {
       this.props.onChangeResult(data)
     }
   }
@@ -53,6 +57,7 @@ class CusSearchBar extends Taro.Component<Props, any> {
           value={this.state.value}
           onChange={this.onChange.bind(this)}
           onActionClick={this.search.bind(this)}
+          onConfirm={this.search.bind(this)}
         />
         {/*搜索建议*/}
         {/*{this.state.showIndex &&*/}

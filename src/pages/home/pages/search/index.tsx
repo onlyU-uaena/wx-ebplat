@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, useRouter } from '@tarojs/taro'
+import Taro, { useState, useEffect, useRouter, useDidShow } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
@@ -8,6 +8,8 @@ import CusSearchBar from '../../../../components/CusSearchBar'
 import CustomIcon from '../../../../components/CustomIcon'
 import { GetTopicSku } from '../../utils/interface'
 import { navTo } from '@utils/route'
+import commodity from '../../utils/commodity'
+import { selectShopState } from '@redux/reducers/selector'
 
 interface Props {
 
@@ -16,14 +18,28 @@ interface Props {
 const Search: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const shopState = useSelector(selectShopState)
+  const [historyList, setHistoryList] = useState([])
 
   const onSearchResult = (data) => {
     navTo('home', 'searchResult', data)
   }
 
-  useEffect(() => {
-    console.log(router)
-  }, [])
+  const clearHistory = () => {
+    Taro.setStorageSync('historySearch', [])
+    setHistoryList([])
+  }
+
+  useDidShow(() => {
+    const list = Taro.getStorageSync('historySearch') || []
+    setHistoryList(list.slice(0, 10))
+  })
+
+  const historySearch = async (value) => {
+    const {code, data} = await commodity.search(0, shopState.shopData.shopid, 1, value, 1, 10000)
+    if (code === 0)
+      navTo('home', 'searchResult', data)
+  }
 
   return (
     <View>
@@ -43,10 +59,19 @@ const Search: Taro.FC<Props> = () => {
         }}
         >
           <Text className='grayText'>历史搜索</Text>
-          <CustomIcon name='rubbish' color='gray' size={20} />
+          <CustomIcon onClick={() => clearHistory()} name='rubbish' color='gray' size={20} />
         </View>
         <View className='normalMarginTop'>
-          {/*<AtTag active>标签</AtTag>*/}
+          {historyList.map(item => (
+            <AtTag customStyle={{
+                     marginRight: '4px',
+                     marginTop: '4px'
+                   }}
+                   key={item}
+                   active
+                   onClick={() => historySearch(item)}
+            >{item}</AtTag>
+          ))}
         </View>
       </View>
     </View>
