@@ -29,6 +29,12 @@ let waitReset = false
 const MyOrder: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const [safeTop, setSafeTop] = useState<number>(0)
+
+  useEffect(() => {
+    const { safeArea } = Taro.getSystemInfoSync()
+    setSafeTop(safeArea.top)
+  }, [])
 
   usePullDownRefresh(() => {
     console.log(1)
@@ -278,10 +284,23 @@ const MyOrder: Taro.FC<Props> = () => {
   return (
     <View>
       <TabBar title='我的订单' />
-      <AtTabs tabList={tabs}
-              scroll
-              onClick={(e) => changeTab(e)}
-              current={currentTabs}
+      <View style={{
+        position: 'fixed',
+        top: `${safeTop + 40}px`,
+        width: '100%',
+        height: '47px',
+        zIndex: 999
+      }}
+      >
+        <AtTabs tabList={tabs}
+                scroll
+                onClick={(e) => changeTab(e)}
+                current={currentTabs}
+        />
+      </View>
+      <View style={{
+        height: '47px'
+      }}
       />
       <ScrollView refresherTriggered={onRefresh}
                   onRefresherRefresh={() => refreshList()}
