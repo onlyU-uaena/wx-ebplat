@@ -8,6 +8,7 @@ import { navTo } from '@utils/route'
 import LimitStr from '@utils/stringLimit'
 import colors from '../../../../common/styles/color'
 import order from '../../utils/order'
+import EmptyPage from '../../../../components/EmptyPage'
 
 interface Props {
 
@@ -44,7 +45,7 @@ const MyGroup: Taro.FC<Props> = () => {
     <View>
       <TabBar title='我的拼团' />
       <View className='normalMargin'>
-        {groupList.length && groupList.map(item => (
+        {groupList.length ? groupList.map(item => (
           <View key={item.actid} className='commonRowFlex normalPadding normalMarginBottom radius'
                 onClick={() => navTo('mine', 'groupDetail', {ugnum: item.ugnum})}
                 style={{
@@ -105,7 +106,9 @@ const MyGroup: Taro.FC<Props> = () => {
               </View>
             </View>
           </View>
-        ))}
+        )) : (
+          <EmptyPage title='无拼团订单' />
+        )}
       </View>
     </View>
   )

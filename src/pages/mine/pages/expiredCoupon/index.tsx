@@ -6,6 +6,7 @@ import { AtButton } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import CustomIcon from '../../../../components/CustomIcon'
 import user from '../../utils/user'
+import EmptyPage from '../../../../components/EmptyPage'
 
 interface Props {
 
@@ -21,7 +22,7 @@ const couponStatus = {
 const ExpiredCoupon: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
 
-  const [couponList, setCouponList] = useState()
+  const [couponList, setCouponList] = useState([])
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const ExpiredCoupon: Taro.FC<Props> = () => {
   return (
     <View>
       <TabBar title='过期券' />
-      {couponList && couponList.map(item => (
+      {couponList.length ? couponList.map(item => (
         <View key={item.couponid} className='normalMargin'>
           <View className='commonRowFlex'>
             <View className='commonColumnFlex normalPadding flexCenter'
@@ -81,7 +82,9 @@ const ExpiredCoupon: Taro.FC<Props> = () => {
             </View>
           </View>
         </View>
-      ))}
+      )) : (
+        <EmptyPage title='无过期优惠券' />
+      )}
     </View>
   )
 }

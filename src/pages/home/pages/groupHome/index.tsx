@@ -11,6 +11,7 @@ import colors from '../../../../common/styles/color'
 import { navTo } from '@utils/route'
 import CustomIcon from '../../../../components/CustomIcon'
 import HeightView from '../../../../components/HeightView'
+import EmptyPage from '../../../../components/EmptyPage'
 
 interface Props {
 
@@ -71,7 +72,7 @@ const GroupHome: Taro.FC<Props> = () => {
                 backgroundColor: 'white'
               }}
         >
-          {groupList && groupList.map(item => (
+          {groupList ? groupList.map(item => (
             <View key={item.actid} className='commonRowFlex normalPadding'
                   onClick={() => navTo('home', 'productDetails', {id: item.skuid, actid: item.actid, showGroup: true})}
                   style={{
@@ -137,7 +138,9 @@ const GroupHome: Taro.FC<Props> = () => {
                 </View>
               </View>
             </View>
-          ))}
+          )) : (
+            <EmptyPage title='暂无拼团商品' />
+          )}
         </View>
       </View>
     </View>

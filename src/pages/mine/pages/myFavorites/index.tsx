@@ -11,7 +11,9 @@ import shopCart from '../../../shoppingCart/utils/shopCart'
 import { selectShopState } from '@redux/reducers/selector'
 import { navTo } from '@utils/route'
 import colors from '../../../../common/styles/color'
+
 import useReachBottom = Taro.useReachBottom
+import EmptyPage from '../../../../components/EmptyPage'
 
 interface Props {
 
@@ -158,16 +160,7 @@ const MyFavorites: Taro.FC<Props> = () => {
           </View>
         </View>
       )) : (
-        <View className='commonRowFlex flexCenter'
-              style={{
-                justifyContent: 'center',
-                margin: '32px 0'
-              }}
-        >
-          <Text className='grayText slightlySmallText'>
-            暂无收藏～
-          </Text>
-        </View>
+        <EmptyPage title='暂无收藏' />
       )}
       {modifyMode && (
         <View className='bottomGroup commonRowFlex'

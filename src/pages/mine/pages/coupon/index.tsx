@@ -6,6 +6,7 @@ import { AtButton, AtSearchBar } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import user from '../../utils/user'
 import { navTo } from '@utils/route'
+import EmptyPage from '../../../../components/EmptyPage'
 
 interface Props {
 
@@ -21,7 +22,7 @@ const couponStatus = {
 const Coupon: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const [swapCode, setSwapCode] = useState<string>('')
-  const [couponList, setCouponList] = useState()
+  const [couponList, setCouponList] = useState([])
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const Coupon: Taro.FC<Props> = () => {
           onActionClick={() => swapCoupon()}
         />
       </View>
-      {couponList && couponList.map(item => (
+      {couponList.length ? couponList.map(item => (
         <View key={item.couponid} className='normalMargin'>
           <View className='commonRowFlex'>
             <View className='commonColumnFlex normalPadding flexCenter gradientTheme'
@@ -97,7 +98,9 @@ const Coupon: Taro.FC<Props> = () => {
             </View>
           </View>
         </View>
-      ))}
+      )) : (
+        <EmptyPage title='暂无优惠券' />
+      )}
       <View className='normalMargin commonRowFlex flexCenter'
             style={{
               justifyContent: 'center'

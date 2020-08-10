@@ -6,6 +6,7 @@ import { AtButton } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import CardCommodity from '../../../../components/CardCommodity'
 import user from '../../utils/user'
+import EmptyPage from '../../../../components/EmptyPage'
 
 interface Props {
 
@@ -41,13 +42,15 @@ const MyFoot: Taro.FC<Props> = () => {
         }}
         >
           <View>
-            {footList.length && footList.map((item, index) => (
+            {footList.length ? footList.map((item, index) => (
               <View key={index}>
                 {item.list.map(shopItem => (
                   <CardCommodity key={shopItem.id} proId={shopItem.id} hurdle imgUrl={shopItem.imgurl} title={shopItem.spuname} desc={shopItem.subtitle} price={shopItem.price} oldPrice={0} />
                 ))}
               </View>
-            ))}
+            )) : (
+              <EmptyPage title='暂无浏览记录' />
+            )}
             {/*{footList.length && footList.map((item) => item.list.map((shopItem, index) => (*/}
             {/*  <View></View>*/}
             {/*)))}*/}

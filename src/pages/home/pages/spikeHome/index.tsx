@@ -11,6 +11,7 @@ import CustomIcon from '../../../../components/CustomIcon'
 import colors from '../../../../common/styles/color'
 import { navTo } from '@utils/route'
 import CusTabs from '../../../../components/CusTabs'
+import EmptyPage from '../../../../components/EmptyPage'
 
 interface Props {
 
@@ -47,11 +48,13 @@ const SpikeHome: Taro.FC<Props> = () => {
   const getSpike = async () => {
     const {data} = await commodity.getSpikeList(shopState.shopData.shopid)
     setSpikeList(data)
-    setTopicId(data[0].actid)
-    const list = data.map((item, index) => {
-      return {id: item.actid, img: '', name: item.endtime.substring(11, 16), num: '', tagName: spikeStatus[item.status]}
-    })
-    setTabList(list)
+    if (data.length) {
+      setTopicId(data[0].actid)
+      const list = data.map((item, index) => {
+        return {id: item.actid, img: '', name: item.endtime.substring(11, 16), num: '', tagName: spikeStatus[item.status]}
+      })
+      setTabList(list)
+    }
   }
 
   useEffect(() => {
@@ -86,7 +89,7 @@ const SpikeHome: Taro.FC<Props> = () => {
           <CusTabs tabs={tabList} active={1} changeTab={(id) => setTopicId(id)} defaultTab={false} />
         </View>
         <View>
-          {(spikeList && topicId) && spikeList.filter(item => item.actid === topicId).map(item => (
+          {(spikeList && topicId) ? spikeList.filter(item => item.actid === topicId).map(item => (
             <View key={item.actid}
                   className='normalMarginBottom'
             >
@@ -151,7 +154,9 @@ const SpikeHome: Taro.FC<Props> = () => {
                 </View>
               ))}
             </View>
-          ))}
+          )) : (
+            <EmptyPage title='暂无秒杀活动' />
+          )}
         </View>
       </View>
     </View>
