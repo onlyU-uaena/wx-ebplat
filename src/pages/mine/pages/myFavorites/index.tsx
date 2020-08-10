@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
+import Taro, { useState, useEffect, useDidShow } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Image, Text, View } from '@tarojs/components'
 import './index.scss'
@@ -46,9 +46,9 @@ const MyFavorites: Taro.FC<Props> = () => {
     })
   }
 
-  useEffect(() => {
+  useDidShow(() => {
     getMyCollect()
-  }, [])
+  })
 
   const selectAll = (e) => {
     console.log(e)
@@ -95,6 +95,7 @@ const MyFavorites: Taro.FC<Props> = () => {
       })
       const {data} = await user.getCollect(1, 14)
       setItemList(data)
+      setModifyMode(false)
       setPage(1)
     }
   }
@@ -102,16 +103,18 @@ const MyFavorites: Taro.FC<Props> = () => {
   return (
     <View>
       <TabBar title='我的收藏' />
-      <Text className='smallMargin mediumText'
-            onClick={() => setModifyMode(!modifyMode)}
-            style={{
-              display: 'block',
-              textAlign: 'right',
-              color: colors.themeColor
-            }}
-      >
-        {modifyMode ? '返回' : '编辑'}
-      </Text>
+      {itemList.length && (
+        <Text className='smallMargin mediumText'
+              onClick={() => setModifyMode(!modifyMode)}
+              style={{
+                display: 'block',
+                textAlign: 'right',
+                color: colors.themeColor
+              }}
+        >
+          {modifyMode ? '返回' : '编辑'}
+        </Text>
+      )}
       {itemList.length ? itemList.map((shopItem, shopIndex) => (
         <View key={shopIndex} className='commonRowFlex flexCenter borderBottom' style={{
           backgroundColor: 'white'
