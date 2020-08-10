@@ -25,6 +25,13 @@ interface Props {
 const tabList = ['商品', '评价', '详情', '推荐']
 
 const ProductDetails: Taro.FC<Props> = () => {
+  const [safeTop, setSafeTop] = useState<number>(0)
+
+  useEffect(() => {
+    const { safeArea } = Taro.getSystemInfoSync()
+    setSafeTop(safeArea.top)
+  }, [])
+
   const dispatch = useDispatch()
   const shopState = useSelector(selectShopState)
   const router = useRouter()
@@ -142,7 +149,7 @@ const ProductDetails: Taro.FC<Props> = () => {
         padding: '8px 32px',
         position: 'fixed',
         width: '100%',
-        top: '60px',
+        top: `${safeTop + 40}px`,
         zIndex: 999
       }}
       >

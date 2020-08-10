@@ -9,7 +9,7 @@ import colors from '../../../../common/styles/color'
 import order from '../../utils/order'
 import { navTo } from '@utils/route'
 import LimitStr from '@utils/stringLimit'
-import { selectAuthState } from '@redux/reducers/selector'
+import { selectAuthState, selectShopState } from '@redux/reducers/selector'
 
 interface Props {
 
@@ -26,15 +26,52 @@ const GroupDetail: Taro.FC<Props> = () => {
   const authState = useSelector(selectAuthState)
   const router = useRouter()
   const [detail, setDetail] = useState()
+  const [intoOuter, setMode] = useState(false)
 
   useEffect(() => {
     const ugnum = JSON.parse(router.params.props).ugnum
     getDetail(ugnum)
   }, [])
 
+  const toOrder = async () => {
+
+    // const res = await order.getFreight(proDetail.shopid, buyNum, buyNum * proDetail.price)
+
+    const data = {
+      shopid: detail.shopid,
+      totalMoney: detail.price,
+      freightMoney: 0,
+      activityId: 0,
+      gnum: detail.ugnum,
+      skuID: [{
+        skuid: detail.proid,
+        title: detail.proname,
+        imgurl: detail.proimg,
+        subtitle: '',
+        proCount: 1,
+        price: detail.price,
+        packageid: 0,
+        unitid: 0,
+        marketid: 0,
+        spikeid: 0,
+        type: 0,
+        isgrp: true,
+        skugrp: {id: detail.gid},
+        packings: 0
+      }]
+    }
+
+    navTo('home', 'confirmOrder', data)
+  }
+
+
   const getDetail = async (gnum: number) => {
     const {data} = await order.myGroupDetail(gnum)
     setDetail(data)
+    if (authState.userData.id === data.users[0].id)
+      setMode(false)
+    else
+      setMode(true)
   }
 
   return (
@@ -133,15 +170,19 @@ const GroupDetail: Taro.FC<Props> = () => {
                     <HeightView />
                   </View>
                 )}
-                {detail && detail.status === 0 && (
+                {(detail && detail.status === 0) && (
                   <View>
                     <AtButton circle
-                              openType='share'
+                              openType={intoOuter ? '' : 'share'}
+                              onClick={() => {
+                                if (intoOuter)
+                                  toOrder()
+                              }}
                               customStyle={{
                                 borderColor: colors.themeRed,
                                 color: colors.themeRed
                               }}
-                    >邀请好友参与拼团
+                    >{intoOuter ? '参与拼团' : '邀请好友参与拼团'}
                     </AtButton>
                     <HeightView />
                   </View>

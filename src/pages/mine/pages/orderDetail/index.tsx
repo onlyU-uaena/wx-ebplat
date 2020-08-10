@@ -318,9 +318,9 @@ const OrderDetail: Taro.FC<Props> = () => {
               <Text className='mediumText'>总计</Text>
               <Text className='redText normalMarginLeft'>¥{orderDetail.actualpay.toFixed(2)}</Text>
             </View>
-            <AtButton customStyle={{width: '100%'}} size='small' type='primary' openType='contact'>
-              联系客服
-            </AtButton>
+            {/*<AtButton customStyle={{width: '100%'}} size='small' type='primary' openType='contact'>*/}
+            {/*  联系客服*/}
+            {/*</AtButton>*/}
           </View>
           <HeightView />
           <View style={{

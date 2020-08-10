@@ -5,4 +5,6 @@ export const SET_SHOP_DATA = 'SET_SHOP_DATA'
 
 export const SET_ADDRESS = 'SET_ADDRESS'
 
+export const REFRESH_COMPLETE = 'REFRESH_COMPLETE'
+
 export const SET_CART_NUM = 'SET_CART_NUM'

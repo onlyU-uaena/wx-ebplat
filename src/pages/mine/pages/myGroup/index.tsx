@@ -47,7 +47,7 @@ const MyGroup: Taro.FC<Props> = () => {
       <View className='normalMargin'>
         {groupList.length ? groupList.map(item => (
           <View key={item.actid} className='commonRowFlex normalPadding normalMarginBottom radius'
-                onClick={() => navTo('mine', 'groupDetail', {ugnum: item.ugnum})}
+                onClick={() => navTo('mine', 'groupDetail', {ugnum: item.ugnum, outer: false})}
                 style={{
                   backgroundColor: 'white',
                   justifyContent: 'space-between'

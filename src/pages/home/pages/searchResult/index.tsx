@@ -20,6 +20,13 @@ interface Props {
 }
 
 const SearchResult: Taro.FC<Props> = () => {
+  const [safeTop, setSafeTop] = useState<number>(0)
+
+  useEffect(() => {
+    const { safeArea } = Taro.getSystemInfoSync()
+    setSafeTop(safeArea.top)
+  }, [])
+
   const shopState = useSelector(selectShopState)
   const dispatch = useDispatch()
   const router = useRouter()
@@ -41,7 +48,12 @@ const SearchResult: Taro.FC<Props> = () => {
       <TabBar title='搜索结果' />
       {/*搜索栏*/}
       <View className='commonRowFlex' style={{
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        position: 'fixed',
+        width: '100%',
+        height: '42px',
+        zIndex: 999,
+        top: `${safeTop + 40}px`
       }}
       >
         <View style={{flex: 1}}>
@@ -57,6 +69,10 @@ const SearchResult: Taro.FC<Props> = () => {
           />
         </View>
       </View>
+      <View style={{
+        height: '42px'
+      }}
+      />
       {/*搜索结果*/}
       {(searchRes && searchRes.length) ? (
         <View>
@@ -69,6 +85,20 @@ const SearchResult: Taro.FC<Props> = () => {
                 <CardCommodity key={index} proId={item.id} hurdle imgUrl={item.imgurl} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
               ))}
             </View>
+          </View>
+          <Text className='normalMarginTop normalMarginBottom' style={{
+            display: 'block',
+            fontSize: '20px',
+            textAlign: 'center'
+          }}
+          >
+            为您推荐
+          </Text>
+          <View className='normalMarginLeft normalMarginRight'>
+            <FreshList onRef={setFreshList} dispatchListFunc={async (page: number, size: number) => {
+              return await commodity.getTopicSku('', Number(shopState.shopData.shopid), page, size)
+            }}
+            />
           </View>
         </View>
       ) : (

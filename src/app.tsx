@@ -4,6 +4,9 @@ import Index from './pages/home/index'
 import store from './redux/store/index'
 import './app.scss'
 import './custom-theme.scss'
+import commodity from './pages/home/utils/commodity'
+import { loginIn, loginOut, setShop } from '@redux/actions'
+import account from './pages/mine/utils/login'
 
 class App extends Component {
 
@@ -106,8 +109,25 @@ class App extends Component {
     }
   }
 
-  componentDidMount () {
+  async getShop () {
+    const shopRes = await commodity.getShop()
+    store.dispatch(setShop(shopRes.data))
+  }
 
+  async autoLogin () {
+    if (!Taro.getStorageSync('token'))
+      return
+    const { code, data } = await account.getUserData()
+    if (!code) {
+      store.dispatch(loginIn(data))
+    } else {
+      store.dispatch(loginOut())
+    }
+  }
+
+  componentDidMount () {
+    this.getShop()
+    this.autoLogin()
   }
 
   componentDidShow () {}
