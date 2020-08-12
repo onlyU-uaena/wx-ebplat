@@ -31,8 +31,9 @@ class Order {
     return await httpRequest(this.urls.getOrderList, data)
   }
 
-  public async getGroupList (pageindex, pagesize) {
+  public async getGroupList (pageindex: number, pagesize: number, status: number) {
     const data = {
+      status,
       pageindex,
       pagesize
     }

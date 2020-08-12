@@ -1,2 +1,15 @@
 @import "src/common/styles/style.scss";
 @import "src/common/styles/icon.scss";
+
+.at-tabs--scroll .at-tabs__header {
+  position: absolute;
+  z-index: 999
+}
+
+.at-tabs {
+  position: relative;
+}
+
+.at-tabs__body {
+  margin-top: 44Px;
+}

@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useRouter, useReachBottom, usePullDownRefres
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { ScrollView, Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtButton, AtTabs } from 'taro-ui'
+import { AtButton, AtTabs, AtTabsPane } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import ReadCommodity from '../../../../components/ReadCommodity'
 import HeightView from '../../../../components/HeightView'
@@ -284,102 +284,96 @@ const MyOrder: Taro.FC<Props> = () => {
   return (
     <View>
       <TabBar title='我的订单' />
-      <View style={{
-        position: 'fixed',
-        top: `${safeTop + 40}px`,
-        width: '100%',
-        height: '47px',
-        zIndex: 999
-      }}
-      >
+      <View>
         <AtTabs tabList={tabs}
                 scroll
                 onClick={(e) => changeTab(e)}
                 current={currentTabs}
-        />
-      </View>
-      <View style={{
-        height: '47px'
-      }}
-      />
-      <ScrollView refresherTriggered={onRefresh}
-                  onRefresherRefresh={() => refreshList()}
-                  refresherEnabled
-      >
-        {orderList.length ? (
-          orderList.map((item, index) => (
-            <View key={index}>
-              <View style={{
-                backgroundColor: 'white'
-              }}
+        >
+          {tabs.map((tabItem, tabIndex) => (
+            <AtTabsPane key={tabIndex} current={currentTabs} index={tabIndex}>
+              <ScrollView refresherTriggered={onRefresh}
+                          onRefresherRefresh={() => refreshList()}
+                          refresherEnabled
               >
-                <View className='commonRowFlex normalPadding borderBottom flexCenter'
-                      style={{
-                        justifyContent: 'space-between'
+                {orderList.length ? (
+                  orderList.map((item, index) => (
+                    <View key={index}>
+                      <View style={{
+                        backgroundColor: 'white'
                       }}
-                >
-                  <Text className='slightlySmallText grayText'>{item.addorderdate}</Text>
-                  <Text className='mediumText orangeText'>{statusToTitle[item.status].name}</Text>
-                </View>
-                {item.lsitdetais.map((shopItem, shopIndex) => (
-                  <ReadCommodity key={shopIndex} onClick={() => navTo('mine', 'orderDetail', {id: item.code})} imgUrl={shopItem.productimg} title={shopItem.productname} price={shopItem.proprice} num={shopItem.productcount} />
-                ))}
-                <View className='commonRowFlex normalPadding borderBottom borderTop flexCenter'
-                      style={{
-                        justifyContent: 'flex-end'
-                      }}
-                >
-                  <Text className='mediumText'>共</Text>
-                  <Text className='mediumText redText'>{item.lsitdetais.length}</Text>
-                  <Text className='mediumText'>件</Text>
-                  <Text className='smallMarginLeft mediumText'>需付款</Text>
-                  <Text className='mediumText redText smallMarginLeft'>¥{item.actualpay.toFixed(2)}</Text>
-                </View>
-                  {statusToTitle[item.status].button.length === 2 ? (
-                    <View className='commonRowFlex normalPadding borderBottom flexCenter'
-                          style={{
-                            justifyContent: 'flex-end'
-                          }}
-                    >
-                      <AtButton onClick={() => statusToTitle[item.status].button[0].func(item)} size='small'>{statusToTitle[item.status].button[0].title}</AtButton>
-                      {!item.iscomment && (
-                        <View className='smallMarginLeft'>
-                          <AtButton type='primary'
-                                    onClick={() => statusToTitle[item.status].button[1].func(item)}
-                                    customStyle={{
-                                      padding: '0 16px'
-                                    }} size='small'
-                          >
-                            {statusToTitle[item.status].button[1].title}
-                          </AtButton>
+                      >
+                        <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                              style={{
+                                justifyContent: 'space-between'
+                              }}
+                        >
+                          <Text className='slightlySmallText grayText'>{item.addorderdate}</Text>
+                          <Text className='mediumText orangeText'>{statusToTitle[item.status].name}</Text>
                         </View>
-                      )}
+                        {item.lsitdetais.map((shopItem, shopIndex) => (
+                          <ReadCommodity key={shopIndex} onClick={() => navTo('mine', 'orderDetail', {id: item.code})} imgUrl={shopItem.productimg} title={shopItem.productname} price={shopItem.proprice} num={shopItem.productcount} />
+                        ))}
+                        <View className='commonRowFlex normalPadding borderBottom borderTop flexCenter'
+                              style={{
+                                justifyContent: 'flex-end'
+                              }}
+                        >
+                          <Text className='mediumText'>共</Text>
+                          <Text className='mediumText redText'>{item.lsitdetais.length}</Text>
+                          <Text className='mediumText'>件</Text>
+                          <Text className='smallMarginLeft mediumText'>需付款</Text>
+                          <Text className='mediumText redText smallMarginLeft'>¥{item.actualpay.toFixed(2)}</Text>
+                        </View>
+                        {statusToTitle[item.status].button.length === 2 ? (
+                          <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                                style={{
+                                  justifyContent: 'flex-end'
+                                }}
+                          >
+                            <AtButton onClick={() => statusToTitle[item.status].button[0].func(item)} size='small'>{statusToTitle[item.status].button[0].title}</AtButton>
+                            {!item.iscomment && (
+                              <View className='smallMarginLeft'>
+                                <AtButton type='primary'
+                                          onClick={() => statusToTitle[item.status].button[1].func(item)}
+                                          customStyle={{
+                                            padding: '0 16px'
+                                          }} size='small'
+                                >
+                                  {statusToTitle[item.status].button[1].title}
+                                </AtButton>
+                              </View>
+                            )}
+                          </View>
+                        ) : (
+                          <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                                style={{
+                                  justifyContent: 'flex-end'
+                                }}
+                          >
+                            <AtButton onClick={() => statusToTitle[item.status].button[0].func(item)} size='small'>{statusToTitle[item.status].button[0].title}</AtButton>
+                          </View>
+                        )}
+                      </View>
+                      <HeightView />
                     </View>
-                  ) : (
-                    <View className='commonRowFlex normalPadding borderBottom flexCenter'
-                          style={{
-                            justifyContent: 'flex-end'
-                          }}
-                    >
-                      <AtButton onClick={() => statusToTitle[item.status].button[0].func(item)} size='small'>{statusToTitle[item.status].button[0].title}</AtButton>
-                    </View>
-                  )}
-              </View>
-              <HeightView />
-            </View>
-          ))
-        ) : (
-          <View className='commonRowFlex flexCenter'
-                   style={{
-                     justifyContent: 'center',
-                     margin: '32px 0'
-                   }}
-          >
-            <Text className='grayText slightlySmallText'>
-              没有订单哦～
-            </Text>
-          </View>)}
-      </ScrollView>
+                  ))
+                ) : (
+                  <View className='commonRowFlex flexCenter'
+                        style={{
+                          justifyContent: 'center',
+                          margin: '32px 0'
+                        }}
+                  >
+                    <Text className='grayText slightlySmallText'>
+                      没有订单哦～
+                    </Text>
+                  </View>)}
+              </ScrollView>
+            </AtTabsPane>
+          ))}
+        </AtTabs>
+      </View>
     </View>
   )
 }

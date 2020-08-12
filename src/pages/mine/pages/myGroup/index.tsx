@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useRef, useReachBottom } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Image, Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtButton, AtTag } from 'taro-ui'
+import { AtButton, AtTabs, AtTag } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import { navTo } from '@utils/route'
 import LimitStr from '@utils/stringLimit'
@@ -20,13 +20,17 @@ const listStatus = {
   2:'团购失败'
 }
 
+const tabList = [{ title: '团购进行中' }, { title: '团购成功' }, { title: '团购失败' }]
+
 const MyGroup: Taro.FC<Props> = () => {
+  const [safeTop, setSafeTop] = useState<number>(0)
   const dispatch = useDispatch()
   const [groupList, setGroupList] = useState([])
   const [page, setPage] = useState(1)
+  const [currentTab, setCurrentTab] = useState<number>(0)
 
-  const getList = async () => {
-    const {data} = await order.getGroupList(page, 14)
+  const getList = async (defaultPage = 1) => {
+    const {data} = await order.getGroupList(defaultPage, 14, currentTab)
     if (data.length) {
       setGroupList(groupList.concat(data))
       setPage(page + 1)
@@ -34,16 +38,31 @@ const MyGroup: Taro.FC<Props> = () => {
   }
 
   useReachBottom(() => {
-    getList()
+    getList(page)
   })
 
   useEffect(() => {
-    getList()
-  }, [])
+    setPage(1)
+    getList(1)
+  }, [currentTab])
 
   return (
     <View>
       <TabBar title='我的拼团' />
+      <View style={{
+        position: 'fixed',
+        top: `${safeTop + 40}px`,
+        width: '100%',
+        height: '47px',
+        zIndex: 999
+      }}
+      >
+        <AtTabs current={currentTab} tabList={tabList} onClick={setCurrentTab} />
+      </View>
+      <View style={{
+        height: '47px'
+      }}
+      />
       <View className='normalMargin'>
         {groupList.length ? groupList.map(item => (
           <View key={item.actid} className='commonRowFlex normalPadding normalMarginBottom radius'
