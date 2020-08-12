@@ -26,7 +26,7 @@ const Profile: Taro.FC<Props> = () => {
   const [nickname, setNickname] = useState<string>(authState.userData.nickname)
   const [imgurl, setImgurl] = useState<string>(authState.userData.imgurl)
   const [birthDay, setBirthDay] = useState<string>(authState.userData.birthdaystr)
-  const [sex, setSex] = useState<string>(authState.userData.sex)
+  const [sex, setSex] = useState<number>(authState.userData.sex)
   const [userwork, setUserwork] = useState<string>(authState.userData.userwork)
   const [email, setEmail] = useState<string>(authState.userData.email)
   const [mobile, setMobile] = useState<string>(authState.userData.mobile)
@@ -39,7 +39,7 @@ const Profile: Taro.FC<Props> = () => {
     Taro.showActionSheet({
       itemList: ['男', '女'],
       success: function (res: any) {
-        setSex(String(res.tapIndex + 1))
+        setSex(res.tapIndex + 1)
       },
       fail: function (res) {
         console.log(res.errMsg)
@@ -99,13 +99,12 @@ const Profile: Taro.FC<Props> = () => {
       <HeightView />
       <InputCard rightTitle={nickname} onClick={() => change(0)} title='修改昵称' />
       <InputCard title='绑定手机号' rightTitle={mobile} />
-      <InputCard title='性别' onClick={chooseSex} rightTitle={sex ? sex === '1' ? '男' : '女' : ''} />
+      <InputCard title='性别' onClick={chooseSex} rightTitle={sex ? sex === 1 ? '男' : '女' : ''} />
       <Picker mode='date' onChange={(e) => setBirthDay(e.detail.value)} value={birthDay}>
         <InputCard title='生日' rightTitle={birthDay} />
       </Picker>
       <InputCard title='职业' onClick={() => change(1)} rightTitle={userwork} />
       <HeightView />
-      <InputCard title='实名认证' />
       <CusModal opened={modalOpen}
                 title={'修改' + modalInputName}
                 renderContent={

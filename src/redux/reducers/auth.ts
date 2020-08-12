@@ -6,7 +6,7 @@ const defaultState = {
     imgurl: '',
     id: 0,
     nickname: '',
-    sex: '',
+    sex: 1,
     birthdaystr: '',
     email: '',
     userwork: '',

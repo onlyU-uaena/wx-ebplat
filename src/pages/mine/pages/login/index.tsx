@@ -1,5 +1,5 @@
-import Taro, { useState } from '@tarojs/taro'
-import { Button, Text, View } from '@tarojs/components'
+import Taro, { useState, useEffect } from '@tarojs/taro'
+import { Button, Text, View, Checkbox, CheckboxGroup } from '@tarojs/components'
 import { AtButton, AtInput } from 'taro-ui'
 import account from '../../utils/login'
 import TabBar from '../../../../components/TabBar'
@@ -11,6 +11,7 @@ import { useDispatch } from '@tarojs/redux'
 import { loginIn } from '@redux/actions'
 import CustomIcon from '../../../../components/CustomIcon'
 import user from '../../utils/user'
+import HeightView from '../../../../components/HeightView'
 
 interface Props {
 
@@ -21,9 +22,17 @@ const Login: Taro.FC<Props> = () => {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [sms, setSms] = useState<string>('')
+  const [userProto, setUserProto] = useState()
+  const [priProto, setPriProto] = useState()
+  const [read, setRead] = useState<string[]>([])
   const dispatch = useDispatch()
 
   const login = async () => {
+    if (read.length < 2)
+      return Taro.showToast({
+        title: '请先同意隐私/用户协议',
+        icon: 'none'
+      })
     if (useSmsLogin) {
       const { code, token } = await account.loginWithPhoneNumber(username, sms)
       if (!code) {
@@ -44,6 +53,11 @@ const Login: Taro.FC<Props> = () => {
   }
 
   const wxLogin = async () => {
+    if (read.length < 2)
+      return Taro.showToast({
+        title: '请先同意隐私/用户协议',
+        icon: 'none'
+      })
     Taro.login({
       success: (e) => {
         Taro.getUserInfo({
@@ -135,6 +149,23 @@ const Login: Taro.FC<Props> = () => {
             <CustomIcon onClick={() => wxLogin()} name='weChat' color='rgb(90, 195, 58)' size={25} />
             <Text className='slightlySmallText smallMarginTop'>微信登录</Text>
           </Button>
+        </View>
+        <HeightView />
+        <View className='commonColumnFlex flexCenter'>
+          <CheckboxGroup onChange={(e) => {
+            setRead(e.detail.value)
+          }}
+          >
+            <View className='commonRowFlex flexCenter'>
+              <Checkbox className='commonRowFlex flexCenter' value='pri'><Text className='slightlySmallText'>同意并已阅读</Text></Checkbox>
+              <Text onClick={() => navTo('mine', 'protocol', {title: '隐私协议',content: 4 })} className='orangeText slightlySmallText textMargin'>隐私协议</Text>
+            </View>
+            <HeightView />
+            <View className='commonRowFlex flexCenter'>
+              <Checkbox className='commonRowFlex flexCenter' value='user'><Text className='slightlySmallText'>同意并已阅读</Text></Checkbox>
+              <Text onClick={() => navTo('mine', 'protocol', {title: '用户协议',content: 5 })} className='orangeText slightlySmallText textMargin'>用户协议</Text>
+            </View>
+          </CheckboxGroup>
         </View>
       </View>
     </View>

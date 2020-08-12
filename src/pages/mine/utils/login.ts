@@ -14,7 +14,8 @@ class Account extends AccountVerification {
     loginWithPhoneNumber: '/api/app/userinfo/loginsms',
     getSmsCode: '/api/app/sms/send',
     getUserData: '/api/app/userinfo/personalInformation',
-    postUserInfo: '/api/app/userinfo/userperfect'
+    postUserInfo: '/api/app/userinfo/userperfect',
+    getSinge: '/api/app/news/getsinge'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -66,6 +67,12 @@ class Account extends AccountVerification {
 
   public async getUserData () {
     return await httpRequest(this.urls.getUserData, {}, false)
+  }
+
+  public async getSinge (type: number) {
+    return await httpRequest(this.urls.getSinge, {
+      type
+    }, true)
   }
 }
 

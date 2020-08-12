@@ -36,6 +36,7 @@ class App extends Component {
           "pointItem/index",
           "findPayPwd/index",
           "myFavorites/index",
+          "protocol/index",
           "feedback/index",
           "myFoot/index",
           "myGroup/index",
