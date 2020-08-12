@@ -35,6 +35,7 @@ const Classification: Taro.FC<Props> = () => {
   const router = useRouter()
   const shopState = useSelector(selectShopState)
 
+  const [safeTop, setSafeTop] = useState<number>(0)
   const [classList, setClassList] = useState<List[]>()
   const [skuList, setSkuList] = useState([])
   const [secClassList, setSecClassList] = useState<List[]>()
@@ -48,6 +49,11 @@ const Classification: Taro.FC<Props> = () => {
     setClassList(data)
     return data
   }
+
+  useEffect(() => {
+    const { safeArea } = Taro.getSystemInfoSync()
+    setSafeTop(safeArea.top)
+  }, [])
 
   const getAdv = async () => {
     const {data} = await commodity.getAdv(0)
@@ -129,10 +135,16 @@ const Classification: Taro.FC<Props> = () => {
   return (
     <View>
       <TabBar title='分类' homeButton={false} backButton={false} />
+      <View style={{height: '67px'}} />
       <View
         className='commonRowFlex flexCenter gradientTheme'
         style={{
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          height: '67px',
+          position: 'fixed',
+          top: `${safeTop + 40}px`,
+          width: '100%',
+          zIndex: 999
         }}
       >
         <View className='cusSearchBar flexCenter commonRowFlex'
@@ -161,8 +173,14 @@ const Classification: Taro.FC<Props> = () => {
             marginRight: '16px'
           }}
         >
-          <CustomIcon name='ring' color='white' size={25} />
-          <Text className='smallText whiteText'>消息</Text>
+          <CustomIcon name='ring'
+                      color='white'
+                      size={25}
+                      onClick={() => navTo('mine', 'myMessage')}
+          />
+          <Text className='smallText whiteText'
+                onClick={() => navTo('mine', 'myMessage')}
+          >消息</Text>
         </View>
       </View>
       <View className='normalPadding'
