@@ -17,6 +17,7 @@ import LimitStr from '@utils/stringLimit'
 import shopCart, { setCartBadge } from '../shoppingCart/utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
 import user from '../mine/utils/user'
+import { getCount } from './utils/count'
 
 let firstIn = true
 
@@ -35,6 +36,7 @@ const Home: Taro.FC<Props> = () => {
   const [spikeList, setSpikeList] = useState({pros: []})
   const [groupList, setGroupList] = useState([])
   const [shopInfo, setShopInfo] = useState()
+  const [countDown, setCountDown] = useState()
   const [topicId, setTopicId] = useState<number>()
   const [showPage, setShowPage] = useState<boolean>(false)
   const [tabList, setTabList] = useState()
@@ -109,6 +111,8 @@ const Home: Taro.FC<Props> = () => {
         setCartBadge(shopState.shopData.shopid || shopRes.data.shopid)
       }
       setSpikeList(spikeRes.data || {pros: []})
+      const time = getCount(spikeRes.data.endtime, spikeRes.data.servicetime)
+      setCountDown(time)
       setGroupList(groupRes.data || [])
       setHotList(hotListRes.data)
       setClassList(classListRes.data)
@@ -317,9 +321,9 @@ const Home: Taro.FC<Props> = () => {
                         minutes: ':',
                         seconds: ''
                       }}
-                      hours={1}
-                      minutes={1}
-                      seconds={10}
+                      hours={countDown.hour}
+                      minutes={countDown.min}
+                      seconds={countDown.sec}
                       onTimeUp={() => {}}
                     />
                   </View>

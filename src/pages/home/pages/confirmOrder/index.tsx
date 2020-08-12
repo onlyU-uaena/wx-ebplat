@@ -134,7 +134,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
     }
     const addRes = await order.addGroupOrder(orderDetail.skuID[0].skuid, orderDetail.skuID[0].skugrp.id, orderDetail.gnum)
     if (addRes.code === 0) {
-      const {code, data} = await order.joinGroupOrder(orderDetail.skuID[0].skuid, addRes.data, shopState.address.id, currentTab, '12:00', remark, '12:00')
+      const {code, data} = await order.joinGroupOrder(orderDetail.skuID[0].proCount, orderDetail.skuID[0].skuid, addRes.data, shopState.address.id, currentTab, '12:00', remark, '12:00')
       if (code === 0)
         navTo('mine', 'orderDetail', {id: data})
     }

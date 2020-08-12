@@ -133,13 +133,16 @@ class Order {
   }
 
   @throttleFunc(1000)
-  public async joinGroupOrder (skuid: number, gid: number, receiveaddrid: number, disptype: number, timetype: string, remark: number, arrivetime: string) {
+  public async joinGroupOrder (gcount: number, skuid: number, gid: number, receiveaddrid: number, disptype: number, timetype: string, remark: number, arrivetime: string) {
     const data = {
+      gcount,
       skuid,
       gid,
       remark,
       receiveaddrid,
-      timetype,arrivetime
+      timetype,
+      arrivetime,
+      disptype
     }
     return await httpRequest(this.urls.joinGroupOrder, data)
   }

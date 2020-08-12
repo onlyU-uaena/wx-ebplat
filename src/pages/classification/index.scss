@@ -25,3 +25,9 @@
   -moz-box-shadow: 1px 0 12px 0 $themeColor;
   box-shadow: 1px 0 12px 0 $themeColor;
 }
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

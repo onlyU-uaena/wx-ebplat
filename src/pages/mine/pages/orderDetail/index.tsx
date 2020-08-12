@@ -1,6 +1,6 @@
 import Taro, { useState, useEffect, useRouter, useDidShow } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
-import { Text, View } from '@tarojs/components'
+import { Image, Text, View } from '@tarojs/components'
 import './index.scss'
 import { AtButton, AtListItem } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
@@ -253,6 +253,21 @@ const OrderDetail: Taro.FC<Props> = () => {
               <Text className='mediumText'>订单号 {orderDetail.code}</Text>
               <Text className='mediumText orangeText'>{statusToTitle[orderDetail.status].name}</Text>
             </View>
+            {(orderDetail && orderDetail.qrcodenumber && orderDetail.deliverymode !== 0) ? (
+              <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                    onClick={orderDetail.qrcodenumber ? () => navTo('mine', 'qrCode', orderDetail) : () => {}}
+                    style={{
+                      justifyContent: 'space-between'
+                    }}
+              >
+                <Text className='mediumText'>自提码 {orderDetail.qrcodenumber}</Text>
+                <Image style={{
+                  width: '30px',
+                  height: '30px'
+                }} src={orderDetail.qrcode}
+                />
+              </View>
+            ) : null}
             <View className='commonRowFlex normalPadding borderBottom flexCenter'
                   style={{
                     justifyContent: 'space-between'

@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useRouter, useScope } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Image, Text, View, RichText, Button } from '@tarojs/components'
 import './index.scss'
-import { AtAvatar, AtButton, AtRate, AtFloatLayout, AtInputNumber, AtTag } from 'taro-ui'
+import { AtAvatar, AtButton, AtRate, AtFloatLayout, AtInputNumber, AtTag, AtCountdown } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import commodity from '../../utils/commodity'
 import SwiperImg from '../../../../components/SwiperImg'
@@ -17,6 +17,7 @@ import order from '../../../mine/utils/order'
 import shopCart from '../../../shoppingCart/utils/shopCart'
 import { selectShopState } from '@redux/reducers/selector'
 import LimitStr from '@utils/stringLimit'
+import { getCount } from '../../utils/count'
 
 interface Props {
 
@@ -26,6 +27,7 @@ const tabList = ['商品', '评价', '详情', '推荐']
 
 const ProductDetails: Taro.FC<Props> = () => {
   const [safeTop, setSafeTop] = useState<number>(0)
+  const [countDown, setCountDown] = useState()
 
   useEffect(() => {
     const { safeArea } = Taro.getSystemInfoSync()
@@ -38,6 +40,7 @@ const ProductDetails: Taro.FC<Props> = () => {
   const scope = useScope()
 
   const [showFloat, setShowFloat] = useState<boolean>(false)
+  const [buyGroup, setBuyGroup] = useState<boolean>(false)
   // 0 无 1秒杀 2拼团
   const [controlShow, setControlShow] = useState<number>(0)
 
@@ -80,6 +83,10 @@ const ProductDetails: Taro.FC<Props> = () => {
     WxParse.wxParse('article', 'html', data.description, scope, 5)
     WxParse.wxParse('serve', 'html', data.afterservice, scope, 5)
     setFavorites(data.isfavorites)
+    if (data.packings) {
+      const time = getCount(data.packings.skitime, data.packings.servicetime)
+      setCountDown(time)
+    }
   }
 
   const toOrder = async (control: number, gnum?: number) => {
@@ -131,6 +138,11 @@ const ProductDetails: Taro.FC<Props> = () => {
         })
       }
     }
+  }
+
+  const chooseCount = () => {
+    setShowFloat(true)
+    setBuyGroup(true)
   }
 
   const chooseTab = (index: number) => {
@@ -212,14 +224,28 @@ const ProductDetails: Taro.FC<Props> = () => {
               <View className='commonColumnFlex'>
                 <View className='commonRowFlex flexCenter'>
                   <Text className='whiteText slightlySmallText'>¥</Text>
-                  <Text className='whiteText'>{proDetail.skugrp.gprice}</Text>
+                  <Text className='whiteText'>{proDetail.packings.skiprice}</Text>
                 </View>
                 <View>
                   <Text className='smallText whiteText throughLineText'>¥{proDetail.price}</Text>
-                  <Text className='smallText whiteText normalMarginLeft'>已售0份</Text>
+                  <Text className='slightlySmallText whiteText normalMarginLeft'>已售{proDetail.salescount}份</Text>
                 </View>
               </View>
-              {/*<Text className='mediumText whiteText'>已拼{1}份</Text>*/}
+              <View className='commonColumnFlex flexCenter'>
+                <Text className='whiteText slightlySmallText'>距结束仅剩</Text>
+                <AtCountdown
+                  isShowDay
+                  format={{
+                    day: '天',
+                    hours: ':',
+                    minutes: ':',
+                    seconds: '' }}
+                  day={countDown.day}
+                  hours={countDown.hour}
+                  minutes={countDown.min}
+                  seconds={countDown.sec}
+                />
+              </View>
             </View>
           )}
           {/*标题*/}
@@ -378,7 +404,7 @@ const ProductDetails: Taro.FC<Props> = () => {
               </View>
               )}
               {controlShow === 2 && (
-                <View onClick={() => toOrder(2)} className='gradientYellow commonRowFlex flexCenter' style={{
+                <View onClick={() => chooseCount()} className='gradientYellow commonRowFlex flexCenter' style={{
                 flex: 1,
                 justifyContent: 'center'
               }}
@@ -405,7 +431,10 @@ const ProductDetails: Taro.FC<Props> = () => {
                 </View>
               )}
               {controlShow === 2 && (
-                <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
+                <View onClick={() => {
+                  setShowFloat(true)
+                  setBuyGroup(false)
+                }} className='gradientTheme commonRowFlex flexCenter' style={{
                   flex: 1,
                   justifyContent: 'center'
                 }}
@@ -428,7 +457,7 @@ const ProductDetails: Taro.FC<Props> = () => {
                   justifyContent: 'flex-end'
                 }}
                 >
-                  <Text className='redText mediumText'>¥{controlShow === 1 ? proDetail.packings.skiprice : proDetail.price}</Text>
+                  <Text className='redText mediumText'>¥{controlShow === 1 ? proDetail.packings.skiprice : buyGroup ? proDetail.skugrp.gprice : proDetail.price}</Text>
                   <HeightView />
                   <Text className='slightlySmallText grayText'>库存{proDetail.stock}件</Text>
                 </View>
@@ -443,7 +472,7 @@ const ProductDetails: Taro.FC<Props> = () => {
               <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
             </View>
             <View className='commonRowFlex gradientTheme flexCenter normalPadding'
-                  onClick={() => toOrder(controlShow === 1 ? 1 : 0)}
+                  onClick={() => toOrder(controlShow === 1 ? 1 : buyGroup ? 2 : 0)}
                   style={{
                     justifyContent: 'center',
                     position: 'fixed',

@@ -48,6 +48,7 @@ class App extends Component {
           "pointRule/index",
           "evaluationOrder/index",
           "swapRecord/index",
+          "qrCode/index",
           "changePassword/index",
           "payPwd/index",
           "setting/index",
