@@ -20,6 +20,7 @@ const Search: Taro.FC<Props> = () => {
   const router = useRouter()
   const shopState = useSelector(selectShopState)
   const [historyList, setHistoryList] = useState([])
+  const [hotKeys, setHotKeys] = useState([])
 
   const onSearchResult = (data, value) => {
     navTo('home', 'searchResult', {data, value})
@@ -30,9 +31,11 @@ const Search: Taro.FC<Props> = () => {
     setHistoryList([])
   }
 
-  useDidShow(() => {
+  useDidShow(async () => {
     const list = Taro.getStorageSync('historySearch') || []
     setHistoryList(list.slice(0, 10))
+    const {data} = await commodity.getSearchKeys()
+    setHotKeys(data)
   })
 
   const historySearch = async (value) => {
@@ -49,7 +52,16 @@ const Search: Taro.FC<Props> = () => {
       <View className='normalMargin'>
         <Text className='grayText'>热门搜索</Text>
         <View className='normalMarginTop'>
-          {/*<AtTag active>标签</AtTag>*/}
+          {hotKeys.map(item => (
+            <AtTag customStyle={{
+              marginRight: '4px',
+              marginTop: '4px'
+            }}
+                   key={item.id}
+                   active
+                   onClick={() => historySearch(item.name)}
+            >{item.name}</AtTag>
+          ))}
         </View>
       </View>
       {/*历史搜索*/}
