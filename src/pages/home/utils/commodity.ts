@@ -198,7 +198,6 @@ class Commodity {
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
-  @throttleFunc(1000)
   public async search (field: number, shopid: number, sort: number, keys: string, index: number, size: number) {
     const data = {
       shopid,

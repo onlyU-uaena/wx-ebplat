@@ -21,8 +21,8 @@ const Search: Taro.FC<Props> = () => {
   const shopState = useSelector(selectShopState)
   const [historyList, setHistoryList] = useState([])
 
-  const onSearchResult = (data) => {
-    navTo('home', 'searchResult', data)
+  const onSearchResult = (data, value) => {
+    navTo('home', 'searchResult', {data, value})
   }
 
   const clearHistory = () => {
@@ -38,7 +38,7 @@ const Search: Taro.FC<Props> = () => {
   const historySearch = async (value) => {
     const {code, data} = await commodity.search(0, shopState.shopData.shopid, 1, value, 1, 10000)
     if (code === 0)
-      navTo('home', 'searchResult', data)
+      navTo('home', 'searchResult', {data, value})
   }
 
   return (

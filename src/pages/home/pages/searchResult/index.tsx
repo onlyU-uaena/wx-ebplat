@@ -2,14 +2,13 @@ import Taro, { useState, useEffect, useReachBottom, useRouter } from '@tarojs/ta
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtButton } from 'taro-ui'
+import { AtTabs, AtTabsPane } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import CusSearchBar from '../../../../components/CusSearchBar'
 import CustomIcon from '../../../../components/CustomIcon'
 import colors from '../../../../common/styles/color'
 import HeightView from '../../../../components/HeightView'
 import FreshList, { FreshListInterface } from '../../../../components/FreshList'
-import { commodityList } from '../../mock'
 import commodity from '../../utils/commodity'
 import { GetTopicSku } from '../../utils/interface'
 import { selectShopState } from '@redux/reducers/selector'
@@ -32,16 +31,35 @@ const SearchResult: Taro.FC<Props> = () => {
   const router = useRouter()
 
   const [freshList, setFreshList] = useState<FreshListInterface>()
+  const [searchBar, setSearchBar] = useState()
   const [searchRes, setSearchRes] = useState<GetTopicSku[]>([])
+  const [currentTab, setCurrentTab] = useState<number>(0)
+  const [searchStr, setSearchStr] = useState('')
+  const [sort, setSort] = useState<boolean>(true)
 
   useReachBottom(() => {
     if (freshList)
       freshList.nextPage()
   })
 
+  const reSearch = (index: number) => {
+    if (index === 0)
+      searchBar.search()
+    else if (index === 1)
+      searchBar.search(1, 1)
+    else if (index === 2) {
+      searchBar.search(sort ? 2 : 1, 2)
+      setSort(!sort)
+    } else if (index === 3) {
+
+    }
+  }
+
   useEffect(() => {
-    setSearchRes(JSON.parse(router.params.props))
-  }, [router.params.props])
+    console.log(JSON.parse(router.params.props).value)
+    setSearchStr(JSON.parse(router.params.props).value)
+    setSearchRes(JSON.parse(router.params.props).data)
+  }, [])
 
   return (
     <View>
@@ -57,7 +75,7 @@ const SearchResult: Taro.FC<Props> = () => {
       }}
       >
         <View style={{flex: 1}}>
-          <CusSearchBar onChangeResult={setSearchRes} />
+          <CusSearchBar onRef={setSearchBar} searchStr={searchStr} onChangeResult={setSearchRes} />
         </View>
         <View className='commonRowFlex flexCenter normalMarginLeft normalMarginRight'
               onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})}
@@ -70,9 +88,56 @@ const SearchResult: Taro.FC<Props> = () => {
         </View>
       </View>
       <View style={{
-        height: '42px'
+        height: '73px'
       }}
       />
+      <View className='commonRowFlex'
+            style={{
+              backgroundColor: 'white',
+              position: 'fixed',
+              width: '100%',
+              height: '31px',
+              zIndex: 999,
+              top: `${safeTop + 40 + 42}px`
+            }}
+      >
+        <View className='commonRowFlex flexCenter tabs'
+              onClick={() => {
+                setCurrentTab(0)
+                reSearch(0)
+              }}
+        >
+          <Text className={(currentTab === 0) ? 'redText slightlySmallText tabsText' : 'slightlySmallText text'}>综合推荐</Text>
+        </View>
+        <View className='commonRowFlex flexCenter tabs'
+              onClick={() => {
+                setCurrentTab(1)
+                reSearch(1)
+              }}
+        >
+          <Text className={(currentTab === 1 ? 'redText slightlySmallText tabsText' : 'slightlySmallText text')}>销量</Text>
+        </View>
+        <View className='commonRowFlex flexCenter tabs'
+              style={{
+                position: 'relative'
+              }}
+              onClick={() => {
+                setCurrentTab(2)
+                reSearch(2)
+              }}
+        >
+          <Text className={(currentTab === 2) ? 'redText slightlySmallText tabsText' : 'slightlySmallText text'}>价格</Text>
+          <View className={sort ? 'triangleBottom' : 'triangleTop'} />
+        </View>
+        <View className='commonRowFlex flexCenter tabs'
+              onClick={() => {
+                setCurrentTab(3)
+                reSearch(3)
+              }}
+        >
+          <Text className={(currentTab === 3) ? 'redText slightlySmallText tabsText' : 'slightlySmallText text'}>筛选</Text>
+        </View>
+      </View>
       {/*搜索结果*/}
       {(searchRes && searchRes.length) ? (
         <View>

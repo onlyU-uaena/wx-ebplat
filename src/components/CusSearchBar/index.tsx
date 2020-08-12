@@ -10,7 +10,9 @@ import store from '@redux/store'
 interface Props {
   showActionButton?: boolean
   focus?: boolean
-  onChangeResult: (e: any) => void
+  onRef?: (ref: any) => void
+  onChangeResult: (e: any, v: any) => void
+  searchStr?: string
 }
 
 class CusSearchBar extends Taro.Component<Props, any> {
@@ -32,15 +34,24 @@ class CusSearchBar extends Taro.Component<Props, any> {
     })
   }
 
-  async search () {
+  componentDidMount () {
+    this.setState({
+      value: this.props.searchStr
+    })
+    if (this.props.onRef)
+      this.props.onRef(this)
+  }
+
+  search = async (sort = 1, field = 0) => {
     let list = Taro.getStorageSync('historySearch') || []
-    list.push(this.state.value)
+    if (this.state.value)
+      list.push(this.state.value)
     list = Array.from(new Set(list))
     Taro.setStorageSync('historySearch', list)
     const state = store.getState()
-    const {code, data} = await commodity.search(0, state.shopState.shopData.shopid, 1, this.state.value, 1, 10000)
+    const {code, data} = await commodity.search(field, state.shopState.shopData.shopid, sort, this.state.value, 1, 10000)
     if (code === 0) {
-      this.props.onChangeResult(data)
+      this.props.onChangeResult(data, this.state.value)
     }
   }
 

@@ -255,7 +255,7 @@ const OrderDetail: Taro.FC<Props> = () => {
             </View>
             {(orderDetail && orderDetail.qrcodenumber && orderDetail.deliverymode !== 0) ? (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'
-                    onClick={orderDetail.qrcodenumber ? () => navTo('mine', 'qrCode', orderDetail) : () => {}}
+                    onClick={() => navTo('mine', 'qrCode', orderDetail)}
                     style={{
                       justifyContent: 'space-between'
                     }}

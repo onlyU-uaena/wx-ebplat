@@ -4,3 +4,38 @@
 .at-search-bar::after {
   border: none;
 }
+
+.tabs {
+  justify-content: center;
+  flex: 1;
+  padding: 16px;
+  padding-bottom: 0;
+}
+
+.tabsText {
+  border-bottom: 2Px solid $themeRed;
+  padding-bottom: 8px;
+}
+
+.text {
+  padding-bottom: 8px;
+}
+
+.triangleTop {
+  width: 0;
+  height: 0;
+  border: 5Px solid transparent;
+  border-top: 5Px solid $themeRed;
+  position: absolute;
+  right: 16Px;
+}
+
+.triangleBottom {
+  width: 0;
+  height: 0;
+  border: 5Px solid transparent;
+  border-bottom: 5Px solid $themeRed;
+  position: absolute;
+  right: 16Px;
+  top: 10Px;
+}
