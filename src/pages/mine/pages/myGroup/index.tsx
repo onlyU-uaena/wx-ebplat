@@ -29,6 +29,11 @@ const MyGroup: Taro.FC<Props> = () => {
   const [page, setPage] = useState(1)
   const [currentTab, setCurrentTab] = useState<number>(0)
 
+  useEffect(() => {
+    const { safeArea } = Taro.getSystemInfoSync()
+    setSafeTop(safeArea.top)
+  }, [])
+
   const getList = async (defaultPage = 1) => {
     const {data} = await order.getGroupList(defaultPage, 14, currentTab)
     if (data.length) {
@@ -44,6 +49,7 @@ const MyGroup: Taro.FC<Props> = () => {
   useEffect(() => {
     setPage(1)
     getList(1)
+    setGroupList([])
   }, [currentTab])
 
   return (

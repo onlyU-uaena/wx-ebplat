@@ -3,6 +3,7 @@ import { Image, Swiper, SwiperItem, View } from '@tarojs/components'
 import './index.scss'
 import { SwiperProps } from '@tarojs/components/types/Swiper'
 import { GetAdv } from '../../pages/home/utils/interface'
+import { navTo } from '@utils/route'
 
 interface Props extends SwiperProps {
   list: GetAdv[] | string[]
@@ -14,6 +15,16 @@ interface Props extends SwiperProps {
 
 const SwiperImg: Taro.FC<Props> = (props) => {
   const { list, marginLeft, marginRight, circular, autoplay, imgWidth, swiperHeight } = props
+
+  const bannerJump = (item) => {
+    if (item.imgurl) {
+      if (item.type === 0) {
+        navTo('home', 'webPage', {url: item.url})
+      } else if (item.type === 2) {
+        navTo('home', 'productDetails', {id: item.typeid})
+      }
+    }
+  }
 
   return (
     <Swiper
@@ -27,7 +38,7 @@ const SwiperImg: Taro.FC<Props> = (props) => {
       }}
     >
       {list && list.map((item, index) => (
-        <SwiperItem key={index}>
+        <SwiperItem key={index} onClick={() => bannerJump(item)}>
           <Image className='swiperImg'
             src={item.imgurl || item}
             style={{

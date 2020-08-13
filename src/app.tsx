@@ -63,6 +63,7 @@ class App extends Component {
           'groupHome/index',
           'paySuccess/index',
           'confirmOrder/index',
+          'webPage/index',
           'spikeHome/index',
           'chooseShop/index',
           'chooseAddress/index',
