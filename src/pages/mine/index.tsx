@@ -44,6 +44,20 @@ const Mine: Taro.FC<Props> = () => {
               position: 'relative'
             }}
       >
+        <View
+          onClick={() => navTo('mine', 'myMessage')}
+          style={{
+            position: 'absolute',
+            top: '-30px'
+          }}
+        >
+          <CustomIcon name='ring'
+                      color='white'
+                      size={25}
+                      showDot={authState.haveMessage}
+                      onClick={() => navTo('mine', 'myMessage')}
+          />
+        </View>
         <View className='avatar'>
           <AtAvatar size='large' circle image={authState.userData.imgurl} />
         </View>
@@ -177,7 +191,7 @@ const Mine: Taro.FC<Props> = () => {
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>
           ))}
-          <Button plain openType='contact' className='commonColumnFlex flexCenter'
+          <Button plain openType={authState.loginStatus ? 'contact' : ''} className='commonColumnFlex flexCenter'
                 style={{
                   flex: 1,
                   paddingLeft: 0,
@@ -186,12 +200,18 @@ const Mine: Taro.FC<Props> = () => {
                   border: 'none'
                 }}
                 key={44}
-                onClick={() => {}}
+                onClick={() => {
+                  if (!authState.loginStatus)
+                    navTo('mine', 'login')
+                }}
           >
             <CustomIcon name='customerService'
                         size={25}
                         color='rgb(234, 114 ,49)'
-                        onClick={() => {}}
+                        onClick={() => {
+                          if (!authState.loginStatus)
+                            navTo('mine', 'login')
+                        }}
             />
             <Text className='slightlySmallText smallMarginTop grayText'>在线客服</Text>
           </Button>

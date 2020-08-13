@@ -33,6 +33,8 @@ const PointShop: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
+    if (!authState.loginStatus)
+      navTo('mine', 'login', {delta: 2})
     getItems()
     getWindowWidth()
   }, [])

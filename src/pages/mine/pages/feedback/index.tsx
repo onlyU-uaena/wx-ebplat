@@ -15,10 +15,10 @@ interface Props {
 const Feedback: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const [content, setContent] = useState<string>('')
-  const [phone, setPhone] = useState<string>('')
+  const [phone, setPhone] = useState<number>(0)
 
   const confirmFeedback = async () => {
-    const {code} = await user.addFeedback(content, phone)
+    const {code} = await user.addFeedback(content, 0)
     if (code === 0) {
       Taro.showToast({
         title: '提交成功'
@@ -44,15 +44,16 @@ const Feedback: Taro.FC<Props> = () => {
               maxLength={200}
               placeholder='请输入客户端意见,我们将不断优化服务'
             />
-            <AtInput name='phone'
-                     onChange={e => setPhone(String(e))}
-                     value={phone}
-                     placeholder='请输入您的手机号/邮箱'
-            />
+            {/*<AtInput name='phone'*/}
+            {/*         onChange={e => setPhone(String(e))}*/}
+            {/*         value={phone}*/}
+            {/*         placeholder='请输入您的手机号/邮箱'*/}
+            {/*/>*/}
           </View>
           <HeightView high='large' />
           <AtButton type='primary'
                     full
+                    disabled={!content}
                     onClick={() => confirmFeedback()}
           >
             提交

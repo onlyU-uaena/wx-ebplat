@@ -8,6 +8,7 @@ import colors from '../../../../common/styles/color'
 import HeightView from '../../../../components/HeightView'
 import { loginOut } from '@redux/actions'
 import { delayBack, navTo } from '@utils/route'
+import { selectAuthState } from '@redux/reducers/selector'
 
 interface Props {
 
@@ -15,6 +16,7 @@ interface Props {
 
 const Setting: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
+  const authState = useSelector(selectAuthState)
 
   const toLogOut = () => {
     dispatch(loginOut())
@@ -38,62 +40,66 @@ const Setting: Taro.FC<Props> = () => {
         <AtAvatar size='large' image='' />
         <Text className='slightlySmallText grayText smallMarginTop'>当前版本 1.1.1</Text>
       </View>
+      {authState.loginStatus && (
+        <View>
+          <View style={{
+            backgroundColor: 'white'
+          }}
+          >
+            <AtListItem iconInfo={{
+              size: 20,
+              color: colors.themeColor,
+              value: 'lock',
+              prefixClass: 'fa'
+            }}
+                        title='修改密码'
+                        onClick={() => navTo('mine', 'changePassword')}
+                        arrow='right'
+            />
+            <AtListItem iconInfo={{
+              size: 20,
+              color: colors.themeColor,
+              value: 'key',
+              prefixClass: 'fa'
+            }}
+                        title='支付密码'
+                        onClick={() => navTo('mine', 'payPwd')}
+                        arrow='right'
+            /><AtListItem iconInfo={{
+            size: 20,
+            color: colors.themeColor,
+            value: 'invoice',
+            prefixClass: 'fa'
+          }}
+                          title='发票管理'
+                          arrow='right'
+          />
+          </View>
+          <HeightView />
+        </View>
+      )}
       <View style={{
         backgroundColor: 'white'
       }}
       >
-        <AtListItem iconInfo={{
-          size: 20,
-          color: colors.themeColor,
-          value: 'lock',
-          prefixClass: 'fa'
-        }}
-                    title='修改密码'
-                    onClick={() => navTo('mine', 'changePassword')}
-                    arrow='right'
-        />
-        <AtListItem iconInfo={{
-          size: 20,
-          color: colors.themeColor,
-          value: 'key',
-          prefixClass: 'fa'
-        }}
-                    title='支付密码'
-                    onClick={() => navTo('mine', 'payPwd')}
-                    arrow='right'
-        /><AtListItem iconInfo={{
-        size: 20,
-        color: colors.themeColor,
-        value: 'invoice',
-        prefixClass: 'fa'
-      }}
-                      title='发票管理'
-                      arrow='right'
-        />
-      </View>
-      <HeightView />
-      <View style={{
-        backgroundColor: 'white'
-      }}
-      >
-        <AtListItem iconInfo={{
-                      size: 20,
-                      color: colors.themeColor,
-                      value: 'warn',
-                      prefixClass: 'fa'
-                    }}
-                    title='关于我们'
-                    arrow='right'
-        />
-        <AtListItem iconInfo={{
-                      size: 20,
-                      color: colors.themeColor,
-                      value: 'question',
-                      prefixClass: 'fa'
-                    }}
-                    title='帮助中心'
-                    arrow='right'
-        />
+        {/*<AtListItem iconInfo={{*/}
+        {/*              size: 20,*/}
+        {/*              color: colors.themeColor,*/}
+        {/*              value: 'warn',*/}
+        {/*              prefixClass: 'fa'*/}
+        {/*            }}*/}
+        {/*            title='关于我们'*/}
+        {/*            arrow='right'*/}
+        {/*/>*/}
+        {/*<AtListItem iconInfo={{*/}
+        {/*              size: 20,*/}
+        {/*              color: colors.themeColor,*/}
+        {/*              value: 'question',*/}
+        {/*              prefixClass: 'fa'*/}
+        {/*            }}*/}
+        {/*            title='帮助中心'*/}
+        {/*            arrow='right'*/}
+        {/*/>*/}
         <AtListItem iconInfo={{
                       size: 20,
                       color: colors.themeColor,

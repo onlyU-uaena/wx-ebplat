@@ -14,7 +14,7 @@ import { GetAdv } from '../home/utils/interface'
 import HeightView from '../../components/HeightView'
 import CardCommodity from '../../components/CardCommodity'
 import shopCart from '../shoppingCart/utils/shopCart'
-import { selectShopState } from '@redux/reducers/selector'
+import { selectAuthState, selectShopState } from '@redux/reducers/selector'
 
 interface Props {
 
@@ -34,7 +34,7 @@ const Classification: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const shopState = useSelector(selectShopState)
-
+  const authState = useSelector(selectAuthState)
   const [safeTop, setSafeTop] = useState<number>(0)
   const [classList, setClassList] = useState<List[]>()
   const [skuList, setSkuList] = useState([])
@@ -175,6 +175,7 @@ const Classification: Taro.FC<Props> = () => {
         >
           <CustomIcon name='ring'
                       color='white'
+                      showDot={authState.haveMessage}
                       size={25}
                       onClick={() => navTo('mine', 'myMessage')}
           />

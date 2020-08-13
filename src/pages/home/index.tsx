@@ -12,7 +12,7 @@ import commodity from './utils/commodity'
 import { GetAdv } from './utils/interface'
 import { navTo } from '@utils/route'
 import { useDispatch, useSelector } from '@tarojs/redux'
-import { refreshComplete } from '@redux/actions'
+import { refreshComplete, setMessage } from '@redux/actions'
 import LimitStr from '@utils/stringLimit'
 import shopCart, { setCartBadge } from '../shoppingCart/utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
@@ -107,7 +107,8 @@ const Home: Taro.FC<Props> = () => {
       const classListRes = await commodity.getClassList()
       if (authState.loginStatus) {
         const messageRes = await user.getMessageCount(1, 0)
-        setMessageList(messageRes.data)
+        if (messageRes.data !== 0)
+          dispatch(setMessage())
         setCartBadge(shopState.shopData.shopid || shopRes.data.shopid)
       }
       setSpikeList(spikeRes.data || {pros: []})
@@ -215,6 +216,7 @@ const Home: Taro.FC<Props> = () => {
               <CustomIcon name='ring'
                           color='white'
                           size={25}
+                          showDot={authState.haveMessage}
                           onClick={() => navTo('mine', 'myMessage')}
               />
               <Text className='smallText whiteText'>消息</Text>

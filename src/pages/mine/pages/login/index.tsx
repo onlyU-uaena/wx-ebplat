@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
+import Taro, { useState, useEffect, useRouter } from '@tarojs/taro'
 import { Button, Text, View, Checkbox, CheckboxGroup } from '@tarojs/components'
 import { AtButton, AtInput } from 'taro-ui'
 import account from '../../utils/login'
@@ -22,10 +22,17 @@ const Login: Taro.FC<Props> = () => {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [sms, setSms] = useState<string>('')
-  const [userProto, setUserProto] = useState()
-  const [priProto, setPriProto] = useState()
   const [read, setRead] = useState<string[]>([])
+  const [backDelta, setBackDelta] = useState<number>(1)
   const dispatch = useDispatch()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.params.props) {
+      const delta = JSON.parse(router.params.props).delta
+      setBackDelta(delta || 1)
+    }
+  }, [])
 
   const login = async () => {
     if (read.length < 2)
@@ -95,7 +102,9 @@ const Login: Taro.FC<Props> = () => {
 
   return (
     <View>
-      <TabBar title='登录' />
+      <TabBar title='登录'
+              backDelta={backDelta}
+      />
       <View className='normalPadding whiteBack'>
         <View style={{height: '80px'}} />
         <AtInput name='username' placeholder='用户名/手机号' onChange={(e) => setUsername(String(e))} />

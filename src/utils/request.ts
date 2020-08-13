@@ -24,7 +24,7 @@ export const baseUrl = 'https://mjsh.yl-mall.cn/'
 
 let requestNum = 0
 
-const httpRequest = async (url: string, data = {}, showToast = true, showLoading = true, jumpToLogin = true, method: keyof Method = 'GET', backFn?) => {
+const httpRequest = async (url: string, data = {}, showToast = true, showLoading = true, jumpToLogin = true, method: keyof Method = 'GET', backFn?, delta = 1) => {
   requestNum++
   if (showLoading)
     await Taro.showLoading({
@@ -48,7 +48,7 @@ const httpRequest = async (url: string, data = {}, showToast = true, showLoading
   }
 
   if (result.data.code !== 0 && !Taro.getStorageSync('token') && jumpToLogin) {
-    navTo('mine', 'login')
+    navTo('mine', 'login', {delta: delta})
   } else if (result.data.code !== 0 && showToast) {
     await Taro.showToast({
       title: result.data.desc || '服务器开小差了～请稍后重试',

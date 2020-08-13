@@ -1,4 +1,12 @@
-import { LOGIN_IN, LOGIN_OUT, REFRESH_COMPLETE, SET_ADDRESS, SET_CART_NUM, SET_SHOP_DATA } from '../constants'
+import {
+  HAVE_MESSAGE,
+  LOGIN_IN,
+  LOGIN_OUT, NO_MESSAGE,
+  REFRESH_COMPLETE,
+  SET_ADDRESS,
+  SET_CART_NUM,
+  SET_SHOP_DATA
+} from '../constants'
 
 export const loginIn = (userLogin: object) => {
   return {
@@ -37,5 +45,17 @@ export const setCartNum = (num) => {
 export const refreshComplete = () => {
   return {
     type: REFRESH_COMPLETE
+  }
+}
+
+export const setMessage = () => {
+  return {
+    type: HAVE_MESSAGE
+  }
+}
+
+export const setNoMessage = () => {
+  return {
+    type: NO_MESSAGE
   }
 }

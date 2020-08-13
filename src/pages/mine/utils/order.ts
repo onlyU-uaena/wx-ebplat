@@ -36,7 +36,7 @@ class Order {
       size,
       ordercode
     }
-    return await httpRequest(this.urls.getOrderList, data)
+    return await httpRequest(this.urls.getOrderList, data, true, true, true, 'GET', () => {}, 2)
   }
 
   public async getGroupList (pageindex: number, pagesize: number, status: number) {
@@ -45,7 +45,7 @@ class Order {
       pageindex,
       pagesize
     }
-    return await httpRequest(this.urls.getGroupList, data)
+    return await httpRequest(this.urls.getGroupList, data, true, true, true, 'GET', () => {}, 2)
   }
 
   public async getFreight (shopid: number, procount: number, proprice: number) {

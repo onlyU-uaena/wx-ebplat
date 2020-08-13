@@ -12,3 +12,32 @@
 .at-list__item .item-extra__info {
   font-size: 9Px;
 }
+
+
+.at-checkbox__option-wrap {
+  padding: 0;
+}
+
+.at-checkbox__option {
+  padding-left: 0;
+}
+
+.at-checkbox::after {
+  border: none;
+}
+
+.at-checkbox::before {
+  border: none;
+}
+
+.at-checkbox__icon-cnt {
+  margin-top: 0;
+  margin-left: 24rpx;
+}
+
+.bottomGroup {
+  width: 100%;
+  background-color: white;
+  position: fixed;
+  bottom: 0;
+}

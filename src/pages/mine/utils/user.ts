@@ -11,6 +11,7 @@ class User {
     queryassets: '/api/app/userinfo/queryassets',
     getFoot: '/api/app/userinfo/browseHistory',
     getMessageCount: '/api/app/messages/getMessageCount',
+    deleteMessage: '/api/app/messages/deleteByIds',
     getMessageList: '/api/app/messages/queryMessages',
     getMessageDetail: '/api/app/messages/getMessagesById',
     getCollect: '/api/app/userinfo/getcollectspu',
@@ -46,9 +47,16 @@ class User {
     return await httpRequest(this.urls.queryassets, data)
   }
 
-  public async getMessageCount (status: number, receType: number) {
+  public async deleteMessage (ids: number[]) {
     const data = {
-      status, receType
+      ids: ids.toString()
+    }
+    return await httpRequest(this.urls.deleteMessage, data)
+  }
+
+  public async getMessageCount (status: number, recetype: number) {
+    const data = {
+      status, recetype
     }
     return await httpRequest(this.urls.getMessageCount, data)
   }
@@ -56,7 +64,7 @@ class User {
   public async getMessageList () {
     const data = {
     }
-    return await httpRequest(this.urls.getMessageList, data)
+    return await httpRequest(this.urls.getMessageList, data, true, true, true, 'GET', () => {}, 2)
   }
 
   public async getMessageDetail (id: number) {
@@ -71,7 +79,7 @@ class User {
       pageindex,
       pagesize
     }
-    return await httpRequest(this.urls.getFoot, data)
+    return await httpRequest(this.urls.getFoot, data, true, true, true, 'GET', () => {}, 2)
   }
 
   public async getCollect (pageindex: number, pagesize: number) {
@@ -79,7 +87,7 @@ class User {
       pageindex,
       pagesize
     }
-    return await httpRequest(this.urls.getCollect, data)
+    return await httpRequest(this.urls.getCollect, data, true, true, true, 'GET', () => {}, 2)
   }
 
   public async getCoupon (type: number, page: number, size: number) {
@@ -172,7 +180,7 @@ class User {
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async addFeedback (content: string, mobile: string, ) {
+  public async addFeedback (content: string, mobile: number) {
     const data = {
       content,
       mobile

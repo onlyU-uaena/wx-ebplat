@@ -1,7 +1,8 @@
-import { LOGIN_IN, LOGIN_OUT } from '../constants'
+import { HAVE_MESSAGE, LOGIN_IN, LOGIN_OUT, NO_MESSAGE } from '../constants'
 
 const defaultState = {
   loginStatus: false,
+  haveMessage: false,
   userData: {
     imgurl: '',
     id: 0,
@@ -25,7 +26,17 @@ function authReducer(state = defaultState, action) {
         loginStatus: true,
         userData: action.payload
       }
-      case LOGIN_OUT:
+    case HAVE_MESSAGE:
+      return {
+        ...state,
+        haveMessage: true
+      }
+    case NO_MESSAGE:
+      return {
+        ...state,
+        haveMessage: false
+      }
+    case LOGIN_OUT:
       return {
         ...state,
         loginStatus: false,

@@ -37,7 +37,7 @@ class Address {
   }
 
   public async getAddress () {
-    return await httpRequest(this.urls.getAddress, {})
+    return await httpRequest(this.urls.getAddress, {}, true, true, true, 'GET', () => {}, 2)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
