@@ -65,6 +65,24 @@ const MyOrder: Taro.FC<Props> = () => {
           }
         }
       ]},
+    20: {name: '拼团中', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]},
+    29: {name: '拼团失败', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            refreshList()
+          }
+        }
+      ]},
     5: {name: '取消申请中', button: [
         {
           title: '删除订单',
@@ -312,7 +330,7 @@ const MyOrder: Taro.FC<Props> = () => {
                           <Text className='mediumText orangeText'>{statusToTitle[item.status].name}</Text>
                         </View>
                         {item.lsitdetais.map((shopItem, shopIndex) => (
-                          <ReadCommodity key={shopIndex} onClick={() => navTo('mine', 'orderDetail', {id: item.code})} imgUrl={shopItem.productimg} title={shopItem.productname} price={shopItem.proprice} num={shopItem.productcount} />
+                          <ReadCommodity key={shopIndex} onClick={() => navTo('mine', 'orderDetail', {id: item.id})} imgUrl={shopItem.productimg} title={shopItem.productname} price={shopItem.proprice} num={shopItem.productcount} />
                         ))}
                         <View className='commonRowFlex normalPadding borderBottom borderTop flexCenter'
                               style={{

@@ -63,6 +63,24 @@ const OrderDetail: Taro.FC<Props> = () => {
           }
         }
       ]},
+    20: {name: '拼团中', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            delayBack()
+          }
+        }
+      ]},
+    29: {name: '拼团失败', button: [
+        {
+          title: '删除订单',
+          func: async (item) => {
+            await toDeleteOrder(item.id)
+            delayBack()
+          }
+        }
+      ]},
     6: {name: '已取消', button: [
         {
           title: '删除订单',
@@ -226,8 +244,8 @@ const OrderDetail: Taro.FC<Props> = () => {
   }
 
   const getDetail = async (id) => {
-    const {data} = await order.getOrderList(1, 10, '', id)
-    setOrderDetail(data[0])
+    const {data} = await order.getOrderDetail(id)
+    setOrderDetail(data)
   }
 
   useDidShow(() => {
@@ -250,8 +268,16 @@ const OrderDetail: Taro.FC<Props> = () => {
                     justifyContent: 'space-between'
                   }}
             >
-              <Text className='mediumText'>订单号 {orderDetail.code}</Text>
-              <Text className='mediumText orangeText'>{statusToTitle[orderDetail.status].name}</Text>
+              <Text className='mediumText'>配送地址</Text>
+              <Text className='mediumText orangeText'>{orderDetail.address}</Text>
+            </View>
+            <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                  style={{
+                    justifyContent: 'space-between'
+                  }}
+            >
+              <Text className='mediumText'>收货人 {orderDetail.telPhone}</Text>
+              <Text className='mediumText orangeText'>{orderDetail.consignee}</Text>
             </View>
             {(orderDetail && orderDetail.qrcodenumber && orderDetail.deliverymode !== 0) ? (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'
@@ -278,16 +304,9 @@ const OrderDetail: Taro.FC<Props> = () => {
             </View>
           </View>
           <HeightView />
-          <View style={{
-            backgroundColor: 'white'
-          }}
-          >
-            <AtListItem title='收货人' extraText={orderDetail.consignee} />
-          </View>
-          <HeightView />
           <View className='borderBottom'>
-            {orderDetail.lsitdetais.map((item, index) => (
-              <ReadCommodity key={index} imgUrl={item.productimg} title={item.productname} price={item.proprice} num={item.productcount}  />
+            {orderDetail.children.map((item, index) => (
+              <ReadCommodity key={index} imgUrl={item.productimg} title={item.productname} price={item.productprice} num={item.productcount}  />
             ))}
           </View>
           <View className='normalPadding commonColumnFlex borderBottom'
@@ -309,7 +328,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>配送费</Text>
-              <Text className='slightlySmallText'>¥0.00</Text>
+              <Text className='slightlySmallText'>¥{orderDetail.freight}</Text>
             </View>
             <View className='commonRowFlex flexCenter'
                   style={{
@@ -317,7 +336,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>优惠券</Text>
-              <Text className='slightlySmallText'>¥{(orderDetail.price - orderDetail.actualpay).toFixed(2)}</Text>
+              <Text className='slightlySmallText'>¥{(orderDetail.price + orderDetail.freight - orderDetail.actualPay).toFixed(2)}</Text>
             </View>
           </View>
           <View className='normalPadding commonColumnFlex'
@@ -331,7 +350,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>总计</Text>
-              <Text className='redText normalMarginLeft'>¥{orderDetail.actualpay.toFixed(2)}</Text>
+              <Text className='redText normalMarginLeft'>¥{orderDetail.actualPay}</Text>
             </View>
             {/*<AtButton customStyle={{width: '100%'}} size='small' type='primary' openType='contact'>*/}
             {/*  联系客服*/}
@@ -343,12 +362,43 @@ const OrderDetail: Taro.FC<Props> = () => {
           }}
           >
             <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                  onClick={() => {
+                    Taro.setClipboardData({
+                      data: orderDetail.code,
+                    })
+                  }}
+                  style={{
+                    justifyContent: 'space-between'
+                  }}
+            >
+              <Text className='mediumText'>订单号 {orderDetail.code}</Text>
+              <Text className='mediumText orangeText'>{statusToTitle[orderDetail.status].name}</Text>
+            </View>
+            <HeightView />
+            <View className='commonRowFlex normalPadding borderBottom flexCenter'
                   style={{
                     justifyContent: 'space-between'
                   }}
             >
               <Text className='mediumText'>下单时间</Text>
-              <Text className='slightlySmallText grayText'>{orderDetail.addorderdate}</Text>
+              <Text className='slightlySmallText grayText'>{orderDetail.orderDate}</Text>
+            </View>
+            <HeightView />
+            <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                  style={{
+                    justifyContent: 'space-between'
+                  }}
+            >
+              <Text className='mediumText'>支付方式</Text>
+              <Text className='slightlySmallText grayText'>微信支付</Text>
+            </View>
+            <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                  style={{
+                    justifyContent: 'space-between'
+                  }}
+            >
+              <Text className='mediumText'>支付时间</Text>
+              <Text className='slightlySmallText grayText'>暂无</Text>
             </View>
             {statusToTitle[orderDetail.status].button.length === 2 ? (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'

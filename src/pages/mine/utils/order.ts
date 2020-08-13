@@ -5,6 +5,7 @@ import { setCartBadge } from '../../shoppingCart/utils/shopCart'
 
 class Order {
   private urls = {
+    getOrderDetail: '/api/app/order/showOrderDetail',
     getOrderList: '/api/app/order/getorderBycode',
     addOrder: '/api/app/order/add',
     deleteOrder: '/api/app/order/delOrder',
@@ -19,6 +20,13 @@ class Order {
     joinGroupOrder: '/api/app/grp/addorder',
     getGroupList: '/api/app/grp/getlist',
     myGroupDetail: '/api/app/grp/getdetail'
+  }
+
+  public async getOrderDetail (orderid: string) {
+    const data = {
+      orderid
+    }
+    return await httpRequest(this.urls.getOrderDetail, data)
   }
 
   public async getOrderList (page: number, size: number, status: string | number = '', ordercode = '') {
