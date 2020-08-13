@@ -459,7 +459,7 @@ const ProductDetails: Taro.FC<Props> = () => {
                 >
                   <Text className='redText mediumText'>¥{controlShow === 1 ? proDetail.packings.skiprice : buyGroup ? proDetail.skugrp.gprice : proDetail.price}</Text>
                   <HeightView />
-                  <Text className='slightlySmallText grayText'>库存{proDetail.stock}件</Text>
+                  <Text className='slightlySmallText grayText'>库存{proDetail.stock}件{controlShow === 1 && <Text className='slightlySmallText grayText smallMarginLeft'>(限购{proDetail.packings.maxcount}件)</Text>}</Text>
                 </View>
               </View>
               <CustomIcon name='close' size={15} color='gray' onClick={() => setShowFloat(false)} />
@@ -469,7 +469,11 @@ const ProductDetails: Taro.FC<Props> = () => {
             }}
             >
               <Text>数量</Text>
-              <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
+              {proDetail.packings ? (
+                <AtInputNumber type='number' min={1} max={proDetail.packings.maxcount} value={buyNum} onChange={setBuyNum} />
+              ) : (
+                <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
+              )}
             </View>
             <View className='commonRowFlex gradientTheme flexCenter normalPadding'
                   onClick={() => toOrder(controlShow === 1 ? 1 : buyGroup ? 2 : 0)}
