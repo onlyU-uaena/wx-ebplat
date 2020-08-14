@@ -1,6 +1,6 @@
 import Taro, { useState, useEffect, useReachBottom } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
-import { View } from '@tarojs/components'
+import { Text, View } from '@tarojs/components'
 import './index.scss'
 import { AtButton } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
@@ -17,6 +17,7 @@ let page = 1
 const MyFoot: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const [footList, setFootList] = useState([])
+  const [reachBottom, setReachBottom] = useState(false)
 
   useReachBottom(() => getFoot())
 
@@ -25,6 +26,8 @@ const MyFoot: Taro.FC<Props> = () => {
     if (data.length) {
       setFootList(footList.concat(data))
       page += 1
+    } else {
+      setReachBottom(true)
     }
   }
 
@@ -42,13 +45,25 @@ const MyFoot: Taro.FC<Props> = () => {
         }}
         >
           <View>
-            {footList.length ? footList.map((item, index) => (
-              <View key={index}>
-                {item.list.map(shopItem => (
-                  <CardCommodity key={shopItem.id} proId={shopItem.id} hurdle imgUrl={shopItem.imgurl} title={shopItem.spuname} desc={shopItem.subtitle} price={shopItem.price} oldPrice={0} />
+            {footList.length ? (
+              <View>
+                {footList.map((item, index) => (
+                  <View key={index}>
+                    {item.list.map(shopItem => (
+                      <CardCommodity key={shopItem.id} proId={shopItem.id} hurdle imgUrl={shopItem.imgurl} title={shopItem.spuname} desc={shopItem.subtitle} price={shopItem.price} oldPrice={0} />
+                    ))}
+                  </View>
                 ))}
+                {reachBottom && (
+                  <Text className='mediumText normalPadding grayText'
+                        style={{
+                          display: 'block',
+                          textAlign: 'center'
+                        }}
+                  >已经到底了</Text>
+                )}
               </View>
-            )) : (
+            ) : (
               <EmptyPage title='暂无浏览记录' />
             )}
             {/*{footList.length && footList.map((item) => item.list.map((shopItem, index) => (*/}

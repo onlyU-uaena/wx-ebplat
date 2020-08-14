@@ -17,7 +17,7 @@ interface Props {
 
 const PointRule: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
-  const [rule, setRule] = useState()
+  const [rule, setRule] = useState([])
 
   const getRule = async () => {
     const {data} = await point.getPointRule()
@@ -25,7 +25,7 @@ const PointRule: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
-    // getRule()
+    getRule()
   }, [])
 
   return (
@@ -44,8 +44,9 @@ const PointRule: Taro.FC<Props> = () => {
         <View className='commonRowFlex'>
           <Text className='orangeText'>A</Text>
           <View className='commonColumnFlex smallMarginLeft'>
-            <Text className='grayText mediumText'>1. 通过签到获取积分</Text>
-            <Text className='grayText mediumText'>2. 通过app完成购买流程</Text>
+            {rule.length && rule.map((item, index) => (
+              <Text key={index} className='grayText mediumText'>{`${index + 1}.${item.content}`}</Text>
+            ))}
           </View>
         </View>
       </View>

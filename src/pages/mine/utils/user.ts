@@ -26,7 +26,9 @@ class User {
     // 微信接口
     wxAuth: '/api/app/ys/auth',
     wxRegister: '/api/app/userinfo/wxregister',
-    wxLogin: '/api/app/userinfo/wxlogin'
+    wxLogin: '/api/app/userinfo/wxlogin',
+    // 积分
+    getPointInfo: 'api/app/checkin/getchecklist'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
@@ -59,6 +61,15 @@ class User {
       status, recetype
     }
     return await httpRequest(this.urls.getMessageCount, data)
+  }
+
+  public async getPointInfo (fromtype = '', index: number, type: number) {
+    const data = {
+      fromtype,
+      index,
+      type
+    }
+    return await httpRequest(this.urls.getPointInfo, data)
   }
 
   public async getMessageList () {

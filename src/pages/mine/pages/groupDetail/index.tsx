@@ -80,6 +80,7 @@ const GroupDetail: Taro.FC<Props> = () => {
       {detail && (
         <View>
           <View className='commonRowFlex normalPadding radius normalMargin'
+                onClick={() => navTo('home', 'productDetails', {id: detail.proid})}
                 style={{
                   justifyContent: 'space-between',
                   backgroundColor: 'white',
@@ -201,7 +202,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                   </View>
                 )}
                 <AtButton circle
-                          onClick={() => navTo('mine', 'myOrder')}
+                          onClick={() => navTo('mine', 'myOrder', {tab: -1})}
                           customStyle={{
                             borderColor: colors.themeRed,
                             color: colors.themeRed

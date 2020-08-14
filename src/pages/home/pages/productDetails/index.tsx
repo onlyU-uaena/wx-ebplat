@@ -185,7 +185,11 @@ const ProductDetails: Taro.FC<Props> = () => {
         </View>
       </View>
       {proDetail.id && (
-        <View id='detail0'>
+        <View id='detail0'
+              style={{
+                marginTop: '40px'
+              }}
+        >
           {/*轮播图*/}
           {proDetail && <SwiperImg swiperHeight='300px' list={proDetail.imgs} />}
           {/*拼团秒杀*/}

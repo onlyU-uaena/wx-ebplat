@@ -9,6 +9,8 @@ import CustomIcon from '../../../../components/CustomIcon'
 import colors from '../../../../common/styles/color'
 import WxParse from '../../../../components/wxParse/wxParse'
 import HeightView from '../../../../components/HeightView'
+import point from '../../utils/point'
+import { navTo } from '@utils/route'
 
 interface Props {
 
@@ -20,6 +22,10 @@ const PointItem: Taro.FC<Props> = () => {
   const [proDetail, setProDetail] = useState()
   const [imgList, setImgList]= useState()
   const scope = useScope()
+
+  const changeItem = async () => {
+    // point.swapItem()
+  }
 
   useEffect(() => {
     const pro = JSON.parse(router.params.props).pro
@@ -67,7 +73,9 @@ const PointItem: Taro.FC<Props> = () => {
           <HeightView high='large' />
           {/*底部按钮*/}
           <View className='bottomGroup'>
-            <AtButton full type='primary'>兑换</AtButton>
+            <AtButton full type='primary'
+                      onClick={() => navTo('home', 'pointOrder', {proDetail})}
+            >兑换</AtButton>
           </View>
         </View>
       )}

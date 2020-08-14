@@ -65,15 +65,17 @@ const Setting: Taro.FC<Props> = () => {
                         title='支付密码'
                         onClick={() => navTo('mine', 'payPwd')}
                         arrow='right'
-            /><AtListItem iconInfo={{
+            />
+            <AtListItem iconInfo={{
             size: 20,
             color: colors.themeColor,
             value: 'invoice',
             prefixClass: 'fa'
           }}
-                          title='发票管理'
-                          arrow='right'
-          />
+                        title='发票管理'
+                        onClick={() => navTo('mine', 'invoice')}
+                        arrow='right'
+            />
           </View>
           <HeightView />
         </View>

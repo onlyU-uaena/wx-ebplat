@@ -269,7 +269,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>配送地址</Text>
-              <Text className='mediumText orangeText'>{orderDetail.address || '暂无'}</Text>
+              <Text className='mediumText'>{orderDetail.address || '暂无'}</Text>
             </View>
             <View className='commonRowFlex normalPadding borderBottom flexCenter'
                   style={{
@@ -277,7 +277,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>收货人 {orderDetail.telPhone}</Text>
-              <Text className='mediumText orangeText'>{orderDetail.consignee || '暂无'}</Text>
+              <Text className='mediumText'>{orderDetail.consignee || '暂无'}</Text>
             </View>
             {(orderDetail && orderDetail.qrcodenumber && orderDetail.deliverymode !== 0) ? (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'
