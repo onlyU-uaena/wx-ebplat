@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
+import Taro, { useState, useEffect, useDidShow, useReachBottom } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Image, Text, View } from '@tarojs/components'
 import './index.scss'
@@ -11,6 +11,9 @@ import CustomIcon from '../../../../components/CustomIcon'
 import { navTo } from '@utils/route'
 import commodity from '../../../home/utils/commodity'
 import LimitStr from '@utils/stringLimit'
+import account from '../../utils/login'
+import store from '@redux/store'
+import { loginIn, loginOut } from '@redux/actions'
 
 interface Props {
 
@@ -19,7 +22,8 @@ interface Props {
 const PointShop: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const authState = useSelector(selectAuthState)
-  const [list, setList] = useState()
+  const [list, setList] = useState([])
+  const [page, setPage] = useState(1)
   const [width, setWidth] = useState<number>(0)
 
   const getWindowWidth = async () => {
@@ -28,8 +32,26 @@ const PointShop: Taro.FC<Props> = () => {
   }
 
   const getItems = async () => {
-    const {data} = await commodity.getPointItem(1, 14)
-    setList(data)
+    const {data} = await commodity.getPointItem(page, 14)
+    if (data.length) {
+      setList(list.concat(data))
+      setPage(page + 1)
+    }
+  }
+
+  useReachBottom(() => {
+    getItems()
+  })
+
+  const autoLogin = async () => {
+    if (!Taro.getStorageSync('token'))
+      return
+    const { code, data } = await account.getUserData()
+    if (!code) {
+      store.dispatch(loginIn(data))
+    } else {
+      store.dispatch(loginOut())
+    }
   }
 
   useEffect(() => {
@@ -38,6 +60,8 @@ const PointShop: Taro.FC<Props> = () => {
     getItems()
     getWindowWidth()
   }, [])
+
+  useDidShow(() => autoLogin())
 
   return (
     <View>
@@ -105,7 +129,7 @@ const PointShop: Taro.FC<Props> = () => {
               paddingRight: 0
             }}
       >
-        {list && list.map(item => (
+        {list.length && list.map(item => (
           <View className='commonColumnFlex flexCenter normalMarginRight'
                 onClick={() => navTo('mine', 'pointItem', {pro: item})}
                 key={item.id}
@@ -121,7 +145,7 @@ const PointShop: Taro.FC<Props> = () => {
                    src={item.img}
             />
             <HeightView />
-            <Text className='slightlySmallText'>{LimitStr(item.goodname, 10)}</Text>
+            <Text className='slightlySmallText'>{LimitStr(item.goodname, 6)}</Text>
             <HeightView />
             <AtButton size='small' type='primary'>{item.points}积分</AtButton>
           </View>

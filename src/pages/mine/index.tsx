@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
+import Taro, { useState, useEffect, useDidShow } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Button, Text, View } from '@tarojs/components'
 import './index.scss'
@@ -11,6 +11,7 @@ import { selectAuthState } from '@redux/reducers/selector'
 import account from './utils/login'
 import { loginIn, loginOut } from '@redux/actions'
 import user from './utils/user'
+import store from '@redux/store'
 
 interface Props {
 
@@ -28,10 +29,25 @@ const Mine: Taro.FC<Props> = () => {
     setCouponCount(couponRes.data)
   }
 
+  const autoLogin = async () => {
+    if (!Taro.getStorageSync('token'))
+      return
+    const { code, data } = await account.getUserData()
+    if (!code) {
+      store.dispatch(loginIn(data))
+    } else {
+      store.dispatch(loginOut())
+    }
+  }
+
   useEffect(() => {
     if (authState.loginStatus)
       getAssets()
   }, [authState.loginStatus])
+
+  useDidShow(() => {
+    autoLogin
+  })
 
   return (
     <View>
