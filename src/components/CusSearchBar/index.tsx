@@ -34,9 +34,11 @@ class CusSearchBar extends Taro.Component<Props, any> {
     })
   }
 
-  componentDidMount () {
+  async componentDidMount () {
+    const {data} = await commodity.getKeys()
     this.setState({
-      value: this.props.searchStr
+      value: this.props.searchStr,
+      keys: data
     })
     if (this.props.onRef)
       this.props.onRef(this)

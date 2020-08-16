@@ -56,16 +56,16 @@ const Setting: Taro.FC<Props> = () => {
                         onClick={() => navTo('mine', 'changePassword')}
                         arrow='right'
             />
-            <AtListItem iconInfo={{
-              size: 20,
-              color: colors.themeColor,
-              value: 'key',
-              prefixClass: 'fa'
-            }}
-                        title='支付密码'
-                        onClick={() => navTo('mine', 'payPwd')}
-                        arrow='right'
-            />
+            {/*<AtListItem iconInfo={{*/}
+            {/*  size: 20,*/}
+            {/*  color: colors.themeColor,*/}
+            {/*  value: 'key',*/}
+            {/*  prefixClass: 'fa'*/}
+            {/*}}*/}
+            {/*            title='支付密码'*/}
+            {/*            onClick={() => navTo('mine', 'payPwd')}*/}
+            {/*            arrow='right'*/}
+            {/*/>*/}
             <AtListItem iconInfo={{
             size: 20,
             color: colors.themeColor,

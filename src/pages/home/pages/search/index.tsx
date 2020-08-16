@@ -49,7 +49,7 @@ const Search: Taro.FC<Props> = () => {
       <TabBar title='搜索' />
       <CusSearchBar showActionButton focus onChangeResult={onSearchResult} />
       {/*热门搜索*/}
-      <View className='normalMargin'>
+      {hotKeys.length && (<View className='normalMargin'>
         <Text className='grayText'>热门搜索</Text>
         <View className='normalMarginTop'>
           {hotKeys.map(item => (
@@ -63,7 +63,7 @@ const Search: Taro.FC<Props> = () => {
             >{item.name}</AtTag>
           ))}
         </View>
-      </View>
+      </View>)}
       {/*历史搜索*/}
       <View className='normalMargin'>
         <View className='commonRowFlex' style={{

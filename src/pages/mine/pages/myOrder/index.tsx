@@ -36,10 +36,6 @@ const MyOrder: Taro.FC<Props> = () => {
     setSafeTop(safeArea.top)
   }, [])
 
-  usePullDownRefresh(() => {
-    console.log(1)
-  })
-
   const statusToTitle = {
     0: {name: '待付款', button: [
         {

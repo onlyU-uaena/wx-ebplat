@@ -7,6 +7,8 @@ import TabBar from '../../../../components/TabBar'
 import user from '../../utils/user'
 import { navTo } from '@utils/route'
 import EmptyPage from '../../../../components/EmptyPage'
+import HeightView from '../../../../components/HeightView'
+import useDidShow = Taro.useDidShow
 
 interface Props {
 
@@ -25,9 +27,9 @@ const Coupon: Taro.FC<Props> = () => {
   const [couponList, setCouponList] = useState([])
   const [page, setPage] = useState(1)
 
-  useEffect(() => {
+  useDidShow(() => {
     getCouponList()
-  }, [])
+  })
 
   useReachBottom(async () => {
     const {data} = await user.getCoupon(1, page + 1, 14)
@@ -38,7 +40,8 @@ const Coupon: Taro.FC<Props> = () => {
   })
 
   const getCouponList = async () => {
-    const {data} = await user.getCoupon(1, page, 14)
+    const {data} = await user.getCoupon(1, 1, 14)
+    setPage(1)
     setCouponList(data)
   }
 
@@ -110,6 +113,19 @@ const Coupon: Taro.FC<Props> = () => {
         <Text className='redText slightlySmallText normalPaddingLeft'
               onClick={() => navTo('mine', 'expiredCoupon')}
         >{`查看过期的券 >`}</Text>
+      </View>
+      <HeightView high='large' />
+      <View className='commonRowFlex gradientTheme flexCenter normalPadding'
+            onClick={() => navTo('mine', 'getCoupon')}
+            style={{
+              justifyContent: 'center',
+              position: 'fixed',
+              width: '100%',
+              bottom: 0,
+              zIndex: 999
+            }}
+      >
+        <Text className='whiteText mediumText'>领取优惠券</Text>
       </View>
     </View>
   )

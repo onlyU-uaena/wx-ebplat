@@ -25,7 +25,7 @@ class Commodity {
     getGroupHome: '/api/app/act/indexgroup',
     getGroupList: '/api/app/act/groupprolist',
     getSearchKeys: '/api/app/pro/getsearchkeys',
-
+    getKeys: '/api/app/pro/getprodcmt',
     //积分商品
     getPointItem: '/api/app/pointspro/getpagelist'
   }
@@ -55,6 +55,12 @@ class Commodity {
       skiid
     }
     return await httpRequest(this.urls.productDetail, data, false)
+  }
+
+  public async getKeys () {
+    const data = {
+    }
+    return await httpRequest(this.urls.getKeys, data, false)
   }
 
   public async getSearchKeys () {

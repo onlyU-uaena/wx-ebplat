@@ -50,7 +50,7 @@ const MyFoot: Taro.FC<Props> = () => {
                 {footList.map((item, index) => (
                   <View key={index}>
                     {item.list.map(shopItem => (
-                      <CardCommodity key={shopItem.id} proId={shopItem.id} hurdle imgUrl={shopItem.imgurl} title={shopItem.spuname} desc={shopItem.subtitle} price={shopItem.price} oldPrice={0} />
+                      <CardCommodity key={shopItem.id} proId={shopItem.spuid} hurdle imgUrl={shopItem.imgurl} title={shopItem.spuname} desc={shopItem.subtitle} price={shopItem.price} oldPrice={0} />
                     ))}
                   </View>
                 ))}

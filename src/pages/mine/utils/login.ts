@@ -59,7 +59,7 @@ class Account extends AccountVerification {
     return await httpRequest(this.urls.getSmsCode, data, true, true, false)
   }
 
-  @throttleFunc(10000)
+  @throttleFunc(1000)
   public async postUserInfo (imgUrl: string, nickname: string, sex: string, birthday: string, email: string, userwork: string) {
     const data = {imgUrl, nickName: nickname, sex, birthDay: birthday, email, userwork}
     return await httpRequest(this.urls.postUserInfo, data, false)

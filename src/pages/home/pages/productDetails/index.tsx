@@ -315,7 +315,7 @@ const ProductDetails: Taro.FC<Props> = () => {
             </View>
           )}
           <View id='detail1' className='smallMarginTop'>
-            <InputCard title='选择包装' onClick={() => Taro.showToast({title: '暂无包装', icon: 'none'})} link />
+            {/*<InputCard title='选择包装' onClick={() => Taro.showToast({title: '暂无包装', icon: 'none'})} link />*/}
             <InputCard title={`商品评价(${proDetail.cmtcount})`} renderRight={() => <Text className='redText slightlySmallText'>{`好评率：${proDetail.cmtgood}`}</Text>} link={false} />
           </View>
           {/*评论*/}
@@ -330,7 +330,7 @@ const ProductDetails: Taro.FC<Props> = () => {
                 }}
                 >
                   <View className='commonRowFlex flexCenter'>
-                    <AtAvatar circle />
+                    <AtAvatar image={item.imgUrl} circle />
                     <View className='normalMarginLeft commonColumnFlex'>
                       <Text>{item.username}</Text>
                       <Text className='slightlySmallText grayText'>{item.createtime}</Text>
@@ -349,9 +349,9 @@ const ProductDetails: Taro.FC<Props> = () => {
                     justifyContent: 'space-between'
                   }}
                   >
-                    <Image src={item.showImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                    <Image src={item.showImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                    <Image src={item.showImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                    <Image src={item.showImgList[0] && JSON.parse(item.showImgList[0].imgurl) || ''} style={{width: '170rpx', height: '170rpx'}} />
+                    <Image src={item.showImgList[1] &&JSON.parse(item.showImgList[1].imgurl) || ''} style={{width: '170rpx', height: '170rpx'}} />
+                    <Image src={item.showImgList[2] && JSON.parse(item.showImgList[2].imgurl) || ''} style={{width: '170rpx', height: '170rpx'}} />
                   </View>}
                 </View>
               </View>
@@ -485,7 +485,8 @@ const ProductDetails: Taro.FC<Props> = () => {
                     justifyContent: 'center',
                     position: 'fixed',
                     width: '100%',
-                    bottom: 0
+                    bottom: 0,
+                    zIndex: 999
                   }}
             >
               <Text className='whiteText mediumText'>确认</Text>

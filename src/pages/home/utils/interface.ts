@@ -22,7 +22,8 @@ export interface GetTopicSku {
 export interface Comment {
   title: string
   star: number
-  username: string
+  username: string,
+  imgUrl: string
   id: number
   createtime: string
   content: string

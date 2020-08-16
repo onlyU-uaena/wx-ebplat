@@ -56,6 +56,15 @@ class User {
     return await httpRequest(this.urls.deleteMessage, data)
   }
 
+  public async getWaitedCoupon (shopid: number, page: number, size: number) {
+    const data = {
+      shopid,
+      page,
+      size
+    }
+    return await httpRequest(this.urls.getWaitedCoupon, data)
+  }
+
   public async getMessageCount (status: number, recetype: number) {
     const data = {
       status, recetype
