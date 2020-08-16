@@ -299,17 +299,17 @@ const MyOrder: Taro.FC<Props> = () => {
     <View>
       <TabBar title='我的订单' />
       <View>
-        <AtTabs tabList={tabs}
-                scroll
-                onClick={(e) => changeTab(e)}
-                current={currentTabs}
+        <ScrollView refresherTriggered={onRefresh}
+                    onRefresherRefresh={() => refreshList()}
+                    refresherEnabled
         >
-          {tabs.map((tabItem, tabIndex) => (
-            <AtTabsPane key={tabIndex} current={currentTabs} index={tabIndex}>
-              <ScrollView refresherTriggered={onRefresh}
-                          onRefresherRefresh={() => refreshList()}
-                          refresherEnabled
-              >
+          <AtTabs tabList={tabs}
+                  scroll
+                  onClick={(e) => changeTab(e)}
+                  current={currentTabs}
+          >
+            {tabs.map((tabItem, tabIndex) => (
+              <AtTabsPane key={tabIndex} current={currentTabs} index={tabIndex}>
                 {orderList.length ? (
                   orderList.map((item, index) => (
                     <View key={index}>
@@ -383,10 +383,10 @@ const MyOrder: Taro.FC<Props> = () => {
                       没有订单哦～
                     </Text>
                   </View>)}
-              </ScrollView>
-            </AtTabsPane>
-          ))}
-        </AtTabs>
+              </AtTabsPane>
+            ))}
+          </AtTabs>
+        </ScrollView>
       </View>
     </View>
   )

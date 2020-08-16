@@ -23,6 +23,7 @@ interface Method {
 export const baseUrl = 'https://mjsh.yl-mall.cn/'
 
 let requestNum = 0
+let timer
 
 const httpRequest = async (url: string, data = {}, showToast = true, showLoading = true, jumpToLogin = true, method: keyof Method = 'GET', backFn?, delta = 1) => {
   requestNum++
@@ -44,7 +45,10 @@ const httpRequest = async (url: string, data = {}, showToast = true, showLoading
     }
   })
   if (requestNum === 0) {
-    Taro.hideLoading()
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => {
+      return Taro.hideLoading()
+    }, 500)
   }
 
   if (result.data.code !== 0 && !Taro.getStorageSync('token') && jumpToLogin) {
