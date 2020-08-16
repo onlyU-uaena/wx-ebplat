@@ -42,14 +42,15 @@ const httpRequest = async (url: string, data = {}, showToast = true, showLoading
     },
     complete: () => {
       requestNum--
+      if (requestNum === 0) {
+        try {
+          Taro.hideLoading()
+        } catch (e) {
+          console.log(e)
+        }
+      }
     }
   })
-  if (requestNum === 0) {
-    if (timer) clearTimeout(timer)
-    timer = setTimeout(() => {
-      return Taro.hideLoading()
-    }, 500)
-  }
 
   if (result.data.code !== 0 && !Taro.getStorageSync('token') && jumpToLogin) {
     navTo('mine', 'login', {delta: delta})

@@ -29,7 +29,7 @@ const ChooseShop: Taro.FC<Props> = () => {
   }, [])
 
   const choose = (item) => {
-    dispatch(setShop(item))
+    dispatch(setShop(item, true))
     Taro.navigateBack()
   }
 

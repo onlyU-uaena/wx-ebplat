@@ -18,8 +18,10 @@ import shopCart, { setCartBadge } from '../shoppingCart/utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
 import user from '../mine/utils/user'
 import { getCount } from './utils/count'
+import index from 'nervjs/dist/packages/nerv-create-class/src'
 
 let firstIn = true
+let showIndex = 0
 
 interface Props {
 
@@ -99,30 +101,71 @@ const Home: Taro.FC<Props> = () => {
         firstIn = false
       }
       getLocationMes()
-      const {data} = await commodity.getAdv(0)
-      const listRes = await commodity.getSkuList(shopState.shopData.shopid || shopRes.data.shopid)
-      const hotListRes = await commodity.getHotShop(shopState.shopData.shopid || shopRes.data.shopid)
-      const spikeRes = await commodity.getSpikeHome(shopState.shopData.shopid || shopRes.data.shopid)
-      const groupRes = await commodity.getGroupHome(shopState.shopData.shopid || shopRes.data.shopid)
-      const classListRes = await commodity.getClassList()
-      if (authState.loginStatus) {
-        const messageRes = await user.getMessageCount(1, 0)
-        if (messageRes.data !== 0)
-          dispatch(setMessage())
-        setCartBadge(shopState.shopData.shopid || shopRes.data.shopid)
-      }
-      setSpikeList(spikeRes.data || {pros: []})
-      const time = getCount(spikeRes.data.endtime, spikeRes.data.servicetime)
-      setCountDown(time)
-      setGroupList(groupRes.data || [])
-      setHotList(hotListRes.data)
-      setClassList(classListRes.data)
-      setTabList(listRes.data)
-      setAdvList(data)
+      getSkuList(shopRes)
+      getHotShop(shopRes)
+      getSpikeHome(shopRes)
+      getMessageCount(shopRes)
+      getClassList(shopRes)
+      getGroupHome(shopRes)
+      getAdv()
     } catch (e) {
+      console.log(e)
     }
-    setShowPage(true)
   }
+
+  useEffect(() => {
+    console.log(showIndex)
+    if (showIndex > 4) {
+      setShowPage(true)
+      showIndex = 0
+    }
+  }, [showIndex])
+
+  const getAdv = async () => {
+    const {data} = await commodity.getAdv(0)
+    setAdvList(data)
+    showIndex += 1
+  }
+
+  const getHotShop = async (shopRes) => {
+    const hotListRes = await commodity.getHotShop(shopState.shopData.shopid || shopRes.data.shopid)
+    setHotList(hotListRes.data)
+    showIndex += 1
+  }
+  const getSpikeHome = async (shopRes) => {
+    const spikeRes = await commodity.getSpikeHome(shopState.shopData.shopid || shopRes.data.shopid)
+    setSpikeList(spikeRes.data || {pros: []})
+    const time = getCount(spikeRes.data.endtime, spikeRes.data.servicetime)
+    setCountDown(time)
+  }
+  const getMessageCount = async (shopRes) => {
+    if (authState.loginStatus) {
+      const messageRes = await user.getMessageCount(1, 0)
+      if (messageRes.data !== 0)
+        dispatch(setMessage())
+      setCartBadge(shopState.shopData.shopid || shopRes.data.shopid)
+    }
+    showIndex += 1
+  }
+  const getGroupHome = async (shopRes) => {
+    const groupRes = await commodity.getGroupHome(shopState.shopData.shopid || shopRes.data.shopid)
+    setGroupList(groupRes.data || [])
+  }
+  const getClassList = async (shopRes) => {
+    const classListRes = await commodity.getClassList()
+    setClassList(classListRes.data)
+    showIndex += 1
+  }
+
+  const getSkuList = async (shopRes) => {
+    const listRes = await commodity.getSkuList(shopState.shopData.shopid || shopRes.data.shopid)
+    setTabList(listRes.data)
+    showIndex += 1
+  }
+
+  useEffect(() => {
+    initPage()
+  }, [])
 
   useEffect(() => {
     if (shopState.needToRefresh) {

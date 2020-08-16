@@ -154,7 +154,7 @@ class Commodity {
         })
       })
     }
-    return await httpRequest(this.urls.getShop, data, false)
+    return await httpRequest(this.urls.getShop, data, false, false)
   }
 
   public async getShopList () {

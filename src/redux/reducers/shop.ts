@@ -14,8 +14,8 @@ function shopReducer(state = defaultState, action) {
     case SET_SHOP_DATA:
       return {
         ...state,
-        needToRefresh: true,
-        shopData: action.payload
+        needToRefresh: action.payload.needToRefresh,
+        shopData: action.payload.shopData
       }
     case REFRESH_COMPLETE:
       return {

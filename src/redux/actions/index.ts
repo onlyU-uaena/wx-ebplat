@@ -21,10 +21,10 @@ export const loginOut = () => {
   }
 }
 
-export const setShop = (shopData) => {
+export const setShop = (shopData, needToRefresh) => {
   return {
     type: SET_SHOP_DATA,
-    payload: shopData
+    payload: {shopData, needToRefresh}
   }
 }
 

@@ -121,7 +121,7 @@ class App extends Component {
 
   async getShop () {
     const shopRes = await commodity.getShop()
-    store.dispatch(setShop(shopRes.data))
+    store.dispatch(setShop(shopRes.data, false))
   }
 
   async autoLogin () {
