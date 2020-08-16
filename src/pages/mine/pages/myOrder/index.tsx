@@ -336,7 +336,7 @@ const MyOrder: Taro.FC<Props> = () => {
                           <Text className='mediumText'>共</Text>
                           <Text className='mediumText redText'>{item.lsitdetais.length}</Text>
                           <Text className='mediumText'>件</Text>
-                          <Text className='smallMarginLeft mediumText'>需付款</Text>
+                          <Text className='smallMarginLeft mediumText'>付款</Text>
                           <Text className='mediumText redText smallMarginLeft'>¥{item.actualpay.toFixed(2)}</Text>
                         </View>
                         {statusToTitle[item.status].button.length === 2 ? (

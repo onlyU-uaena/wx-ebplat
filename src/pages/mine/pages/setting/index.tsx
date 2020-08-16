@@ -115,9 +115,11 @@ const Setting: Taro.FC<Props> = () => {
                     arrow='right'
         />
       </View>
-      <View className='bottomGroup'>
-        <AtButton onClick={() => toLogOut()} type='primary' full>退出登录</AtButton>
-      </View>
+      {authState.loginStatus && (
+        <View className='bottomGroup'>
+          <AtButton onClick={() => toLogOut()} type='primary' full>退出登录</AtButton>
+        </View>
+      )}
     </View>
   )
 }

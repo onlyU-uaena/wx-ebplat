@@ -1,8 +1,10 @@
 export const getCount = (timeStr, oldStr) => {
-  const end_time = new Date(timeStr).getTime();
-  const now_time = new Date(oldStr).getTime();
+  const end_time = dateToTimestamp(timeStr)
+  const now_time = dateToTimestamp(oldStr)
 
   const resetSec = end_time - now_time;
+
+  console.log(end_time, now_time, resetSec)
 
   const day = parseInt(resetSec/(60*60*24*1000))
   const hour = parseInt(resetSec/(60*60*1000)%24)
@@ -12,4 +14,14 @@ export const getCount = (timeStr, oldStr) => {
   return {
     day, hour, min, sec
   }
+}
+
+const dateToTimestamp = (dateStr) => {
+  if (!dateStr) {
+    return ''
+  }
+  const newDataStr = dateStr.replace(/\.|\-/g, '/')
+  const date = new Date(newDataStr);
+  const timestamp = date.getTime();
+  return timestamp
 }

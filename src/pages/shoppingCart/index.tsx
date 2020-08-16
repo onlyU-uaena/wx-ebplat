@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useDidShow, useReachBottom } from '@tarojs/t
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Checkbox, CheckboxGroup, Image, Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtButton, AtCheckbox, AtInputNumber } from 'taro-ui'
+import { AtButton, AtCheckbox, AtInputNumber, AtSwipeAction } from 'taro-ui'
 import TabBar from '../../components/TabBar'
 import shopCart, { setCartBadge } from './utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
@@ -133,78 +133,92 @@ const ShoppingCart: Taro.FC<Props> = () => {
       {authState.loginStatus ? (
         <View>
           <TabBar title='购物车' homeButton={false} backButton={false} />
-          <Text className='smallMargin mediumText'
-                onClick={() => setModifyMode(!modifyMode)}
-                style={{
-                  display: 'block',
-                  textAlign: 'left',
-                  color: colors.themeColor
-                }}
-          >
-            {modifyMode ? '返回' : '编辑'}
-          </Text>
+          {cartList.shops.length && (
+            <Text className='smallMargin mediumText'
+                  onClick={() => setModifyMode(!modifyMode)}
+                  style={{
+                    display: 'block',
+                    textAlign: 'left',
+                    color: colors.themeColor
+                  }}
+            >
+              {modifyMode ? '返回' : '编辑'}
+            </Text>
+          )}
           {cartList.shops.length ? cartList.shops.map((item, index) => (
-            <View key={index}>
-              {item.spuscd.map((shopItem, shopIndex) => (
-                <View key={shopIndex}
-                      className='commonRowFlex flexCenter borderBottom'
-                      style={{
-                        backgroundColor: 'white'
-                      }}
-                >
-                  <AtCheckbox onChange={(e) => changeSelect(shopItem.shopcartproid, e.length === 0 ? '0' : '1')}
-                              options={[{
-                                value: shopItem.shopcartproid,
-                                label: '',
-                                disabled: !shopItem.stock
-                              }]}
-                              selectedList={[shopItem.isselected ? shopItem.shopcartproid : '']}
-                  />
-                  <View className='commonRowFlex normalPadding'
-                        style={{flex: 1}}
-                        onClick={() => toDetail(shopItem.id)}
+              <View key={index}>
+                {item.spuscd.map((shopItem, shopIndex) => (
+                  <AtSwipeAction onClick={() => deleteNone(shopItem.shopcartproid)}
+                                 key={shopIndex}
+                                 options={[
+                                   {
+                                     text: '删除',
+                                     style: {
+                                       backgroundColor: colors.themeRed,
+                                       color: 'white'
+                                     }
+                                   }
+                                 ]}
                   >
-                    <Image src={shopItem.img}
-                           className='displayImg'
-                    />
-                    <View className='commonColumnFlex'
+                    <View className='commonRowFlex flexCenter borderBottom'
                           style={{
-                            justifyContent: 'space-between',
-                            flex: 1
+                            backgroundColor: 'white'
                           }}
                     >
-                      <View className='commonRowFlex flexCenter' style={{
-                        justifyContent: 'space-between'
-                      }}
+                      <AtCheckbox onChange={(e) => changeSelect(shopItem.shopcartproid, e.length === 0 ? '0' : '1')}
+                                  options={[{
+                                    value: shopItem.shopcartproid,
+                                    label: '',
+                                    disabled: !shopItem.stock
+                                  }]}
+                                  selectedList={[shopItem.isselected ? shopItem.shopcartproid : '']}
+                      />
+                      <View className='commonRowFlex normalPadding'
+                            style={{flex: 1}}
+                            onClick={() => toDetail(shopItem.id)}
                       >
-                        <Text className='slightlySmallText'>{shopItem.name}</Text>
-                        {/*<Text className='slightlySmallText redText'>库存紧张</Text>*/}
-                      </View>
-                      <View className='commonRowFlex flexCenter' style={{
-                        justifyContent: 'space-between'
-                      }}
-                      >
-                        <View>
-                          <Text className='redText slightlySmallText'>¥{shopItem.price}</Text>
-                          {/*<Text className='grayText throughLineText slightlySmallText smallMarginLeft'>¥{shopItem.oldprice}</Text>*/}
-                        </View>
-                        <View onClick={(event => event.stopPropagation())}>
-                          {shopItem.stock ? (
-                            <AtInputNumber type='number' value={shopItem.count} max={shopItem.stock} min={1} onChange={(e) => changeNum(shopItem.shopcartproid, e)} />
-                          ) : (
+                        <Image src={shopItem.img}
+                               className='displayImg'
+                        />
+                        <View className='commonColumnFlex'
+                              style={{
+                                justifyContent: 'space-between',
+                                flex: 1
+                              }}
+                        >
+                          <View className='commonRowFlex flexCenter' style={{
+                            justifyContent: 'space-between'
+                          }}
+                          >
+                            <Text className='slightlySmallText'>{shopItem.name}</Text>
+                            {/*<Text className='slightlySmallText redText'>库存紧张</Text>*/}
+                          </View>
+                          <View className='commonRowFlex flexCenter' style={{
+                            justifyContent: 'space-between'
+                          }}
+                          >
                             <View>
-                              <Text className='slightlySmallText grayText'>已售罄</Text>
-                              <Text onClick={() => deleteNone(shopItem.shopcartproid)} className='slightlySmallText orangeText smallMarginLeft'>删除</Text>
+                              <Text className='redText slightlySmallText'>¥{shopItem.price}</Text>
+                              {/*<Text className='grayText throughLineText slightlySmallText smallMarginLeft'>¥{shopItem.oldprice}</Text>*/}
                             </View>
-                          )}
+                            <View onClick={(event => event.stopPropagation())}>
+                              {shopItem.stock ? (
+                                <AtInputNumber type='number' value={shopItem.count} max={shopItem.stock} min={1} onChange={(e) => changeNum(shopItem.shopcartproid, e)} />
+                              ) : (
+                                <View>
+                                  <Text className='slightlySmallText grayText'>已售罄</Text>
+                                  <Text onClick={() => deleteNone(shopItem.shopcartproid)} className='slightlySmallText orangeText smallMarginLeft'>删除</Text>
+                                </View>
+                              )}
+                            </View>
+                          </View>
                         </View>
                       </View>
                     </View>
-                  </View>
-                </View>
-              ))}
-              <HeightView />
-            </View>
+                  </AtSwipeAction>
+                ))}
+                <HeightView />
+              </View>
           )) : (
             <View className='commonRowFlex flexCenter'
                   style={{

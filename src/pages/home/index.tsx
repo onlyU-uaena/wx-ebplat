@@ -113,7 +113,6 @@ const Home: Taro.FC<Props> = () => {
       }
       setSpikeList(spikeRes.data || {pros: []})
       const time = getCount(spikeRes.data.endtime, spikeRes.data.servicetime)
-      console.log('time', time, spikeRes.data.endtime, spikeRes.data.servicetime)
       setCountDown(time)
       setGroupList(groupRes.data || [])
       setHotList(hotListRes.data)
