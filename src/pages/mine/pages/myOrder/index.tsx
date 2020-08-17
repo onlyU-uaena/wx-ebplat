@@ -30,10 +30,12 @@ const MyOrder: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const [safeTop, setSafeTop] = useState<number>(0)
+  const [safeHeight, setSafeHeight] = useState<number>(0)
 
   useEffect(() => {
-    const { safeArea } = Taro.getSystemInfoSync()
+    const { safeArea, screenHeight } = Taro.getSystemInfoSync()
     setSafeTop(safeArea.top)
+    setSafeHeight(screenHeight)
   }, [])
 
   const statusToTitle = {
@@ -251,10 +253,6 @@ const MyOrder: Taro.FC<Props> = () => {
     }
   })
 
-  useReachBottom( async () => {
-    getOrderList(currentTabs - 1)
-  })
-
   const getOrderList = async (status?: string | number) => {
     const {data} = await order.getOrderList(page, size, status)
     if (data.length && !waitReset) {
@@ -305,11 +303,16 @@ const MyOrder: Taro.FC<Props> = () => {
   return (
     <View>
       <TabBar title='我的订单' />
-      <View>
-        <ScrollView refresherTriggered={onRefresh}
-                    onRefresherRefresh={() => pullDownRefresh()}
-                    refresherEnabled
-        >
+      <ScrollView refresherTriggered={onRefresh}
+                  onRefresherRefresh={() => pullDownRefresh()}
+                  refresherEnabled
+                  onScrollToLower={() => getOrderList(currentTabs - 1)}
+                  scrollY
+                  style={{
+                    height: `${safeHeight - safeTop - 40}px`
+                  }}
+      >
+        <View>
           <AtTabs tabList={tabs}
                   scroll
                   onClick={(e) => changeTab(e)}
@@ -393,8 +396,8 @@ const MyOrder: Taro.FC<Props> = () => {
               </AtTabsPane>
             ))}
           </AtTabs>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </View>
   )
 }
