@@ -88,6 +88,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
   const chooseCoupon = (e) => {
     setDiscount(JSON.parse(e).facevalue)
     setCoupon(e)
+    setShowFloat(false)
   }
 
   const confirmOrder = async () => {
@@ -226,11 +227,13 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                            小计
                          </Text>
                          <Text className='mediumText redText normalMarginLeft'>
-                           {`¥${(orderDetail.totalMoney + orderDetail.freightMoney - discount).toFixed(2)}`}
+                           {`¥${(orderDetail.totalMoney + orderDetail.freightMoney - discount) < 0 ? 0 : (orderDetail.totalMoney + orderDetail.freightMoney - discount).toFixed(2)}`}
                          </Text>
                        </View>}
             />
           </View>
+          <HeightView high='large' />
+          <HeightView high='large' />
           <View className='commonRowFlex flexCenter' style={{
             position: 'fixed',
             width: '100%',
@@ -245,7 +248,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                 合计
               </Text>
               <Text className='mediumText redText smallMarginLeft'>
-                {`¥${orderDetail.totalMoney + orderDetail.freightMoney - discount}`}
+                {`¥${(orderDetail.totalMoney + orderDetail.freightMoney - discount) < 0 ? 0 : (orderDetail.totalMoney + orderDetail.freightMoney - discount).toFixed(2)}`}
               </Text>
             </View>
             {orderDetail && orderDetail.skuID[0].isgrp ? (

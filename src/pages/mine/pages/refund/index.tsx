@@ -108,6 +108,8 @@ const Refund: Taro.FC<Props> = () => {
           </View>
         </View>
       )}
+     <HeightView high='large' />
+     <HeightView high='large' />
       <View className='bottomGroup'>
         <AtButton full type='primary' onClick={() => confirmToRefund()}>确定</AtButton>
       </View>

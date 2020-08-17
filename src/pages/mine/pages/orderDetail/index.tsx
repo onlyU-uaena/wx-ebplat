@@ -103,7 +103,16 @@ const OrderDetail: Taro.FC<Props> = () => {
         {
           title: '去退款',
           func: async (item) => {
-            navTo('mine','refund', {item})
+            navTo('mine','refund', {item: {
+                lsitdetais: item.children.map(shopItem => {
+                  return {
+                    proprice: shopItem.productprice,
+                    ...shopItem
+                  }
+                }),
+                actualpay: item.actualPay,
+                ...item
+              }})
           }
         },
       ]},
@@ -111,7 +120,16 @@ const OrderDetail: Taro.FC<Props> = () => {
         {
           title: '去退款',
           func: async (item) => {
-            navTo('mine','refund', {item})
+            navTo('mine','refund', {item: {
+                lsitdetais: item.children.map(shopItem => {
+                  return {
+                    proprice: shopItem.productprice,
+                    ...shopItem
+                  }
+                }),
+                actualpay: item.actualPay,
+                ...item
+              }})
           }
         },
         {
@@ -140,7 +158,16 @@ const OrderDetail: Taro.FC<Props> = () => {
         {
           title: '去退款',
           func: async (item) => {
-            navTo('mine','refund', {item})
+            navTo('mine','refund', {item: {
+                lsitdetais: item.children.map(shopItem => {
+                  return {
+                    proprice: shopItem.productprice,
+                    ...shopItem
+                  }
+                }),
+                actualpay: item.actualPay,
+                ...item
+              }})
           }
         },{
           title: '确认收货',
@@ -161,12 +188,30 @@ const OrderDetail: Taro.FC<Props> = () => {
         {
           title: '去退款',
           func: async (item) => {
-            navTo('mine','refund', {item})
+            navTo('mine','refund', {item: {
+                lsitdetais: item.children.map(shopItem => {
+                  return {
+                    proprice: shopItem.productprice,
+                    ...shopItem
+                  }
+                }),
+                actualpay: item.actualPay,
+                ...item
+              }})
           }
         },{
           title: '评价订单',
           func: async (item) => {
-            navTo('mine','evaluationOrder', {item})
+            navTo('mine','evaluationOrder', {item: {
+                lsitdetais: item.children.map(shopItem => {
+                  return {
+                    proprice: shopItem.productprice,
+                    ...shopItem
+                  }
+                }),
+                actualpay: item.actualPay,
+                ...item
+              }})
             delayBack()
           }
         }
@@ -175,12 +220,30 @@ const OrderDetail: Taro.FC<Props> = () => {
         {
           title: '去退款',
           func: async (item) => {
-            navTo('mine','refund', {item})
+            navTo('mine','refund', {item: {
+                lsitdetais: item.children.map(shopItem => {
+                  return {
+                    proprice: shopItem.productprice,
+                    ...shopItem
+                  }
+                }),
+                actualpay: item.actualPay,
+                ...item
+              }})
           }
         },{
           title: '评价订单',
           func: async (item) => {
-            navTo('mine','evaluationOrder', {item})
+            navTo('mine','evaluationOrder', {item: {
+                lsitdetais: item.children.map(shopItem => {
+                  return {
+                    proprice: shopItem.productprice,
+                    ...shopItem
+                  }
+                }),
+                actualpay: item.actualPay,
+                ...item
+              }})
             delayBack()
           }
         }
@@ -189,7 +252,16 @@ const OrderDetail: Taro.FC<Props> = () => {
         {
           title: '去退款',
           func: async (item) => {
-            navTo('mine','refund', {item})
+            navTo('mine','refund', {item: {
+                lsitdetais: item.children.map(shopItem => {
+                  return {
+                    proprice: shopItem.productprice,
+                    ...shopItem
+                  }
+                }),
+                actualpay: item.actualPay,
+                ...item
+              }})
           }
         },
         {

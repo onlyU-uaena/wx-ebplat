@@ -51,7 +51,7 @@ const InvoiceDetail: Taro.FC<Props> = () => {
                     border: '1px solid rgb(238, 238, 238)'
                   }}
             >
-              {detail.titletype === 1 && (
+              {detail.titletype === 1 ? (
                 <View>
                   <View className='commonRowFlex flexCenter'
                         style={{
@@ -72,7 +72,7 @@ const InvoiceDetail: Taro.FC<Props> = () => {
                   </View>
                   <HeightView />
                 </View>
-              )}
+              ) : null}
               <View className='commonRowFlex flexCenter'
                     style={{
                       justifyContent: 'space-between'

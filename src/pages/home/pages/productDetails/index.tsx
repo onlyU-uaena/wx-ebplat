@@ -349,9 +349,9 @@ const ProductDetails: Taro.FC<Props> = () => {
                     justifyContent: 'space-between'
                   }}
                   >
-                    <Image src={item.showImgList[0] && JSON.parse(item.showImgList[0].imgurl) || ''} style={{width: '170rpx', height: '170rpx'}} />
-                    <Image src={item.showImgList[1] &&JSON.parse(item.showImgList[1].imgurl) || ''} style={{width: '170rpx', height: '170rpx'}} />
-                    <Image src={item.showImgList[2] && JSON.parse(item.showImgList[2].imgurl) || ''} style={{width: '170rpx', height: '170rpx'}} />
+                    <Image src={item.showImgList[0] && item.showImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                    <Image src={item.showImgList[1] && item.showImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                    <Image src={item.showImgList[2] && item.showImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
                   </View>}
                 </View>
               </View>

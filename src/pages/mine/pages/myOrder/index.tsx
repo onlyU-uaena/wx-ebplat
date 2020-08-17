@@ -48,7 +48,7 @@ const MyOrder: Taro.FC<Props> = () => {
         {
           title: '去支付',
           func: (item) => {
-            navTo('mine', 'orderDetail', {id: item.code})
+            navTo('mine', 'orderDetail', {id: item.id})
           }
         }
       ]},
@@ -234,7 +234,7 @@ const MyOrder: Taro.FC<Props> = () => {
 
   const [currentTabs, setCurrentTabs] = useState<number>(0)
   const [onRefresh, setOnRefresh] = useState<boolean>(false)
-  const [size, setSize] = useState<number>(10)
+  const [size, setSize] = useState<number>(3)
   const [firstInto, setFirstInto] = useState<boolean>(true)
   const [orderList, setOrderList] = useState([])
 
@@ -247,7 +247,6 @@ const MyOrder: Taro.FC<Props> = () => {
     if (firstInto) {
       setFirstInto(false)
     } else {
-      console.log(1)
       refreshList()
     }
   })
@@ -262,11 +261,10 @@ const MyOrder: Taro.FC<Props> = () => {
       setOrderList(orderList.concat(data))
       page = page + 1
     } else if (waitReset) {
-      setOrderList(data)
+      setOrderList([].concat(data))
       waitReset = false
       page = page + 1
     }
-    return data
   }
 
   const changeTab = (e) => {
@@ -286,6 +284,15 @@ const MyOrder: Taro.FC<Props> = () => {
 
   const refreshList = async () => {
     resetPage()
+    if (currentTabs === 0) {
+      await getOrderList()
+    } else {
+      await getOrderList(currentTabs - 1)
+    }
+  }
+
+  const pullDownRefresh = async () => {
+    resetPage()
     setOnRefresh(true)
     if (currentTabs === 0) {
       await getOrderList()
@@ -300,7 +307,7 @@ const MyOrder: Taro.FC<Props> = () => {
       <TabBar title='我的订单' />
       <View>
         <ScrollView refresherTriggered={onRefresh}
-                    onRefresherRefresh={() => refreshList()}
+                    onRefresherRefresh={() => pullDownRefresh()}
                     refresherEnabled
         >
           <AtTabs tabList={tabs}

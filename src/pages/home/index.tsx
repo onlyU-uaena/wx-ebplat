@@ -114,7 +114,6 @@ const Home: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
-    console.log(showIndex)
     if (showIndex > 4) {
       setShowPage(true)
       showIndex = 0
