@@ -1,6 +1,6 @@
 import Taro, { useState, useEffect, useRouter, useScope } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
-import { Image, Text, View, RichText, Button } from '@tarojs/components'
+import { Image, Text, View, RichText, Button, ScrollView } from '@tarojs/components'
 import './index.scss'
 import { AtAvatar, AtButton, AtRate, AtFloatLayout, AtInputNumber, AtTag, AtCountdown } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
@@ -24,14 +24,17 @@ interface Props {
 }
 
 const tabList = ['商品', '评价', '详情', '推荐']
+const anchor = ['product', 'comment', 'detail', 'share']
 
 const ProductDetails: Taro.FC<Props> = () => {
   const [safeTop, setSafeTop] = useState<number>(0)
+  const [windowHeight, setWindowHeight] = useState<number>(0)
   const [countDown, setCountDown] = useState()
 
   useEffect(() => {
-    const { safeArea } = Taro.getSystemInfoSync()
+    const { safeArea, screenHeight } = Taro.getSystemInfoSync()
     setSafeTop(safeArea.top)
+    setWindowHeight(screenHeight)
   }, [])
 
   const dispatch = useDispatch()
@@ -61,10 +64,12 @@ const ProductDetails: Taro.FC<Props> = () => {
     getDetail()
   }, [])
 
-  const [currentTab, setCurrentTab] = useState<number>(0)
+  const [currentTab, setCurrentTab] = useState<string>('product')
+  const [anchorTab, setAnchorTab] = useState<string>('product')
   const [proDetail, setProDetail] = useState({})
   const [favorites, setFavorites] = useState<boolean>(false)
   const [buyNum, setBuyNum] = useState<number>(1)
+  const [anchorArray, setAnchorArray] = useState([])
 
   const addToCart = async (id: number) => {
     console.log(id)
@@ -140,16 +145,51 @@ const ProductDetails: Taro.FC<Props> = () => {
     }
   }
 
+  useEffect(() => {
+    getHeight()
+  }, [proDetail])
+
+  const getHeight = () => {
+    const query = Taro.createSelectorQuery().in(scope)
+    const heightArr = [];
+    let h = 0;
+    query.selectAll('.anchorPoint').boundingClientRect((react) =>{
+      react.forEach((res)=>{
+        h += res.height;
+        heightArr.push(h)
+      })
+      console.log(heightArr)
+      setAnchorArray(heightArr)
+    }).exec();
+  }
+
   const chooseCount = () => {
     setShowFloat(true)
     setBuyGroup(true)
   }
 
-  const chooseTab = (index: number) => {
-    setCurrentTab(index)
-    Taro.pageScrollTo({
-      selector: `#detail${index}`
-    })
+  const handleScroll = (e) => {
+    const scrollTop = e.detail.scrollTop;
+    const scrollArr = anchorArray;
+    if (scrollTop >= scrollArr[scrollArr.length-1] - (windowHeight - safeTop + 80)) {
+      return
+    } else {
+      for(let i=0;i<scrollArr.length;i++){
+        if(scrollTop>=0&&scrollTop<scrollArr[0]){
+          setAnchorTab('product')
+        }else if(scrollTop>=scrollArr[i-1]&&scrollTop<scrollArr[i]) {
+          setAnchorTab(anchor[i])
+        }
+      }
+    }
+  }
+
+  const chooseTab = (index: string) => {
+    setCurrentTab(String(index))
+    setAnchorTab(String(index))
+    // Taro.pageScrollTo({
+    //   selector: `#detail${index}`
+    // })
   }
 
   return (
@@ -166,7 +206,7 @@ const ProductDetails: Taro.FC<Props> = () => {
       }}
       >
         {tabList.map((item, index) => (
-          <Text className={currentTab === index ? 'whiteText tabText' : 'whiteText'} onClick={() => chooseTab(index)} key={index}>{item}</Text>
+          <Text className={anchorTab === anchor[index] ? 'whiteText tabText' : 'whiteText'} onClick={() => chooseTab(anchor[index])} key={index}>{item}</Text>
         ))}
         <View style={{
           position: 'absolute',
@@ -184,316 +224,327 @@ const ProductDetails: Taro.FC<Props> = () => {
           </Button>
         </View>
       </View>
-      {proDetail.id && (
-        <View id='detail0'
-              style={{
-                marginTop: '40px'
-              }}
-        >
-          {/*轮播图*/}
-          {proDetail && <SwiperImg swiperHeight='300px' list={proDetail.imgs} />}
-          {/*拼团秒杀*/}
-          {controlShow === 2 && (
-            <View className='commonRowFlex flexCenter gradientTheme radius'
-                  style={{
-                    justifyContent: 'space-between',
-                    padding: '8px 16px'
+      <ScrollView style={{
+                    marginTop: '40px',
+                    height: `${windowHeight - safeTop + 80}px`
                   }}
-            >
-              <View className='commonColumnFlex'>
-                <View className='commonRowFlex flexCenter'>
-                  <Text className='whiteText slightlySmallText'>¥</Text>
-                  <Text className='whiteText'>{proDetail.skugrp.gprice}</Text>
-                  <View className='normalMarginLeft'>
-                    <AtTag size='small'
-                           customStyle={{
-                             backgroundColor: 'rgba(0, 0, 0, 0)',
-                             color: 'white'
-                           }}
-                    >{proDetail.skugrp.gcount}人拼</AtTag>
-                  </View>
-                </View>
-                <Text className='smallText whiteText throughLineText'>¥{proDetail.price}</Text>
-              </View>
-              <Text className='mediumText whiteText'>已拼{proDetail.salescount}份</Text>
-            </View>
-          )}
-          {controlShow === 1 && (
-            <View className='commonRowFlex flexCenter gradientTheme radius'
-                  style={{
-                    justifyContent: 'space-between',
-                    padding: '8px 16px'
-                  }}
-            >
-              <View className='commonColumnFlex'>
-                <View className='commonRowFlex flexCenter'>
-                  <Text className='whiteText slightlySmallText'>¥</Text>
-                  <Text className='whiteText'>{proDetail.packings.skiprice}</Text>
-                </View>
-                <View>
-                  <Text className='smallText whiteText throughLineText'>¥{proDetail.price}</Text>
-                  <Text className='slightlySmallText whiteText normalMarginLeft'>已售{proDetail.salescount}份</Text>
-                </View>
-              </View>
-              <View className='commonColumnFlex flexCenter'>
-                <Text className='whiteText slightlySmallText'>距结束仅剩</Text>
-                <AtCountdown
-                  isShowDay
-                  format={{
-                    day: '天',
-                    hours: ':',
-                    minutes: ':',
-                    seconds: '' }}
-                  day={countDown.day}
-                  hours={countDown.hour}
-                  minutes={countDown.min}
-                  seconds={countDown.sec}
-                />
-              </View>
-            </View>
-          )}
-          {/*标题*/}
-          <View className='normalPadding commonColumnFlex' style={{
-            backgroundColor: 'white'
-          }}
-          >
-            <View className='commonRowFlex flexCenter' style={{
-              justifyContent: 'space-between'
-            }}
-            >
-              <Text className='mediumText'>{proDetail.title}</Text>
-              <CustomIcon name='collect' onClick={() => collect()} color={favorites ? colors.themeRed : colors.lightGray} size={20} />
-            </View>
-            <Text className='slightlySmallText grayText'>{proDetail.subtitle}</Text>
-            {!proDetail.isgrp && (
-              <View className='commonRowFlex normalMarginTop'
-                    style={{
-                      justifyContent: 'space-between'
-                    }}
-              >
-                <View className='commonRowFlex' style={{
-                  alignItems: 'flex-end'
-                }}
-                >
-                  <Text className='mediumText redText'>¥{proDetail.price}</Text>
-                  {/*<Text className='slightlySmallText grayText smallMarginLeft'>¥ {}</Text>*/}
-                </View>
-                <Text className='slightlySmallText grayText'>{`已售${proDetail.salescount}份`}</Text>
-              </View>
-            )}
-          </View>
-          <HeightView />
-          {controlShow === 2 && (proDetail.grpusers.length) && (
-            <View className='normalPaddingTop normalPaddingBottom'
-                  style={{
-                    backgroundColor: 'white'
-                  }}
-            >
-              <View className='normalMarginRight normalMarginLeft borderBottom'>
-                <Text className='mediumText'><Text className='mediumText redText'>{proDetail.grpusers.length}</Text>人在拼单,可直接参与</Text>
-                <HeightView />
-              </View>
-              {proDetail.grpusers.map(item => (
-                <View className='commonRowFlex flexCenter normalPadding borderBottom'
-                      key={item.gid}
+                  onScroll={handleScroll}
+                  scrollIntoView={currentTab}
+                  scrollY
+      >
+        {proDetail.id && (
+          <View id='product'>
+            <View className='anchorPoint'>
+              {/*轮播图*/}
+              {proDetail && <SwiperImg swiperHeight='300px' list={proDetail.imgs} />}
+              {/*拼团秒杀*/}
+              {controlShow === 2 && (
+                <View className='commonRowFlex flexCenter gradientTheme radius'
                       style={{
-                        justifyContent: 'space-between'
+                        justifyContent: 'space-between',
+                        padding: '8px 16px'
                       }}
                 >
-                  <View className='commonRowFlex flexCenter'>
-                    <AtAvatar circle size='normal' image={item.userimg} />
-                    <Text className='mediumText normalMarginLeft'>{LimitStr(item.username, 6)}</Text>
+                  <View className='commonColumnFlex'>
+                    <View className='commonRowFlex flexCenter'>
+                      <Text className='whiteText slightlySmallText'>¥</Text>
+                      <Text className='whiteText'>{proDetail.skugrp.gprice}</Text>
+                      <View className='normalMarginLeft'>
+                        <AtTag size='small'
+                               customStyle={{
+                                 backgroundColor: 'rgba(0, 0, 0, 0)',
+                                 color: 'white'
+                               }}
+                        >{proDetail.skugrp.gcount}人拼</AtTag>
+                      </View>
+                    </View>
+                    <Text className='smallText whiteText throughLineText'>¥{proDetail.price}</Text>
                   </View>
-                  <View className='commonRowFlex flexCenter'>
-                    <Text className='mediumText normalMarginLeft smallMarginRight'>还差<Text className='mediumText redText'>{item.count}人</Text>拼成</Text>
-                    <AtButton size='small'
-                              onClick={() => toOrder(2, item.gnum)}
-                    >去参团</AtButton>
+                  <Text className='mediumText whiteText'>已拼{proDetail.salescount}份</Text>
+                </View>
+              )}
+              {controlShow === 1 && (
+                <View className='commonRowFlex flexCenter gradientTheme radius'
+                      style={{
+                        justifyContent: 'space-between',
+                        padding: '8px 16px'
+                      }}
+                >
+                  <View className='commonColumnFlex'>
+                    <View className='commonRowFlex flexCenter'>
+                      <Text className='whiteText slightlySmallText'>¥</Text>
+                      <Text className='whiteText'>{proDetail.packings.skiprice}</Text>
+                    </View>
+                    <View>
+                      <Text className='smallText whiteText throughLineText'>¥{proDetail.price}</Text>
+                      <Text className='slightlySmallText whiteText normalMarginLeft'>已售{proDetail.salescount}份</Text>
+                    </View>
+                  </View>
+                  <View className='commonColumnFlex flexCenter'>
+                    <Text className='whiteText slightlySmallText'>距结束仅剩</Text>
+                    <AtCountdown
+                      isShowDay
+                      format={{
+                        day: '天',
+                        hours: ':',
+                        minutes: ':',
+                        seconds: '' }}
+                      day={countDown.day}
+                      hours={countDown.hour}
+                      minutes={countDown.min}
+                      seconds={countDown.sec}
+                    />
                   </View>
                 </View>
-              ))}
-            </View>
-          )}
-          <View id='detail1' className='smallMarginTop'>
-            {/*<InputCard title='选择包装' onClick={() => Taro.showToast({title: '暂无包装', icon: 'none'})} link />*/}
-            <InputCard title={`商品评价(${proDetail.cmtcount})`} renderRight={() => <Text className='redText slightlySmallText'>{`好评率：${proDetail.cmtgood}`}</Text>} link={false} />
-          </View>
-          {/*评论*/}
-          <View style={{
-            backgroundColor: 'white'
-          }}
-          >
-            {proDetail.cmts.map((item: Comment, index) => (
-              <View key={index} className='normalPadding'>
+              )}
+              {/*标题*/}
+              <View className='normalPadding commonColumnFlex' style={{
+                backgroundColor: 'white'
+              }}
+              >
                 <View className='commonRowFlex flexCenter' style={{
                   justifyContent: 'space-between'
                 }}
                 >
-                  <View className='commonRowFlex flexCenter'>
-                    <AtAvatar image={item.imgUrl} circle />
-                    <View className='normalMarginLeft commonColumnFlex'>
-                      <Text>{item.username}</Text>
-                      <Text className='slightlySmallText grayText'>{item.createtime}</Text>
-                    </View>
-                  </View>
-                  <AtRate value={item.star} />
+                  <Text className='mediumText'>{proDetail.title}</Text>
+                  <CustomIcon name='collect' onClick={() => collect()} color={favorites ? colors.themeRed : colors.lightGray} size={20} />
                 </View>
-                <View style={{
-                  marginLeft: '120rpx'
-                }}
-                >
-                  <Text className='mediumText grayText'>
-                    {item.content}
-                  </Text>
-                  {item.showImgList.length && <View className='commonRowFlex normalMarginTop' style={{
-                    justifyContent: 'space-between'
-                  }}
+                <Text className='slightlySmallText grayText'>{proDetail.subtitle}</Text>
+                {!proDetail.isgrp && (
+                  <View className='commonRowFlex normalMarginTop'
+                        style={{
+                          justifyContent: 'space-between'
+                        }}
                   >
-                    <Image src={item.showImgList[0] && item.showImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                    <Image src={item.showImgList[1] && item.showImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                    <Image src={item.showImgList[2] && item.showImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                  </View>}
-                </View>
-              </View>
-            ))}
-          </View>
-          {/*商品图*/}
-          <Text id='detail2' className='mediumText normalPadding borderBottom' style={{
-            backgroundColor: 'white',
-            display: 'block'
-          }}
-          >商品详情</Text>
-          {/*售后*/}
-          <View className='commonColumnFlex flexCenter normalMarginTop normalMarginBottom normalPadding' style={{
-            justifyContent: 'center',
-            backgroundColor: 'white'
-          }}
-          >
-            <import src='../../../../components/wxParse/wxParse.wxml' />
-            <template is='wxParse' data='{{wxParseData:article.nodes}}' />
-            <template is='wxParse' data='{{wxParseData:serve.nodes}}' />
-          </View>
-          <HeightView high='large' />
-          <HeightView high='large' />
-          {/*底部按钮*/}
-          <View className='bottomGroup commonRowFlex'>
-            <Button plain
-                    className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginLeft normalMarginRight'
-                    openType='contact'
-                    style={{
-                      paddingLeft: 0,
-                      paddingRight: 0,
-                      lineHeight: 'initial',
-                      border: 'none',
-                      fontSize: 'inherit'
+                    <View className='commonRowFlex' style={{
+                      alignItems: 'flex-end'
                     }}
-            >
-              <CustomIcon name='customerService' size={20} color='gray' />
-              <Text className='slightlySmallText grayText'>客服</Text>
-            </Button>
-            <View onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})} className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginRight'>
-              <CustomIcon onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})} name='shop' size={20} color='gray' />
-              <Text className='slightlySmallText grayText'>购物车</Text>
+                    >
+                      <Text className='mediumText redText'>¥{proDetail.price}</Text>
+                      {/*<Text className='slightlySmallText grayText smallMarginLeft'>¥ {}</Text>*/}
+                    </View>
+                    <Text className='slightlySmallText grayText'>{`已售${proDetail.salescount}份`}</Text>
+                  </View>
+                )}
+              </View>
+              <HeightView />
+              {controlShow === 2 && (proDetail.grpusers.length) && (
+                <View className='normalPaddingTop normalPaddingBottom'
+                      style={{
+                        backgroundColor: 'white'
+                      }}
+                >
+                  <View className='normalMarginRight normalMarginLeft borderBottom'>
+                    <Text className='mediumText'><Text className='mediumText redText'>{proDetail.grpusers.length}</Text>人在拼单,可直接参与</Text>
+                    <HeightView />
+                  </View>
+                  {proDetail.grpusers.map(item => (
+                    <View className='commonRowFlex flexCenter normalPadding borderBottom'
+                          key={item.gid}
+                          style={{
+                            justifyContent: 'space-between'
+                          }}
+                    >
+                      <View className='commonRowFlex flexCenter'>
+                        <AtAvatar circle size='normal' image={item.userimg} />
+                        <Text className='mediumText normalMarginLeft'>{LimitStr(item.username, 6)}</Text>
+                      </View>
+                      <View className='commonRowFlex flexCenter'>
+                        <Text className='mediumText normalMarginLeft smallMarginRight'>还差<Text className='mediumText redText'>{item.count}人</Text>拼成</Text>
+                        <AtButton size='small'
+                                  onClick={() => toOrder(2, item.gnum)}
+                        >去参团</AtButton>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              )}
             </View>
-            <View className='commonRowFlex' style={{
-              flex: 1
-            }}
-            >
-              {controlShow === 0 && (<View onClick={() => addToCart(proDetail.id)} className='gradientYellow commonRowFlex flexCenter' style={{
-                flex: 1,
-                justifyContent: 'center'
+            <View className='anchorPoint'>
+              <View id='comment' className='smallMarginTop'>
+                {/*<InputCard title='选择包装' onClick={() => Taro.showToast({title: '暂无包装', icon: 'none'})} link />*/}
+                <InputCard title={`商品评价(${proDetail.cmtcount})`} renderRight={() => <Text className='redText slightlySmallText'>{`好评率：${proDetail.cmtgood}`}</Text>} link={false} />
+              </View>
+              {/*评论*/}
+              <View style={{
+                backgroundColor: 'white'
               }}
               >
-                <Text className='whiteText slightlySmallText'>加入购物车</Text>
+                {proDetail.cmts.map((item: Comment, index) => (
+                  <View key={index} className='normalPadding'>
+                    <View className='commonRowFlex flexCenter' style={{
+                      justifyContent: 'space-between'
+                    }}
+                    >
+                      <View className='commonRowFlex flexCenter'>
+                        <AtAvatar image={item.imgUrl} circle />
+                        <View className='normalMarginLeft commonColumnFlex'>
+                          <Text>{item.username}</Text>
+                          <Text className='slightlySmallText grayText'>{item.createtime}</Text>
+                        </View>
+                      </View>
+                      <AtRate value={item.star} />
+                    </View>
+                    <View style={{
+                      marginLeft: '120rpx'
+                    }}
+                    >
+                      <Text className='mediumText grayText'>
+                        {item.content}
+                      </Text>
+                      {item.showImgList.length && <View className='commonRowFlex normalMarginTop' style={{
+                        justifyContent: 'space-between'
+                      }}
+                      >
+                        <Image src={item.showImgList[0] && item.showImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                        <Image src={item.showImgList[1] && item.showImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                        <Image src={item.showImgList[2] && item.showImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                      </View>}
+                    </View>
+                  </View>
+                ))}
               </View>
-              )}
-              {controlShow === 2 && (
-                <View onClick={() => chooseCount()} className='gradientYellow commonRowFlex flexCenter' style={{
-                flex: 1,
-                justifyContent: 'center'
+            </View>
+            <View className='anchorPoint'>
+              {/*商品图*/}
+              <Text id='detail' className='mediumText normalPadding borderBottom' style={{
+                backgroundColor: 'white',
+                display: 'block'
               }}
-                >
-                <Text className='whiteText slightlySmallText'>我要开团</Text>
-                </View>
-              )}
-              {controlShow === 0 && (
-                <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
-                  flex: 1,
-                  justifyContent: 'center'
-                }}
-                >
-                  <Text className='whiteText slightlySmallText'>立即购买</Text>
-                </View>
-              )}
-              {controlShow === 1 && (
-                <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
-                  flex: 1,
-                  justifyContent: 'center'
-                }}
-                >
-                  <Text className='whiteText slightlySmallText'>立即购买</Text>
-                </View>
-              )}
-              {controlShow === 2 && (
-                <View onClick={() => {
-                  setShowFloat(true)
-                  setBuyGroup(false)
-                }} className='gradientTheme commonRowFlex flexCenter' style={{
-                  flex: 1,
-                  justifyContent: 'center'
-                }}
-                >
-                  <Text className='whiteText slightlySmallText'>直接购买</Text>
-                </View>
-              )}
-            </View>
-          </View>
-          <AtFloatLayout isOpened={showFloat}
-                         onClose={() => setShowFloat(false)}
-          >
-            <View className='commonRowFlex normalMargin' style={{
-              justifyContent: 'space-between'
-            }}
-            >
-              <View className='commonRowFlex'>
-                <AtAvatar size='large' image={proDetail.imgurl} />
-                <View className='commonColumnFlex normalMarginLeft' style={{
-                  justifyContent: 'flex-end'
-                }}
-                >
-                  <Text className='redText mediumText'>¥{controlShow === 1 ? proDetail.packings.skiprice : buyGroup ? proDetail.skugrp.gprice : proDetail.price}</Text>
-                  <HeightView />
-                  <Text className='slightlySmallText grayText'>库存{proDetail.stock}件{controlShow === 1 && <Text className='slightlySmallText grayText smallMarginLeft'>(限购{proDetail.packings.maxcount}件)</Text>}</Text>
-                </View>
+              >商品详情</Text>
+              {/*售后*/}
+              <View className='commonColumnFlex flexCenter normalMarginTop normalMarginBottom normalPadding' style={{
+                justifyContent: 'center',
+                backgroundColor: 'white'
+              }}
+              >
+                <import src='../../../../components/wxParse/wxParse.wxml' />
+                <template is='wxParse' data='{{wxParseData:article.nodes}}' />
+                <template is='wxParse' data='{{wxParseData:serve.nodes}}' />
               </View>
-              <CustomIcon name='close' size={15} color='gray' onClick={() => setShowFloat(false)} />
             </View>
-            <View className='commonRowFlex normalMargin flexCenter' style={{
-              justifyContent: 'space-between'
-            }}
-            >
-              <Text>数量</Text>
-              {proDetail.packings ? (
-                <AtInputNumber type='number' min={1} max={proDetail.packings.maxcount} value={buyNum} onChange={setBuyNum} />
-              ) : (
-                <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
-              )}
-            </View>
-            <View className='commonRowFlex gradientTheme flexCenter normalPadding'
-                  onClick={() => toOrder(controlShow === 1 ? 1 : buyGroup ? 2 : 0)}
-                  style={{
-                    justifyContent: 'center',
-                    position: 'fixed',
-                    width: '100%',
-                    bottom: 0,
-                    zIndex: 999
+            <HeightView high='large' />
+            <HeightView high='large' />
+            {/*底部按钮*/}
+            <View className='bottomGroup commonRowFlex'>
+              <Button plain
+                      className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginLeft normalMarginRight'
+                      openType='contact'
+                      style={{
+                        paddingLeft: 0,
+                        paddingRight: 0,
+                        lineHeight: 'initial',
+                        border: 'none',
+                        fontSize: 'inherit'
+                      }}
+              >
+                <CustomIcon name='customerService' size={20} color='gray' />
+                <Text className='slightlySmallText grayText'>客服</Text>
+              </Button>
+              <View onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})} className='commonColumnFlex smallMarginTop smallMarginBottom normalMarginRight'>
+                <CustomIcon onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})} name='shop' size={20} color='gray' />
+                <Text className='slightlySmallText grayText'>购物车</Text>
+              </View>
+              <View className='commonRowFlex' style={{
+                flex: 1
+              }}
+              >
+                {controlShow === 0 && (<View onClick={() => addToCart(proDetail.id)} className='gradientYellow commonRowFlex flexCenter' style={{
+                    flex: 1,
+                    justifyContent: 'center'
                   }}
-            >
-              <Text className='whiteText mediumText'>确认</Text>
+                >
+                    <Text className='whiteText slightlySmallText'>加入购物车</Text>
+                  </View>
+                )}
+                {controlShow === 2 && (
+                  <View onClick={() => chooseCount()} className='gradientYellow commonRowFlex flexCenter' style={{
+                    flex: 1,
+                    justifyContent: 'center'
+                  }}
+                  >
+                    <Text className='whiteText slightlySmallText'>我要开团</Text>
+                  </View>
+                )}
+                {controlShow === 0 && (
+                  <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
+                    flex: 1,
+                    justifyContent: 'center'
+                  }}
+                  >
+                    <Text className='whiteText slightlySmallText'>立即购买</Text>
+                  </View>
+                )}
+                {controlShow === 1 && (
+                  <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
+                    flex: 1,
+                    justifyContent: 'center'
+                  }}
+                  >
+                    <Text className='whiteText slightlySmallText'>立即购买</Text>
+                  </View>
+                )}
+                {controlShow === 2 && (
+                  <View onClick={() => {
+                    setShowFloat(true)
+                    setBuyGroup(false)
+                  }} className='gradientTheme commonRowFlex flexCenter' style={{
+                    flex: 1,
+                    justifyContent: 'center'
+                  }}
+                  >
+                    <Text className='whiteText slightlySmallText'>直接购买</Text>
+                  </View>
+                )}
+              </View>
             </View>
-          </AtFloatLayout>
-        </View>
-      )}
+            <AtFloatLayout isOpened={showFloat}
+                           onClose={() => setShowFloat(false)}
+            >
+              <View className='commonRowFlex normalMargin' style={{
+                justifyContent: 'space-between'
+              }}
+              >
+                <View className='commonRowFlex'>
+                  <AtAvatar size='large' image={proDetail.imgurl} />
+                  <View className='commonColumnFlex normalMarginLeft' style={{
+                    justifyContent: 'flex-end'
+                  }}
+                  >
+                    <Text className='redText mediumText'>¥{controlShow === 1 ? proDetail.packings.skiprice : buyGroup ? proDetail.skugrp.gprice : proDetail.price}</Text>
+                    <HeightView />
+                    <Text className='slightlySmallText grayText'>库存{proDetail.stock}件{controlShow === 1 && <Text className='slightlySmallText grayText smallMarginLeft'>(限购{proDetail.packings.maxcount}件)</Text>}</Text>
+                  </View>
+                </View>
+                <CustomIcon name='close' size={15} color='gray' onClick={() => setShowFloat(false)} />
+              </View>
+              <View className='commonRowFlex normalMargin flexCenter' style={{
+                justifyContent: 'space-between'
+              }}
+              >
+                <Text>数量</Text>
+                {proDetail.packings ? (
+                  <AtInputNumber type='number' min={1} max={proDetail.packings.maxcount} value={buyNum} onChange={setBuyNum} />
+                ) : (
+                  <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
+                )}
+              </View>
+              <View className='commonRowFlex gradientTheme flexCenter normalPadding'
+                    onClick={() => toOrder(controlShow === 1 ? 1 : buyGroup ? 2 : 0)}
+                    style={{
+                      justifyContent: 'center',
+                      position: 'fixed',
+                      width: '100%',
+                      bottom: 0,
+                      zIndex: 999
+                    }}
+              >
+                <Text className='whiteText mediumText'>确认</Text>
+              </View>
+            </AtFloatLayout>
+          </View>
+        )}
+      </ScrollView>
     </View>
   )
 }

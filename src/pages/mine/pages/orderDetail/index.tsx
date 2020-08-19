@@ -372,7 +372,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>配送方式</Text>
-              <Text className='mediumText'>{orderDetail.deliverymode === 0 ? '物流配送' : '自提'}</Text>
+              <Text className='mediumText'>{orderDetail.transportMode === 0 ? '物流配送' : '自提'}</Text>
             </View>
           </View>
           <HeightView />

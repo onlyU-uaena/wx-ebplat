@@ -25,7 +25,7 @@ class Commodity {
     getGroupHome: '/api/app/act/indexgroup',
     getGroupList: '/api/app/act/groupprolist',
     getSearchKeys: '/api/app/pro/getsearchkeys',
-    getKeys: '/api/app/pro/getprodcmt',
+    getBrandList: '/api/app/pro/getbrands',
     //积分商品
     getPointItem: '/api/app/pointspro/getpagelist'
   }
@@ -57,10 +57,10 @@ class Commodity {
     return await httpRequest(this.urls.productDetail, data, false)
   }
 
-  public async getKeys () {
+  public async getBrandList () {
     const data = {
     }
-    return await httpRequest(this.urls.getKeys, data, false)
+    return await httpRequest(this.urls.getBrandList, data, false)
   }
 
   public async getSearchKeys () {
@@ -210,13 +210,14 @@ class Commodity {
     return await httpRequest(this.urls.getSkuList, data, false)
   }
 
-  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
-  public async search (field: number, shopid: number, sort: number, keys: string, index: number, size: number) {
+  // @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
+  public async search (field: number, shopid: number, sort: number, keys: string, brand: number | string, index: number, size: number) {
     const data = {
       shopid,
       field,
       sort,
       keys,
+      brand,
       index,
       size
     }

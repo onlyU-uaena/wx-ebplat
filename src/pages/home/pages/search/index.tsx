@@ -39,7 +39,7 @@ const Search: Taro.FC<Props> = () => {
   })
 
   const historySearch = async (value) => {
-    const {code, data} = await commodity.search(0, shopState.shopData.shopid, 1, value, 1, 10000)
+    const {code, data} = await commodity.search(0, shopState.shopData.shopid, 1, value, '',  1, 10000)
     if (code === 0)
       navTo('home', 'searchResult', {data, value})
   }

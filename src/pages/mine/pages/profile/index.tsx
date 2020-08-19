@@ -58,11 +58,11 @@ const Profile: Taro.FC<Props> = () => {
   }
 
   const confirmChange = () => {
-    if (!modalOnChange)
-      return Taro.showToast({
-        title: '请勿提交空值',
-        icon: 'none'
-      })
+    // if (!modalOnChange)
+    //   return Taro.showToast({
+    //     title: '请勿提交空值',
+    //     icon: 'none'
+    //   })
     modalOnConfirm(modalOnChange)
     setModalOpen(false)
   }

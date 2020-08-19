@@ -101,9 +101,22 @@ const MyMessage: Taro.FC<Props> = () => {
           <View className='normalMarginBottom commonRowFlex flexCenter'
                 key={item.id}
                 style={{
-                  backgroundColor: 'white'
+                  backgroundColor: 'white',
+                  position: 'relative'
                 }}
           >
+            {item.status && (
+              <View style={{
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                width: '10px',
+                height: '10px',
+                borderRadius: '10px',
+                backgroundColor: colors.themeColor
+              }}
+              />
+            )}
             {modifyMode && (
               <AtCheckbox onChange={(e) => toggleCheck(e)}
                           options={[{
@@ -113,33 +126,17 @@ const MyMessage: Taro.FC<Props> = () => {
                           selectedList={selectList}
               />
             )}
-            {item.status ? (
-              <AtBadge dot>
-                <AtListItem
-                  title={item.title}
-                  note={LimitStr(item.content, 10)}
-                  extraText={item.sendtime}
-                  onClick={() => navTo('mine', 'messageDetail', {id: item.id})}
-                  iconInfo={{
-                    size: 25,
-                    color: colors.themeColor,
-                    value: 'message',
-                  }}
-                />
-              </AtBadge>
-            ) : (
-              <AtListItem
-                title={item.title}
-                note={LimitStr(item.content, 10)}
-                onClick={() => navTo('mine', 'messageDetail', {id: item.id})}
-                extraText={item.sendtime}
-                iconInfo={{
-                  size: 25,
-                  color: colors.themeColor,
-                  value: 'message',
-                }}
-              />
-            )}
+            <AtListItem
+              title={item.title}
+              note={LimitStr(item.content, 10)}
+              onClick={() => navTo('mine', 'messageDetail', {id: item.id})}
+              extraText={item.sendtime}
+              iconInfo={{
+                size: 25,
+                color: colors.themeColor,
+                value: 'message',
+              }}
+            />
           </View>
         )) : (
           <EmptyPage title='暂无消息' />

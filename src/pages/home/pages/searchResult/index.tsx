@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useReachBottom, useRouter } from '@tarojs/ta
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtTabs, AtTabsPane } from 'taro-ui'
+import { AtTabs, AtDrawer, AtTag } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import CusSearchBar from '../../../../components/CusSearchBar'
 import CustomIcon from '../../../../components/CustomIcon'
@@ -36,6 +36,10 @@ const SearchResult: Taro.FC<Props> = () => {
   const [currentTab, setCurrentTab] = useState<number>(0)
   const [searchStr, setSearchStr] = useState('')
   const [sort, setSort] = useState<boolean>(true)
+  const [showDrawer, setShowDrawer] = useState<boolean>(false)
+  const [brandList, setBrandList] = useState([])
+  const [brand, setBrand] = useState<number>()
+  const [firstIn, setFirstIn] = useState<boolean>(false)
 
   useReachBottom(() => {
     if (freshList)
@@ -51,11 +55,25 @@ const SearchResult: Taro.FC<Props> = () => {
       searchBar.search(sort ? 2 : 1, 2)
       setSort(!sort)
     } else if (index === 3) {
-
+      setShowDrawer(true)
     }
   }
 
+  const getBrandList = async () => {
+    const {data} = await commodity.getBrandList()
+    setBrandList(data)
+  }
+
   useEffect(() => {
+    if (!firstIn)
+      setFirstIn(true)
+    else {
+      searchBar.search(1, 0, brand)
+    }
+  }, [brand])
+
+  useEffect(() => {
+    getBrandList()
     console.log(JSON.parse(router.params.props).value)
     setSearchStr(JSON.parse(router.params.props).value)
     setSearchRes(JSON.parse(router.params.props).data)
@@ -199,6 +217,28 @@ const SearchResult: Taro.FC<Props> = () => {
           </View>
         </View>
       )}
+      <AtDrawer
+        show={showDrawer}
+        right
+        mask
+        onClose={() => setShowDrawer(false)}
+      >
+        <View className='normalMargin' style={{
+          marginTop: `${safeTop + 40}px`
+        }}
+        >
+          {brandList.map(item => (
+            <AtTag customStyle={{
+              marginRight: '4px',
+              marginTop: '4px'
+            }}
+                   key={item.id}
+                   active={brand === item.id}
+                   onClick={() => setBrand(brand === item.id ? '' : item.id)}
+            >{item.name}</AtTag>
+          ))}
+        </View>
+      </AtDrawer>
     </View>
   )
 }
