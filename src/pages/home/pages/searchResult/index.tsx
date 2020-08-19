@@ -102,6 +102,7 @@ const SearchResult: Taro.FC<Props> = () => {
                       onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})}
                       color='gray'
                       size={25}
+                      dotNumber={shopState.cartNum}
           />
         </View>
       </View>

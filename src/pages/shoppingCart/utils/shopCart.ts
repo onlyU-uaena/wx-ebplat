@@ -5,16 +5,20 @@ import store from '@redux/store'
 import { setCartNum } from '@redux/actions'
 
 export const setCartBadge = async (shopid) => {
-  if (!shopid) {
+  const state = store.getState()
+  if (!shopid && !state.shopState.shopData.shopid) {
     return
   }
-  const state = store.getState()
   const {data} = await shopCart.getCart(state.shopState.shopData.shopid || shopid)
   if (data.shops.length) {
-    store.dispatch(setCartNum(data.shops[0].spuscd.length))
+    let cartNum = 0
+    data.shops[0].spuscd.map(item => {
+      cartNum += item.count
+    })
+    store.dispatch(setCartNum(cartNum))
     Taro.setTabBarBadge({
       index: 2,
-      text: `${data.shops[0].spuscd.length}`
+      text: `${cartNum}`
     })
   } else {
     store.dispatch(setCartNum(0))

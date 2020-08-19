@@ -33,6 +33,7 @@ const ShoppingCart: Taro.FC<Props> = () => {
 
   const getCart = async () => {
     const {data} = await shopCart.getCart(shopState.shopData.shopid)
+    setCartBadge(shopState.shopData.shopid)
     setCartList(data)
   }
 
@@ -124,7 +125,6 @@ const ShoppingCart: Taro.FC<Props> = () => {
   useDidShow(() => {
     if (authState.loginStatus) {
       getCart()
-      setCartBadge(shopState.shopData.shopid)
     }
   })
 

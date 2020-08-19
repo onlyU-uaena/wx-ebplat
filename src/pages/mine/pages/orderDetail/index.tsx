@@ -499,6 +499,9 @@ const OrderDetail: Taro.FC<Props> = () => {
                     }}
               >
                 <AtButton onClick={() => statusToTitle[orderDetail.status].button[0].func(orderDetail)} size='small'>{statusToTitle[orderDetail.status].button[0].title}</AtButton>
+                {orderDetail.status === 13 && (
+                  <AtButton openType='contact' type='primary' customStyle={{marginLeft: '8px'}} size='small'>联系客服</AtButton>
+                )}
               </View>
             )}
           </View>

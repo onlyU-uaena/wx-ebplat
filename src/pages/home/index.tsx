@@ -114,11 +114,17 @@ const Home: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
-    if (showIndex > 4) {
+    if (showIndex > 3) {
       setShowPage(true)
       showIndex = 0
     }
   }, [showIndex])
+
+  useEffect(() => {
+    if (shopState.shopData && authState.loginStatus) {
+      getMessageCount()
+    }
+  }, [authState.loginStatus, shopState.shopData])
 
   const getAdv = async () => {
     const {data} = await commodity.getAdv(0)
@@ -137,14 +143,13 @@ const Home: Taro.FC<Props> = () => {
     const time = getCount(spikeRes.data.endtime, spikeRes.data.servicetime)
     setCountDown(time)
   }
-  const getMessageCount = async (shopRes) => {
+  const getMessageCount = async (shopRes?) => {
     if (authState.loginStatus) {
       const messageRes = await user.getMessageCount(1, 0)
       if (messageRes.data !== 0)
         dispatch(setMessage())
       setCartBadge(shopState.shopData.shopid || shopRes.data.shopid)
     }
-    showIndex += 1
   }
   const getGroupHome = async (shopRes) => {
     const groupRes = await commodity.getGroupHome(shopState.shopData.shopid || shopRes.data.shopid)
