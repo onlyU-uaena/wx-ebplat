@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useRouter } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Image, Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtAvatar, AtButton, AtIcon, AtTag } from 'taro-ui'
+import { AtAvatar, AtButton, AtCountdown, AtIcon, AtTag } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import HeightView from '../../../../components/HeightView'
 import colors from '../../../../common/styles/color'
@@ -10,6 +10,7 @@ import order from '../../utils/order'
 import { navTo } from '@utils/route'
 import LimitStr from '@utils/stringLimit'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
+import { getCount } from '../../../home/utils/count'
 
 interface Props {
 
@@ -27,6 +28,7 @@ const GroupDetail: Taro.FC<Props> = () => {
   const router = useRouter()
   const [detail, setDetail] = useState()
   const [intoOuter, setMode] = useState(false)
+  const [countDown, setCountDown] = useState()
 
   useEffect(() => {
     const ugnum = JSON.parse(router.params.props).ugnum
@@ -72,6 +74,8 @@ const GroupDetail: Taro.FC<Props> = () => {
       setMode(false)
     else
       setMode(true)
+    const time = getCount(data.endtime, data.paytime)
+    setCountDown(time)
   }
 
   return (
@@ -113,14 +117,31 @@ const GroupDetail: Taro.FC<Props> = () => {
                     backgroundColor: 'white'
                   }}
             >
-              {detail.status && (
-                <View>
-                  {detail.status === 1 && (<AtIcon value='check-circle' size='25' color={colors.green} />)}
-                  {detail.status === 0 && (<AtIcon value='clock' size='25' color={colors.themeRed} />)}
-                  {detail.status === 2 && (<AtIcon value='close-circle' size='25' color={colors.themeColor} />)}
-                  <Text className='normalMarginLeft'>{listStatus[detail.status]}</Text>
+              <View>
+                {detail.status === 1 && (<AtIcon value='check-circle' size='25' color={colors.green} />)}
+                {detail.status === 0 && (<AtIcon value='clock' size='25' color={colors.themeRed} />)}
+                {detail.status === 2 && (<AtIcon value='close-circle' size='25' color={colors.themeColor} />)}
+                <Text className='normalMarginLeft'>{listStatus[detail.status]}</Text>
+                <HeightView />
+                <View className='commonColumnFlex flexCenter'>
+                  <Text className='redText slightlySmallText'>距结束</Text>
+                  <HeightView />
+                  {countDown && (
+                    <AtCountdown
+                      isShowDay
+                      format={{
+                        day: '天',
+                        hours: ':',
+                        minutes: ':',
+                        seconds: '' }}
+                      day={countDown.day}
+                      hours={countDown.hour}
+                      minutes={countDown.min}
+                      seconds={countDown.sec}
+                    />
+                  )}
                 </View>
-              )}
+              </View>
               <HeightView high='large' />
               <View className='commonRowFlex'
                     style={{
@@ -130,6 +151,7 @@ const GroupDetail: Taro.FC<Props> = () => {
               >
                 {detail.users.map(item => (
                   <View className='commonColumnFlex flexCenter'
+                        onClick={() => navTo('home', 'productDetails', {id: detail.proid})}
                         key={item.id}
                         style={{
                           position: 'relative',
@@ -143,7 +165,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                       bottom: '25px'
                     }}
                     >
-                      {((item.id === authState.userData.id) && (item.islaunch)) && (
+                      {((item.id === authState.userData.id)) && (
                         <AtTag size='small'
                                active
                                type='primary'
@@ -202,7 +224,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                   </View>
                 )}
                 <AtButton circle
-                          onClick={() => navTo('mine', 'myOrder', {tab: -1})}
+                          onClick={() => navTo('mine', 'orderDetail', {id: detail.orderid})}
                           customStyle={{
                             borderColor: colors.themeRed,
                             color: colors.themeRed

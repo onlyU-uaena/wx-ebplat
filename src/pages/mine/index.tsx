@@ -75,7 +75,7 @@ const Mine: Taro.FC<Props> = () => {
           />
         </View>
         <View className='avatar'>
-          <AtAvatar size='large' circle image={authState.userData.imgurl} />
+          <AtAvatar size='large' circle image={authState.userData.imgurl || 'https://pic3.zhimg.com/80/v2-6afa72220d29f045c15217aa6b275808_1440w.jpg?source=1940ef5c'} />
         </View>
         <View className='commonColumnFlex normalMarginLeft'
               style={{

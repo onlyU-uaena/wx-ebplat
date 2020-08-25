@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, useRouter, useScope } from '@tarojs/taro'
+import Taro, { useState, useEffect, useRouter, useScope, useReachBottom } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Image, Text, View, RichText, Button, ScrollView } from '@tarojs/components'
 import './index.scss'
@@ -18,6 +18,7 @@ import shopCart from '../../../shoppingCart/utils/shopCart'
 import { selectShopState } from '@redux/reducers/selector'
 import LimitStr from '@utils/stringLimit'
 import { getCount } from '../../utils/count'
+import FreshList, { FreshListInterface } from '../../../../components/FreshList'
 
 interface Props {
 
@@ -67,6 +68,7 @@ const ProductDetails: Taro.FC<Props> = () => {
   const [currentTab, setCurrentTab] = useState<string>('product')
   const [anchorTab, setAnchorTab] = useState<string>('product')
   const [proDetail, setProDetail] = useState({})
+  const [freshList, setFreshList] = useState<FreshListInterface>()
   const [favorites, setFavorites] = useState<boolean>(false)
   const [buyNum, setBuyNum] = useState<number>(1)
   const [anchorArray, setAnchorArray] = useState([])
@@ -91,6 +93,11 @@ const ProductDetails: Taro.FC<Props> = () => {
     if (data.packings) {
       const time = getCount(data.packings.skitime, data.packings.servicetime)
       setCountDown(time)
+    } else {
+      if (data.skugrp) {
+        const time = getCount(data.skugrp.endtime, data.skugrp.servicetime)
+        setCountDown(time)
+      }
     }
   }
 
@@ -169,19 +176,19 @@ const ProductDetails: Taro.FC<Props> = () => {
   }
 
   const handleScroll = (e) => {
-    const scrollTop = e.detail.scrollTop;
-    const scrollArr = anchorArray;
-    if (scrollTop >= scrollArr[scrollArr.length-1] - (windowHeight - safeTop + 80)) {
-      return
-    } else {
-      for(let i=0;i<scrollArr.length;i++){
-        if(scrollTop>=0&&scrollTop<scrollArr[0]){
+    const scrollTop = e.detail.scrollTop
+    const scrollArr = anchorArray
+    // if (scrollTop >= scrollArr[scrollArr.length - 1] - (windowHeight - safeTop + 80)) {
+    //   return
+    // } else {
+      for (let i = 0; i < scrollArr.length; i++) {
+        if (scrollTop >= 0 && scrollTop < scrollArr[0]){
           setAnchorTab('product')
-        }else if(scrollTop>=scrollArr[i-1]&&scrollTop<scrollArr[i]) {
-          setAnchorTab(anchor[i])
+        } else if (scrollTop >= scrollArr[i] && scrollTop < scrollArr[i + 1]) {
+          setAnchorTab(anchor[i + 1])
         }
       }
-    }
+    // }
   }
 
   const chooseTab = (index: string) => {
@@ -226,17 +233,19 @@ const ProductDetails: Taro.FC<Props> = () => {
       </View>
       <ScrollView style={{
                     marginTop: '40px',
-                    height: `${windowHeight - safeTop + 80}px`
+                    height: `${windowHeight - safeTop - 80}px`
                   }}
                   onScroll={handleScroll}
                   scrollIntoView={currentTab}
+                  onScrollToLower={() => freshList.nextPage()}
+                  lowerThreshold={0}
                   scrollY
       >
         {proDetail.id && (
           <View id='product'>
             <View className='anchorPoint'>
               {/*轮播图*/}
-              {proDetail && <SwiperImg swiperHeight='300px' list={proDetail.imgs} />}
+              {proDetail && <SwiperImg videoUrl={proDetail.videourl} swiperHeight='300px' list={proDetail.imgs} />}
               {/*拼团秒杀*/}
               {controlShow === 2 && (
                 <View className='commonRowFlex flexCenter gradientTheme radius'
@@ -260,7 +269,26 @@ const ProductDetails: Taro.FC<Props> = () => {
                     </View>
                     <Text className='smallText whiteText throughLineText'>¥{proDetail.price}</Text>
                   </View>
-                  <Text className='mediumText whiteText'>已拼{proDetail.salescount}份</Text>
+                  <View className='commonRowFlex flexCenter'>
+                    <View className='commonColumnFlex flexCenter'>
+                      <Text className='whiteText slightlySmallText'>距结束仅剩</Text>
+                      {countDown && (
+                        <AtCountdown
+                          isShowDay
+                          format={{
+                            day: '天',
+                            hours: ':',
+                            minutes: ':',
+                            seconds: '' }}
+                          day={countDown.day}
+                          hours={countDown.hour}
+                          minutes={countDown.min}
+                          seconds={countDown.sec}
+                        />
+                      )}
+                    </View>
+                    <Text className='mediumText smallMarginLeft whiteText'>已拼{proDetail.salescount}份</Text>
+                  </View>
                 </View>
               )}
               {controlShow === 1 && (
@@ -282,18 +310,20 @@ const ProductDetails: Taro.FC<Props> = () => {
                   </View>
                   <View className='commonColumnFlex flexCenter'>
                     <Text className='whiteText slightlySmallText'>距结束仅剩</Text>
-                    <AtCountdown
-                      isShowDay
-                      format={{
-                        day: '天',
-                        hours: ':',
-                        minutes: ':',
-                        seconds: '' }}
-                      day={countDown.day}
-                      hours={countDown.hour}
-                      minutes={countDown.min}
-                      seconds={countDown.sec}
-                    />
+                    {countDown && (
+                      <AtCountdown
+                        isShowDay
+                        format={{
+                          day: '天',
+                          hours: ':',
+                          minutes: ':',
+                          seconds: '' }}
+                        day={countDown.day}
+                        hours={countDown.hour}
+                        minutes={countDown.min}
+                        seconds={countDown.sec}
+                      />
+                    )}
                   </View>
                 </View>
               )}
@@ -370,40 +400,50 @@ const ProductDetails: Taro.FC<Props> = () => {
                 backgroundColor: 'white'
               }}
               >
-                {proDetail.cmts.map((item: Comment, index) => (
-                  <View key={index} className='normalPadding'>
-                    <View className='commonRowFlex flexCenter' style={{
-                      justifyContent: 'space-between'
-                    }}
-                    >
-                      <View className='commonRowFlex flexCenter'>
-                        <AtAvatar image={item.imgUrl} circle />
-                        <View className='normalMarginLeft commonColumnFlex'>
-                          <Text>{item.username}</Text>
-                          <Text className='slightlySmallText grayText'>{item.createtime}</Text>
-                        </View>
-                      </View>
-                      <AtRate value={item.star} />
-                    </View>
-                    <View style={{
-                      marginLeft: '120rpx'
-                    }}
-                    >
-                      <Text className='mediumText grayText'>
-                        {item.content}
-                      </Text>
-                      {item.showImgList.length && <View className='commonRowFlex normalMarginTop' style={{
+                {proDetail.cmts.map((item: Comment, index) => {
+                  if (index < 1) return (
+                    <View key={index} className='normalPadding'>
+                      <View className='commonRowFlex flexCenter' style={{
                         justifyContent: 'space-between'
                       }}
                       >
-                        <Image src={item.showImgList[0] && item.showImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                        <Image src={item.showImgList[1] && item.showImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                        <Image src={item.showImgList[2] && item.showImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
-                      </View>}
+                        <View className='commonRowFlex flexCenter'>
+                          <AtAvatar image={item.imgUrl} circle />
+                          <View className='normalMarginLeft commonColumnFlex'>
+                            <Text>{item.username}</Text>
+                            <Text className='slightlySmallText grayText'>{item.createtime}</Text>
+                          </View>
+                        </View>
+                        <AtRate value={item.star} />
+                      </View>
+                      <View style={{
+                        marginLeft: '120rpx'
+                      }}
+                      >
+                        <Text className='mediumText grayText'>
+                          {item.content}
+                        </Text>
+                        {item.showImgList.length && <View className='commonRowFlex normalMarginTop' style={{
+                          justifyContent: 'space-between'
+                        }}
+                        >
+                          <Image src={item.showImgList[0] && item.showImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                          <Image src={item.showImgList[1] && item.showImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                          <Image src={item.showImgList[2] && item.showImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                        </View>}
+                      </View>
                     </View>
-                  </View>
-                ))}
+                  )
+                })}
               </View>
+              {proDetail.cmts.length && (
+                <AtButton size='small'
+                          type='primary'
+                          onClick={() => navTo('home', 'allComment', {sid: proDetail.id})}
+                >
+                  查看更多评价
+                </AtButton>
+              )}
             </View>
             <View className='anchorPoint'>
               {/*商品图*/}
@@ -423,8 +463,24 @@ const ProductDetails: Taro.FC<Props> = () => {
                 <template is='wxParse' data='{{wxParseData:serve.nodes}}' />
               </View>
             </View>
-            <HeightView high='large' />
-            <HeightView high='large' />
+            <View className='anchorPoint'>
+              <Text id='share' className='normalMarginTop normalMarginBottom' style={{
+                display: 'block',
+                fontSize: '20px',
+                textAlign: 'center'
+              }}
+              >
+                为您推荐
+              </Text>
+              <View onClick={() => console.log(1)} className='normalMarginLeft normalMarginRight'>
+                <FreshList onRef={setFreshList} dispatchListFunc={async (page: number, size: number) => {
+                  return await commodity.getTopicSku('', Number(shopState.shopData.shopid), page, size)
+                }}
+                />
+              </View>
+              <HeightView high='large' />
+              <HeightView high='large' />
+            </View>
             {/*底部按钮*/}
             <View className='bottomGroup commonRowFlex'>
               <Button plain

@@ -34,22 +34,24 @@ const MyGroup: Taro.FC<Props> = () => {
     setSafeTop(safeArea.top)
   }, [])
 
-  const getList = async (defaultPage = 1) => {
+  const getList = async (defaultPage = 1, reset: boolean) => {
     const {data} = await order.getGroupList(defaultPage, 14, currentTab)
-    if (data.length) {
+    if (reset) {
+      setGroupList(data)
+      setPage(page + 1)
+    } else if (data.length) {
       setGroupList(groupList.concat(data))
       setPage(page + 1)
     }
   }
 
   useReachBottom(() => {
-    getList(page)
+    getList(page, false)
   })
 
   useEffect(() => {
     setPage(1)
-    getList(1)
-    setGroupList([])
+    getList(1, true)
   }, [currentTab])
 
   return (
@@ -115,17 +117,19 @@ const MyGroup: Taro.FC<Props> = () => {
                     <Text className='smallText throughLineText grayText smallMarginLeft'>¥ {item.oldprice}</Text>
                   </View>
                 </View>
-                <View className='commonColumnFlex radius' style={{
-                  width: '80px',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-end'
-                }}
+                <View className='commonColumnFlex radius'
+                      onClick={e => e.stopPropagation()}
+                      style={{
+                        width: '80px',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-end'
+                      }}
                 >
                   <Text className='redText mediumText'>
                     {listStatus[item.status]}
                   </Text>
                   {item.status === 0 ? null : (
-                    <AtButton type='primary' size='small'>再次拼团</AtButton>
+                    <AtButton type='primary' onClick={() => navTo('home', 'groupHome')} size='small'>再次拼团</AtButton>
                   )}
                 </View>
               </View>

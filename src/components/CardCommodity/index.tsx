@@ -109,13 +109,13 @@ const CardCommodity: Taro.FC<Props> = (props) => {
                    }}
             />
             <Text className='mediumText smallMarginTop'>{LimitStr(title, 18)}</Text>
-            <View className='commonRowFlex smallMarginTop normalMarginBottom'>
-              <View className='commodityLabel gradientTheme'>
-                <Text className='smallText whiteText'>
-                  明日达
-                </Text>
-              </View>
-            </View>
+            {/*<View className='commonRowFlex smallMarginTop normalMarginBottom'>*/}
+            {/*  <View className='commodityLabel gradientTheme'>*/}
+            {/*    <Text className='smallText whiteText'>*/}
+            {/*      明日达*/}
+            {/*    </Text>*/}
+            {/*  </View>*/}
+            {/*</View>*/}
             <View className='commonRowFlex'
                   style={{
                     justifyContent: 'space-between'

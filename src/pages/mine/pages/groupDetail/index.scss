@@ -7,3 +7,16 @@
   height: 100Px;
   margin-right: 8Px;
 }
+
+.at-countdown__time-box {
+  background-color: $themeRed;
+  border-radius: 5px;
+}
+
+.at-countdown__separator {
+  color: $themeRed;
+}
+
+.at-countdown__time {
+  color: white;
+}

@@ -15,6 +15,7 @@ class Order {
     payOrder: '/api/app/pay/getwxconfig',
     toRefund: '/api/app/order/afterreturn',
     toComment: '/api/app/order/addordercomment',
+    getCommentList: '/api/app/pro/getprodcmt',
     // 团购
     addGroupOrder: '/api/app/grp/applypro',
     joinGroupOrder: '/api/app/grp/addorder',
@@ -46,6 +47,16 @@ class Order {
       pagesize
     }
     return await httpRequest(this.urls.getGroupList, data, true, true, true, 'GET', () => {}, 2)
+  }
+
+  public async getCommentList (page: number, size: number, star: number, sid: number) {
+    const data = {
+      star,
+      sid,
+      page,
+      size
+    }
+    return await httpRequest(this.urls.getCommentList, data, true, true, true, 'GET', () => {}, 2)
   }
 
   public async getFreight (shopid: number, procount: number, proprice: number) {

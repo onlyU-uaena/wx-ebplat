@@ -7,6 +7,8 @@ import {
   SET_CART_NUM,
   SET_SHOP_DATA
 } from '../constants'
+import store from '@redux/store'
+import Taro from '@tarojs/taro'
 
 export const loginIn = (userLogin: object) => {
   return {
@@ -16,6 +18,13 @@ export const loginIn = (userLogin: object) => {
 }
 
 export const loginOut = () => {
+  store.dispatch(setCartNum(0))
+  store.dispatch(setNoMessage())
+  setTimeout(() => {
+    Taro.removeTabBarBadge({
+      index: 2
+    })
+  }, 1500)
   return {
     type: LOGIN_OUT
   }

@@ -51,7 +51,12 @@ const Search: Taro.FC<Props> = () => {
       {/*热门搜索*/}
       {hotKeys.length && (<View className='normalMargin'>
         <Text className='grayText'>热门搜索</Text>
-        <View className='normalMarginTop'>
+        <View className='normalMarginTop'
+              style={{
+                height: '136rpx',
+                overflow: 'hidden'
+              }}
+        >
           {hotKeys.map(item => (
             <AtTag customStyle={{
               marginRight: '4px',

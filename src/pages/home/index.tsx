@@ -384,30 +384,59 @@ const Home: Taro.FC<Props> = () => {
                         marginTop: '8px'
                       }}
                 >
-                  {spikeList.pros.map((item, index) => (
-                    <View className='commonColumnFlex flexCenter'
-                          key={index}
-                          style={{
-                            justifyContent: 'center',
-                            flex: 1,
-                          }}
-                    >
-                      <AtAvatar image={item.imgurl} />
-                      <View className='commonRowFlex flexCenter'>
-                        <Text className='slightlySmallText'>
-                          ¥ {item.activityprice}
-                        </Text>
-                        <Text className='smallText grayText'
+                  {spikeList.pros.map((item, spikeIndex) => {
+                    if (!groupList.length && (spikeIndex < 4)) {
+                      return (
+                        <View className='commonColumnFlex flexCenter'
+                              key={spikeIndex}
                               style={{
-                                marginLeft: '4px',
-                                textDecoration: 'line-through'
+                                justifyContent: 'center',
+                                width: '100rpx'
                               }}
                         >
-                          ¥ {item.price}
-                        </Text>
-                      </View>
-                    </View>
-                  ))}
+                          <AtAvatar image={item.imgurl} />
+                          <View className='commonRowFlex flexCenter'>
+                            <Text className='slightlySmallText'>
+                              ¥ {item.activityprice}
+                            </Text>
+                            <Text className='smallText grayText'
+                                  style={{
+                                    marginLeft: '4px',
+                                    textDecoration: 'line-through'
+                                  }}
+                            >
+                              ¥ {item.price}
+                            </Text>
+                          </View>
+                        </View>
+                      )
+                    } else if (groupList.length && (spikeIndex < 2)) {
+                      return (
+                        <View className='commonColumnFlex flexCenter'
+                              key={spikeIndex}
+                              style={{
+                                justifyContent: 'center',
+                                width: '100rpx'
+                              }}
+                        >
+                          <AtAvatar image={item.imgurl} />
+                          <View className='commonRowFlex flexCenter'>
+                            <Text className='slightlySmallText'>
+                              ¥ {item.activityprice}
+                            </Text>
+                            <Text className='smallText grayText'
+                                  style={{
+                                    marginLeft: '4px',
+                                    textDecoration: 'line-through'
+                                  }}
+                            >
+                              ¥ {item.price}
+                            </Text>
+                          </View>
+                        </View>
+                      )
+                    }
+                  })}
                 </View>
               </View>
             )}
@@ -436,36 +465,61 @@ const Home: Taro.FC<Props> = () => {
                         marginTop: '8px'
                       }}
                 >
-                  {groupList.map((item, index) => (
-                    <View className='commonColumnFlex flexCenter'
-                          key={index}
-                          style={{
-                            justifyContent: 'center',
-                            flex: 1,
-                          }}
-                    >
-                      <AtAvatar image={item.imgurl} />
-                      <View className='commonRowFlex flexCenter'>
-                        <AtTag size='small' circle active>{`${item.tgcount}人团${item.activityprice}`}</AtTag>
-                      </View>
-                    </View>
-                  ))}
+                  {groupList.map((item, groupIndex) => {
+                    if (spikeList.pros.length && (groupIndex < 2)) {
+                      return (
+                        <View className='commonColumnFlex flexCenter'
+                              key={groupIndex}
+                              style={{
+                                justifyContent: 'center',
+                                flex: 1,
+                              }}
+                        >
+                          <AtAvatar image={item.imgurl} />
+                          <View className='commonRowFlex flexCenter'>
+                            <AtTag size='small' circle active>{`${item.tgcount}人团${item.activityprice}`}</AtTag>
+                          </View>
+                        </View>
+                      )
+                    } else if (!spikeList.pros.length && (groupIndex < 4)) {
+                      return (
+                        <View className='commonColumnFlex flexCenter'
+                              key={groupIndex}
+                              style={{
+                                justifyContent: 'center',
+                                flex: 1,
+                              }}
+                        >
+                          <AtAvatar image={item.imgurl} />
+                          <View className='commonRowFlex flexCenter'>
+                            <AtTag size='small' circle active>{`${item.tgcount}人团${item.activityprice}`}</AtTag>
+                          </View>
+                        </View>
+                      )
+                    }
+                  })}
                 </View>
               </View>
             )}
           </View>
           {/*热门活动*/}
-          <View className='normalMarginTop'
+          <View className='normalMarginTop commonRowFlex flexCenter'
                 style={{
-                  position: 'relative'
+                  position: 'relative',
+                  justifyContent: 'space-between'
                 }}
           >
-            <View className='titleWithColor' />
-            <Text className='boldText'
-                  style={{
-                    marginLeft: '16px'
-                  }}
-            >热销排行榜</Text>
+            <View>
+              <View className='titleWithColor' />
+              <Text className='boldText'
+                    style={{
+                      marginLeft: '16px'
+                    }}
+              >热销排行榜</Text>
+            </View>
+            <Text onClick={() => navTo('home', 'hotProduct')}
+                  className='slightlySmallText normalMarginRight'
+            >{`查看更多 >`}</Text>
           </View>
           <View className='radius normalMargin'
                 style={{
