@@ -34,9 +34,9 @@ const PaySuccess: Taro.FC<Props> = () => {
                 padding: '32px'
               }}
         >
-          <Text className='whiteText' style={{fontSize: '30px'}}>¥ {detail.actualpay.toFixed(2)}</Text>
+          <Text className='whiteText' style={{fontSize: '30px'}}>¥ {detail.actualPay.toFixed(2)}</Text>
           <HeightView />
-          <Text className='whiteText slightlySmallText'>获得{detail.actualpay.toFixed(0)}积分</Text>
+          <Text className='whiteText slightlySmallText'>获得{detail.actualPay.toFixed(0)}积分</Text>
           <HeightView high='large' />
           <View className='commonRowFlex flexCenter'
                 style={{

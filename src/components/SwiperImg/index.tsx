@@ -13,12 +13,22 @@ interface Props extends SwiperProps {
   imgWidth?: number
   swiperHeight?: string
   videoUrl?: string
+  networkType?: string
+  onChange?: (e) => void
+  onVideoPlay?: (e) => void
+  onRef?: (e) => void
 }
 
-const SwiperImg: Taro.FC<Props> = (props) => {
-  const { list, marginLeft, marginRight, act, circular, autoplay, imgWidth, swiperHeight, videoUrl } = props
 
-  const bannerJump = (item) => {
+class SwiperImg extends Taro.Component<Props, any> {
+
+  componentDidMount(){
+    if (this.props.onRef) {
+      this.props.onRef(this)
+    }
+  }
+
+  bannerJump = (item, act) => {
     if (item.imgurl) {
       if (item.type === 0) {
         navTo('home', 'webPage', {url: item.url})
@@ -30,42 +40,50 @@ const SwiperImg: Taro.FC<Props> = (props) => {
     }
   }
 
-  return (
-    <Swiper
-      indicatorDots
-      autoplay={autoplay}
-      circular={circular}
-      nextMargin={`${marginRight}px`}
-      previousMargin={`${marginLeft}px`}
-      style={{
-        height: swiperHeight
-      }}
-    >
-      {videoUrl && (
-        <SwiperItem>
-          <Video className='swiperImg'
-                 src={videoUrl}
-                 controls
-                 style={{
-                   width: '100%'
-                 }}
-          >
-          </Video>
-        </SwiperItem>
-      )}
-      {list && list.map((item, index) => (
-        <SwiperItem key={index} onClick={() => bannerJump(item)}>
-          <Image className='swiperImg'
-            src={item.imgurl || item}
-            style={{
-              width: imgWidth ? `${imgWidth}%` : '100%'
-            }}
-          >
-          </Image>
-        </SwiperItem>
-      ))}
-    </Swiper>
-  )
+  render () {
+    const { list, marginLeft, onVideoPlay, onChange, marginRight, networkType, act, circular, autoplay, imgWidth, swiperHeight, videoUrl } = this.props
+    return (
+      <Swiper
+        indicatorDots
+        autoplay={autoplay}
+        circular={circular}
+        onChange={onChange ? onChange : () => {}}
+        nextMargin={`${marginRight}px`}
+        previousMargin={`${marginLeft}px`}
+        style={{
+          height: swiperHeight
+        }}
+      >
+        {videoUrl && (
+          <SwiperItem>
+            <Video className='swiperImg'
+                   id='video'
+                   enableProgressGesture={false}
+                   src={videoUrl}
+                   onPlay={onVideoPlay ? onVideoPlay : () => {}}
+                   controls
+                   autoplay={networkType === 'wifi'}
+                   style={{
+                     width: '100%'
+                   }}
+            >
+            </Video>
+          </SwiperItem>
+        )}
+        {list && list.map((item, index) => (
+          <SwiperItem key={index} onClick={() => this.bannerJump(item, act)}>
+            <Image className='swiperImg'
+                   src={item.imgurl || item}
+                   style={{
+                     width: imgWidth ? `${imgWidth}%` : '100%'
+                   }}
+            >
+            </Image>
+          </SwiperItem>
+        ))}
+      </Swiper>
+    )
+  }
 }
 
 export default SwiperImg

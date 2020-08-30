@@ -159,6 +159,7 @@ const EvaluationOrder: Taro.FC<Props> = () => {
             <View className='normalMarginBottom smallMarginLeft smallMarginRight'>
               <AtImagePicker
                 files={comment[shopIndex].files}
+                count={9}
                 onChange={(e, type) => uploadFile(e, shopIndex, type)}
               />
             </View>
@@ -210,6 +211,8 @@ const EvaluationOrder: Taro.FC<Props> = () => {
         selectedList={checkedList}
         onChange={setCheckedList}
       />
+      <HeightView high='large' />
+      <HeightView high='large' />
       <View className='bottomGroup'>
         <AtButton full type='primary' onClick={() => confirmComment()}>确定</AtButton>
       </View>

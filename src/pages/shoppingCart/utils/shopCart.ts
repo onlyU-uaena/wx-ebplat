@@ -11,7 +11,7 @@ export const setCartBadge = async (shopid) => {
   if (!shopid && !state.shopState.shopData.shopid) {
     return
   }
-  const {data} = await shopCart.getCart(state.shopState.shopData.shopid || shopid)
+  const {data} = await shopCart.getCart(state.shopState.shopData.shopid || shopid, false)
   if (data.shops.length) {
     let cartNum = 0
     data.shops[0].spuscd.map(item => {
@@ -85,11 +85,11 @@ class ShopCart {
     return await httpRequest(this.urls.deleteItem, data, true, true, true, 'GET', setCartBadge)
   }
 
-  public async getCart (shopid) {
+  public async getCart (shopid, needLoading = true) {
     const data = {
       shopid
     }
-    return await httpRequest(this.urls.getCart, data)
+    return await httpRequest(this.urls.getCart, data, true, needLoading)
   }
 }
 

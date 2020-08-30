@@ -155,8 +155,8 @@ const Mine: Taro.FC<Props> = () => {
         }}
         >
           {firstIconList.map((item, index) => (
-            <View onClick={() => navTo('mine', 'myOrder', {tab: index})} className='commonColumnFlex flexCenter' style={{flex: 1}} key={index}>
-              <CustomIcon onClick={() => navTo('mine', 'myOrder', {tab: index})} name={item.iconName} size={25} color='rgb(234, 114 ,49)' />
+            <View onClick={() => navTo('mine', 'myOrder', {tab: index}, true)} className='commonColumnFlex flexCenter' style={{flex: 1}} key={index}>
+              <CustomIcon onClick={() => navTo('mine', 'myOrder', {tab: index}, true)} name={item.iconName} size={25} color='rgb(234, 114 ,49)' />
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>
           ))}
@@ -174,11 +174,11 @@ const Mine: Taro.FC<Props> = () => {
           {secondIconList.map((item, index) => (
             <View className='commonColumnFlex flexCenter'
                   style={{flex: 1}} key={index}
-                  onClick={() => navTo(item.nav.index, item.nav.name)}
+                  onClick={() => navTo(item.nav.index, item.nav.name, {}, true)}
             >
               <CustomIcon name={item.iconName}
                           size={25}
-                          onClick={() => navTo(item.nav.index, item.nav.name)}
+                          onClick={() => navTo(item.nav.index, item.nav.name, {}, true)}
                           color={item.color || 'rgb(234, 114 ,49)'}
               />
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
@@ -199,12 +199,12 @@ const Mine: Taro.FC<Props> = () => {
             <View className='commonColumnFlex flexCenter'
                   style={{flex: 1}}
                   key={index}
-                  onClick={() => navTo(item.nav.index, item.nav.name)}
+                  onClick={() => navTo(item.nav.index, item.nav.name, {}, true)}
             >
               <CustomIcon name={item.iconName}
                           size={25}
                           color={item.color || 'rgb(234, 114 ,49)'}
-                          onClick={() => navTo(item.nav.index, item.nav.name)}
+                          onClick={() => navTo(item.nav.index, item.nav.name, {}, true)}
               />
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>

@@ -11,6 +11,7 @@ import { navTo } from '@utils/route'
 import LimitStr from '@utils/stringLimit'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
 import { getCount } from '../../../home/utils/count'
+import useShareAppMessage = Taro.useShareAppMessage
 
 interface Props {
 
@@ -29,9 +30,12 @@ const GroupDetail: Taro.FC<Props> = () => {
   const [detail, setDetail] = useState()
   const [intoOuter, setMode] = useState(false)
   const [countDown, setCountDown] = useState()
+  const [helpMode, setHelpMode] = useState(true)
 
   useEffect(() => {
     const ugnum = JSON.parse(router.params.props).ugnum
+    const outer = JSON.parse(router.params.props).outer
+    setHelpMode(outer)
     getDetail(ugnum)
   }, [])
 
@@ -66,6 +70,19 @@ const GroupDetail: Taro.FC<Props> = () => {
     navTo('home', 'confirmOrder', data)
   }
 
+  useShareAppMessage(() => {
+    console.log(`/pages/mine/pages/groupDetail/index?props=${JSON.stringify({
+      outer: true,
+      ugnum: detail.ugnum
+    })}`)
+    return {
+      title: '好友助力拼团',
+      path: `/pages/mine/pages/groupDetail/index?props=${JSON.stringify({
+        outer: true,
+        ugnum: detail.ugnum
+      })}`
+    }
+  })
 
   const getDetail = async (gnum: number) => {
     const {data} = await order.myGroupDetail(gnum)
@@ -123,24 +140,26 @@ const GroupDetail: Taro.FC<Props> = () => {
                 {detail.status === 2 && (<AtIcon value='close-circle' size='25' color={colors.themeColor} />)}
                 <Text className='normalMarginLeft'>{listStatus[detail.status]}</Text>
                 <HeightView />
-                <View className='commonColumnFlex flexCenter'>
-                  <Text className='redText slightlySmallText'>距结束</Text>
-                  <HeightView />
-                  {countDown && (
-                    <AtCountdown
-                      isShowDay
-                      format={{
-                        day: '天',
-                        hours: ':',
-                        minutes: ':',
-                        seconds: '' }}
-                      day={countDown.day}
-                      hours={countDown.hour}
-                      minutes={countDown.min}
-                      seconds={countDown.sec}
-                    />
-                  )}
-                </View>
+                {detail.status === 0 && (
+                  <View className='commonColumnFlex flexCenter'>
+                    <Text className='redText slightlySmallText'>距结束</Text>
+                    <HeightView />
+                    {countDown && (
+                      <AtCountdown
+                        isShowDay
+                        format={{
+                          day: '天',
+                          hours: ':',
+                          minutes: ':',
+                          seconds: '' }}
+                        day={countDown.day}
+                        hours={countDown.hour}
+                        minutes={countDown.min}
+                        seconds={countDown.sec}
+                      />
+                    )}
+                  </View>
+                )}
               </View>
               <HeightView high='large' />
               <View className='commonRowFlex'
@@ -149,7 +168,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                       flexWrap: 'wrap'
                     }}
               >
-                {detail.users.map(item => (
+                {detail.users.map((item, index) => (
                   <View className='commonColumnFlex flexCenter'
                         onClick={() => navTo('home', 'productDetails', {id: detail.proid})}
                         key={item.id}
@@ -165,14 +184,14 @@ const GroupDetail: Taro.FC<Props> = () => {
                       bottom: '25px'
                     }}
                     >
-                      {((item.id === authState.userData.id)) && (
+                      {(index === 0) && (
                         <AtTag size='small'
                                active
                                type='primary'
                         >团长</AtTag>
                       )}
                     </View>
-                    <Text className='slightlySmallText'>{item.nickname || '好友'}</Text>
+                    <Text className='slightlySmallText'>{(item.id === authState.userData.id) ? '你' : '好友'}</Text>
                   </View>
                 ))}
               </View>
@@ -223,13 +242,13 @@ const GroupDetail: Taro.FC<Props> = () => {
                     <HeightView />
                   </View>
                 )}
-                <AtButton circle
-                          onClick={() => navTo('mine', 'orderDetail', {id: detail.orderid})}
-                          customStyle={{
-                            borderColor: colors.themeRed,
-                            color: colors.themeRed
-                          }}
-                >查看订单详情</AtButton>
+                {!helpMode && <AtButton circle
+                           onClick={() => navTo('mine', 'orderDetail', {id: detail.orderid})}
+                           customStyle={{
+                             borderColor: colors.themeRed,
+                             color: colors.themeRed
+                           }}
+                >查看订单详情</AtButton>}
               </View>
             </View>
           </View>

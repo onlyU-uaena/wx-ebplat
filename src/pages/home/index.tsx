@@ -32,6 +32,7 @@ const Home: Taro.FC<Props> = () => {
   const shopState = useSelector(selectShopState)
   const authState = useSelector(selectAuthState)
 
+  const [safeTop, setSafeTop] = useState<number>(0)
   const [location, setLocation] = useState<string>('')
   const [freshList, setFreshList] = useState<FreshListInterface>()
   const [advList, setAdvList] = useState<GetAdv[]>()
@@ -51,6 +52,11 @@ const Home: Taro.FC<Props> = () => {
     if (freshList)
       freshList.nextPage()
   })
+
+  useEffect(() => {
+    const { safeArea } = Taro.getSystemInfoSync()
+    setSafeTop(safeArea.top)
+  }, [])
 
   usePullDownRefresh(() => {
     initPage()
@@ -112,12 +118,14 @@ const Home: Taro.FC<Props> = () => {
       getAdv(shopRes)
     } catch (e) {
       console.log(e)
+      Taro.stopPullDownRefresh()
     }
   }
 
   useEffect(() => {
     if (showIndex > 4) {
       setShowPage(true)
+      Taro.stopPullDownRefresh()
       showIndex = 0
     }
   }, [showIndex])
@@ -203,78 +211,86 @@ const Home: Taro.FC<Props> = () => {
       (
         <View>
           {/*首页顶部*/}
-          <TabBar title='首页' hideContent />
+          {/*<TabBar title='首页' hideContent />*/}
           <View className='topBackground gradientTheme' />
-          <View
-            className='headerAndTitle commonRowFlex'
-            style={{
-              justifyContent: 'space-between',
-              alignItems: 'flex-start'
-            }}
+          <View className='gradientTheme' style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 10
+          }}
           >
             <View
-              className='commonRowFlex'
-              onClick={() => navTo('home', 'chooseShop')}
+              className='headerAndTitle commonRowFlex'
               style={{
-                alignItems: 'center'
+                paddingTop: 16 + safeTop + 'px',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start'
               }}
             >
-              <CustomIcon size={20}
-                          onClick={() => navTo('home', 'chooseShop')}
-                          name='location'
-                          color='white'
-              />
-              <Text
-                className='mediumText'
+              <View
+                className='commonRowFlex'
+                onClick={() => navTo('home', 'chooseShop')}
                 style={{
-                  color: 'white',
-                  marginLeft: '8Px'
+                  alignItems: 'center'
                 }}
               >
-                {shopState.showShopName ? shopState.shopData.shopname : location}
-              </Text>
-            </View>
-          </View>
-          <View
-            className='commonRowFlex flexCenter'
-            style={{
-              justifyContent: 'space-between'
-            }}
-          >
-            <View className='cusSearchBar flexCenter commonRowFlex'
-                  onClick={() => navTo('home', 'search')}
-            >
-              <CustomIcon
-                name='search'
-                size={25}
-                color='gray'
-                style={{
-                  margin: '0 12px'
-                }}
-              />
-              <Text
-                className='mediumText'
-                style={{
-                  color: 'gray'
-                }}
-              >
-                请输入关键字搜索
-              </Text>
+                <CustomIcon size={20}
+                            onClick={() => navTo('home', 'chooseShop')}
+                            name='location'
+                            color='white'
+                />
+                <Text
+                  className='mediumText'
+                  style={{
+                    color: 'white',
+                    marginLeft: '8Px'
+                  }}
+                >
+                  {shopState.showShopName ? shopState.shopData.shopname : location}
+                </Text>
+              </View>
             </View>
             <View
-              className='commonColumnFlex flexCenter'
-              onClick={() => navTo('mine', 'myMessage')}
+              className='commonRowFlex flexCenter'
               style={{
-                marginRight: '16px'
+                justifyContent: 'space-between'
               }}
             >
-              <CustomIcon name='ring'
-                          color='white'
-                          size={25}
-                          showDot={authState.haveMessage}
-                          onClick={() => navTo('mine', 'myMessage')}
-              />
-              <Text className='smallText whiteText'>消息</Text>
+              <View className='cusSearchBar flexCenter commonRowFlex'
+                    onClick={() => navTo('home', 'search')}
+              >
+                <CustomIcon
+                  name='search'
+                  size={25}
+                  color='gray'
+                  style={{
+                    margin: '0 12px'
+                  }}
+                />
+                <Text
+                  className='mediumText'
+                  style={{
+                    color: 'gray'
+                  }}
+                >
+                  请输入关键字搜索
+                </Text>
+              </View>
+              <View
+                className='commonColumnFlex flexCenter'
+                onClick={() => navTo('mine', 'myMessage')}
+                style={{
+                  marginRight: '16px'
+                }}
+              >
+                <CustomIcon name='ring'
+                            color='white'
+                            size={25}
+                            showDot={authState.haveMessage}
+                            onClick={() => navTo('mine', 'myMessage')}
+                />
+                <Text className='smallText whiteText'>消息</Text>
+              </View>
             </View>
           </View>
           {/*首页banner*/}
@@ -429,7 +445,7 @@ const Home: Taro.FC<Props> = () => {
                               }}
                         >
                           <AtAvatar image={item.imgurl} />
-                          <View className='commonRowFlex flexCenter'>
+                          <View className='commonColumnFlex flexCenter'>
                             <Text className='slightlySmallText'>
                               ¥ {item.activityprice}
                             </Text>

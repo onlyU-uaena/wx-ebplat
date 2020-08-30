@@ -212,7 +212,6 @@ const OrderDetail: Taro.FC<Props> = () => {
                 actualpay: item.actualPay,
                 ...item
               }})
-            delayBack()
           }
         }
       ]},
@@ -244,7 +243,6 @@ const OrderDetail: Taro.FC<Props> = () => {
                 actualpay: item.actualPay,
                 ...item
               }})
-            delayBack()
           }
         }
       ]},
@@ -446,6 +444,17 @@ const OrderDetail: Taro.FC<Props> = () => {
               <Text className='mediumText'>订单号 {orderDetail.code}</Text>
               <Text className='mediumText orangeText'>{statusToTitle[orderDetail.status].name}</Text>
             </View>
+            <HeightView />
+            {(orderDetail && orderDetail.status === 13) && (
+              <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                    style={{
+                      justifyContent: 'space-between'
+                    }}
+              >
+                <Text className='mediumText'>拒绝原因</Text>
+                <Text className='slightlySmallText grayText'>{orderDetail.returnreason}</Text>
+              </View>
+            )}
             <HeightView />
             <View className='commonRowFlex normalPadding borderBottom flexCenter'
                   style={{

@@ -31,6 +31,7 @@ const ProductDetails: Taro.FC<Props> = () => {
   const [safeTop, setSafeTop] = useState<number>(0)
   const [windowHeight, setWindowHeight] = useState<number>(0)
   const [countDown, setCountDown] = useState()
+  const [networkType, setNetworkType] = useState<string>('')
 
   useEffect(() => {
     const { safeArea, screenHeight } = Taro.getSystemInfoSync()
@@ -61,9 +62,18 @@ const ProductDetails: Taro.FC<Props> = () => {
     else setControlShow(0)
   }
 
+  const getNetwork = () => {
+    Taro.getNetworkType({
+      success: (res) => {
+        setNetworkType(res.networkType)
+      }
+    })
+  }
+
   useEffect(() => {
     getDetail()
     getAttr()
+    getNetwork()
   }, [])
 
   const [currentTab, setCurrentTab] = useState<string>('product')
@@ -74,6 +84,8 @@ const ProductDetails: Taro.FC<Props> = () => {
   const [buyNum, setBuyNum] = useState<number>(1)
   const [anchorArray, setAnchorArray] = useState([])
   const [itemAttribute, setItemAttribute] = useState([])
+  const [videoRef, setVideoRef] = useState()
+  const [imgRef, setImgRef] = useState()
 
   const addToCart = async (id: number) => {
     console.log(id)
@@ -163,6 +175,13 @@ const ProductDetails: Taro.FC<Props> = () => {
     getHeight()
   }, [proDetail])
 
+  useEffect(() => {
+    if (imgRef) {
+      const videoContext = Taro.createVideoContext('video', imgRef)
+      setVideoRef(videoContext)
+    }
+  }, [imgRef])
+
   const getHeight = () => {
     const query = Taro.createSelectorQuery().in(scope)
     const heightArr = [];
@@ -177,9 +196,24 @@ const ProductDetails: Taro.FC<Props> = () => {
     }).exec();
   }
 
+  const changeImgTab = (e) => {
+    if (e.detail.current !== 0) {
+      videoRef.pause()
+    }
+  }
+
   const chooseCount = () => {
     setShowFloat(true)
     setBuyGroup(true)
+  }
+
+  const playVideo = () => {
+    if (networkType !== 'wifi') {
+      Taro.showToast({
+        title: '您正在使用移动网络,继续播放将消耗流量',
+        icon: 'none'
+      })
+    }
   }
 
   const handleScroll = (e) => {
@@ -213,6 +247,7 @@ const ProductDetails: Taro.FC<Props> = () => {
       <View className='gradientTheme commonRowFlex' style={{
         justifyContent: 'space-around',
         padding: '8px 32px',
+        height: '40px',
         position: 'fixed',
         width: '100%',
         top: `${safeTop + 40}px`,
@@ -244,7 +279,7 @@ const ProductDetails: Taro.FC<Props> = () => {
                   }}
                   onScroll={handleScroll}
                   scrollIntoView={currentTab}
-                  onScrollToLower={() => freshList.nextPage()}
+                  onScrollToLower={() => {}}
                   lowerThreshold={0}
                   scrollY
       >
@@ -252,7 +287,7 @@ const ProductDetails: Taro.FC<Props> = () => {
           <View id='product'>
             <View className='anchorPoint'>
               {/*轮播图*/}
-              {proDetail && <SwiperImg videoUrl={proDetail.videourl} swiperHeight='300px' list={proDetail.imgs} />}
+              {proDetail && <SwiperImg onRef={setImgRef} onVideoPlay={playVideo} onChange={(e) => changeImgTab(e)} networkType={networkType} videoUrl={proDetail.videourl} swiperHeight='300px' list={proDetail.imgs} />}
               {/*拼团秒杀*/}
               {controlShow === 2 && (
                 <View className='commonRowFlex flexCenter gradientTheme radius'
@@ -453,6 +488,22 @@ const ProductDetails: Taro.FC<Props> = () => {
               )}
             </View>
             <View className='anchorPoint'>
+              <Text id='share' className='normalMarginTop normalMarginBottom' style={{
+                display: 'block',
+                fontSize: '20px',
+                textAlign: 'center'
+              }}
+              >
+                为您推荐
+              </Text>
+              <View onClick={() => console.log(1)} className='normalMarginLeft normalMarginRight'>
+                <FreshList onRef={setFreshList} dispatchListFunc={async (page: number, size: number) => {
+                  return await commodity.getTopicSku('', Number(shopState.shopData.shopid), 1, 6)
+                }}
+                />
+              </View>
+            </View>
+            <View className='anchorPoint'>
               {/*商品图*/}
               <Text id='detail' className='mediumText normalPadding borderBottom' style={{
                 backgroundColor: 'white',
@@ -490,22 +541,6 @@ const ProductDetails: Taro.FC<Props> = () => {
                 <import src='../../../../components/wxParse/wxParse.wxml' />
                 <template is='wxParse' data='{{wxParseData:article.nodes}}' />
                 <template is='wxParse' data='{{wxParseData:serve.nodes}}' />
-              </View>
-            </View>
-            <View className='anchorPoint'>
-              <Text id='share' className='normalMarginTop normalMarginBottom' style={{
-                display: 'block',
-                fontSize: '20px',
-                textAlign: 'center'
-              }}
-              >
-                为您推荐
-              </Text>
-              <View onClick={() => console.log(1)} className='normalMarginLeft normalMarginRight'>
-                <FreshList onRef={setFreshList} dispatchListFunc={async (page: number, size: number) => {
-                  return await commodity.getTopicSku('', Number(shopState.shopData.shopid), page, size)
-                }}
-                />
               </View>
               <HeightView high='large' />
               <HeightView high='large' />
