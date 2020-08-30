@@ -63,6 +63,7 @@ const ProductDetails: Taro.FC<Props> = () => {
 
   useEffect(() => {
     getDetail()
+    getAttr()
   }, [])
 
   const [currentTab, setCurrentTab] = useState<string>('product')
@@ -72,6 +73,7 @@ const ProductDetails: Taro.FC<Props> = () => {
   const [favorites, setFavorites] = useState<boolean>(false)
   const [buyNum, setBuyNum] = useState<number>(1)
   const [anchorArray, setAnchorArray] = useState([])
+  const [itemAttribute, setItemAttribute] = useState([])
 
   const addToCart = async (id: number) => {
     console.log(id)
@@ -81,6 +83,11 @@ const ProductDetails: Taro.FC<Props> = () => {
         title: '加入购物车成功'
       })
     }
+  }
+
+  const getAttr = async () => {
+    const {data} = await commodity.getAttr(JSON.parse(router.params.props).id)
+    setItemAttribute(data)
   }
 
   const getDetail = async () => {
@@ -452,6 +459,28 @@ const ProductDetails: Taro.FC<Props> = () => {
                 display: 'block'
               }}
               >商品详情</Text>
+              <HeightView />
+              <View style={{
+                padding: '16px',
+                backgroundColor: 'white'
+              }}
+              >
+                <Text className='mediumText'>
+                  商品属性
+                </Text>
+                <HeightView />
+                {itemAttribute.map(item => (
+                  <View className='commonRowFlex smallMarginBottom'
+                        key={item.attrid}
+                        style={{
+                          justifyContent: 'space-between'
+                        }}
+                  >
+                    <Text className='slightlySmallText grayText'>{item.attrname}</Text>
+                    <Text className='slightlySmallText grayText'>{item.value}</Text>
+                  </View>
+                ))}
+              </View>
               {/*售后*/}
               <View className='commonColumnFlex flexCenter normalMarginTop normalMarginBottom normalPadding' style={{
                 justifyContent: 'center',

@@ -82,12 +82,21 @@ const ConfirmOrder: Taro.FC<Props> = () => {
         desc: `有效期至${item.outtimetr}`
       }
     })
+    newList.unshift({
+      label: `不使用`,
+      value: null,
+    })
     setCouponList(newList)
   }
 
   const chooseCoupon = (e) => {
-    setDiscount(JSON.parse(e).facevalue)
-    setCoupon(e)
+    if (e) {
+      setDiscount(JSON.parse(e).facevalue)
+      setCoupon(e)
+    } else {
+      setCoupon(null)
+      setDiscount(0)
+    }
     setShowFloat(false)
   }
 
@@ -217,7 +226,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
           >
             <InputCard title='优惠券'
                        onClick={() => setShowFloat(true)}
-                       rightTitle={couponList.length ? `${couponList.length}张可用` : `暂无可用`}
+                       rightTitle={(couponList.length - 1) ? `${couponList.length - 1}张可用` : `暂无可用`}
             />
             <AtInput name='remark' title='备注' placeholder='请输入备注' onChange={(e) => setRemark(String(e))} />
             <InputCard title=''
@@ -238,6 +247,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
             position: 'fixed',
             width: '100%',
             bottom: 0,
+            zIndex: 10,
             justifyContent: 'space-between',
             backgroundColor: 'white',
             padding: '8px 16px'

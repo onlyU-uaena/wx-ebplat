@@ -40,35 +40,38 @@ const Refund: Taro.FC<Props> = () => {
     }
   }
 
-  const uploadFile = (e) => {
+  const uploadFile = (e, type) => {
+    console.log(e, type)
     let urls = []
     setFiles(e)
-    Taro.showLoading({
-      title: '正在上传图片',
-      mask: true
-    })
     let urlLength = 0
-    e.map((item) => {
-      Taro.uploadFile({
-        url: baseUrl + '/img/upload',
-        filePath: item.url,
-        name: 'file',
-        formData: {
-          'token': Taro.getStorageSync('token'),
-          'relationtype': 0,
-          'ch': '3'
-        },
-        success: (res) => {
-          urls = urls.concat(JSON.parse(res.data).data)
-          urlLength++
-          if (urlLength === e.length) {
-            Taro.hideLoading()
-            console.log(urls)
-            setFilesUrl(urls)
-          }
-        }
+    if (type === 'add') {
+      Taro.showLoading({
+        title: '正在上传图片',
+        mask: true
       })
-    })
+      e.map((item) => {
+        Taro.uploadFile({
+          url: baseUrl + '/img/upload',
+          filePath: item.url,
+          name: 'file',
+          formData: {
+            'token': Taro.getStorageSync('token'),
+            'relationtype': 0,
+            'ch': '3'
+          },
+          success: (res) => {
+            urls = urls.concat(JSON.parse(res.data).data)
+            urlLength++
+            if (urlLength === e.length) {
+              Taro.hideLoading()
+              console.log(urls)
+              setFilesUrl(urls)
+            }
+          }
+        })
+      })
+    }
     console.log(e)
   }
 
@@ -104,6 +107,7 @@ const Refund: Taro.FC<Props> = () => {
             <AtImagePicker
               files={files}
               onChange={uploadFile}
+              count={9}
             />
           </View>
         </View>

@@ -69,6 +69,7 @@ class App extends Component {
           'paySuccess/index',
           'allComment/index',
           'hotProduct/index',
+          'fullCutDetail/index',
           'confirmOrder/index',
           'webPage/index',
           'spikeHome/index',

@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useDidShow, useReachBottom } from '@tarojs/t
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Checkbox, CheckboxGroup, Image, Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtButton, AtCheckbox, AtInputNumber, AtSwipeAction } from 'taro-ui'
+import { AtButton, AtCheckbox, AtInputNumber, AtSwipeAction, AtTag } from 'taro-ui'
 import TabBar from '../../components/TabBar'
 import shopCart, { setCartBadge } from './utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
@@ -146,79 +146,97 @@ const ShoppingCart: Taro.FC<Props> = () => {
             </Text>
           )}
           {cartList.shops.length ? cartList.shops.map((item, index) => (
-              <View key={index}>
-                {item.spuscd.map((shopItem, shopIndex) => (
-                  <AtSwipeAction onClick={() => deleteNone(shopItem.shopcartproid)}
-                                 key={shopIndex}
-                                 options={[
-                                   {
-                                     text: '删除',
-                                     style: {
-                                       backgroundColor: colors.themeRed,
-                                       color: 'white'
-                                     }
+            <View key={index}>
+              {item.asd.map(asdItem => (
+                <View key={asdItem.id}
+                      className='commonRowFlex flexCenter borderBottom'
+                      style={{
+                        justifyContent: 'space-between',
+                        backgroundColor: 'white',
+                        padding: '8px'
+                      }}
+                >
+                  <View>
+                    <AtTag active size='small'>{asdItem.name}</AtTag>
+                    <Text className='slightlySmallText normalMarginLeft'>满{asdItem.fullmoney}减{asdItem.cutmoney}</Text>
+                  </View>
+                  <Text className='orangeText slightlySmallText'
+                        onClick={() => navTo('home', 'fullCutDetail', {actId: asdItem.id})}
+                  >去凑单</Text>
+                </View>
+              ))}
+              {item.spuscd.map((shopItem, shopIndex) => (
+                <AtSwipeAction onClick={() => deleteNone(shopItem.shopcartproid)}
+                               key={shopIndex}
+                               options={[
+                                 {
+                                   text: '删除',
+                                   style: {
+                                     backgroundColor: colors.themeRed,
+                                     color: 'white'
                                    }
-                                 ]}
+                                 }
+                               ]}
+                >
+                  <View className='commonRowFlex flexCenter borderBottom'
+                        style={{
+                          backgroundColor: 'white'
+                        }}
                   >
-                    <View className='commonRowFlex flexCenter borderBottom'
-                          style={{
-                            backgroundColor: 'white'
-                          }}
+                    <AtCheckbox onChange={(e) => changeSelect(shopItem.shopcartproid, e.length === 0 ? '0' : '1')}
+                                options={[{
+                                  value: shopItem.shopcartproid,
+                                  label: '',
+                                  disabled: !shopItem.stock
+                                }]}
+                                selectedList={[shopItem.isselected ? shopItem.shopcartproid : '']}
+                    />
+                    <View className='commonRowFlex normalPadding'
+                          style={{flex: 1}}
+                          onClick={() => toDetail(shopItem.id)}
                     >
-                      <AtCheckbox onChange={(e) => changeSelect(shopItem.shopcartproid, e.length === 0 ? '0' : '1')}
-                                  options={[{
-                                    value: shopItem.shopcartproid,
-                                    label: '',
-                                    disabled: !shopItem.stock
-                                  }]}
-                                  selectedList={[shopItem.isselected ? shopItem.shopcartproid : '']}
+                      <Image src={shopItem.img}
+                             className='displayImg'
                       />
-                      <View className='commonRowFlex normalPadding'
-                            style={{flex: 1}}
-                            onClick={() => toDetail(shopItem.id)}
+                      <View className='commonColumnFlex'
+                            style={{
+                              justifyContent: 'space-between',
+                              flex: 1
+                            }}
                       >
-                        <Image src={shopItem.img}
-                               className='displayImg'
-                        />
-                        <View className='commonColumnFlex'
-                              style={{
-                                justifyContent: 'space-between',
-                                flex: 1
-                              }}
+                        <View className='commonRowFlex flexCenter' style={{
+                          justifyContent: 'space-between'
+                        }}
                         >
-                          <View className='commonRowFlex flexCenter' style={{
-                            justifyContent: 'space-between'
-                          }}
-                          >
-                            <Text className='slightlySmallText'>{shopItem.name}</Text>
-                            {/*<Text className='slightlySmallText redText'>库存紧张</Text>*/}
+                          <Text className='slightlySmallText'>{shopItem.name}</Text>
+                          {/*<Text className='slightlySmallText redText'>库存紧张</Text>*/}
+                        </View>
+                        <View className='commonRowFlex flexCenter' style={{
+                          justifyContent: 'space-between'
+                        }}
+                        >
+                          <View>
+                            <Text className='redText slightlySmallText'>¥{shopItem.price}</Text>
+                            {/*<Text className='grayText throughLineText slightlySmallText smallMarginLeft'>¥{shopItem.oldprice}</Text>*/}
                           </View>
-                          <View className='commonRowFlex flexCenter' style={{
-                            justifyContent: 'space-between'
-                          }}
-                          >
-                            <View>
-                              <Text className='redText slightlySmallText'>¥{shopItem.price}</Text>
-                              {/*<Text className='grayText throughLineText slightlySmallText smallMarginLeft'>¥{shopItem.oldprice}</Text>*/}
-                            </View>
-                            <View onClick={(event => event.stopPropagation())}>
-                              {shopItem.stock ? (
-                                <AtInputNumber type='number' value={shopItem.count} max={shopItem.stock} min={1} onChange={(e) => changeNum(shopItem.shopcartproid, e)} />
-                              ) : (
-                                <View>
-                                  <Text className='slightlySmallText grayText'>已售罄</Text>
-                                  <Text onClick={() => deleteNone(shopItem.shopcartproid)} className='slightlySmallText orangeText smallMarginLeft'>删除</Text>
-                                </View>
-                              )}
-                            </View>
+                          <View onClick={(event => event.stopPropagation())}>
+                            {shopItem.stock ? (
+                              <AtInputNumber type='number' value={shopItem.count} max={shopItem.stock} min={1} onChange={(e) => changeNum(shopItem.shopcartproid, e)} />
+                            ) : (
+                              <View>
+                                <Text className='slightlySmallText grayText'>已售罄</Text>
+                                <Text onClick={() => deleteNone(shopItem.shopcartproid)} className='slightlySmallText orangeText smallMarginLeft'>删除</Text>
+                              </View>
+                            )}
                           </View>
                         </View>
                       </View>
                     </View>
-                  </AtSwipeAction>
-                ))}
-                <HeightView />
-              </View>
+                  </View>
+                </AtSwipeAction>
+              ))}
+              <HeightView />
+            </View>
           )) : (
             <View className='commonRowFlex flexCenter'
                   style={{

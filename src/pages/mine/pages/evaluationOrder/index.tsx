@@ -73,35 +73,37 @@ const EvaluationOrder: Taro.FC<Props> = () => {
     }
   }
 
-  const uploadFile = (e, index) => {
+  const uploadFile = (e, index, type) => {
     let urls = []
     changeImg(index, e)
-    Taro.showLoading({
-      title: '正在上传图片',
-      mask: true
-    })
     let urlLength = 0
-    e.map((item) => {
-      Taro.uploadFile({
-        url: baseUrl + '/img/upload',
-        filePath: item.url,
-        name: 'file',
-        formData: {
-          'token': Taro.getStorageSync('token'),
-          'relationtype': 0,
-          'ch': '3'
-        },
-        success: (res) => {
-          urls = urls.concat(JSON.parse(res.data).data)
-          urlLength++
-          if (urlLength === e.length) {
-            Taro.hideLoading()
-            console.log(urls)
-            changeImgUrl(index, urls)
-          }
-        }
+    if (type === 'add') {
+      Taro.showLoading({
+        title: '正在上传图片',
+        mask: true
       })
-    })
+      e.map((item) => {
+        Taro.uploadFile({
+          url: baseUrl + '/img/upload',
+          filePath: item.url,
+          name: 'file',
+          formData: {
+            'token': Taro.getStorageSync('token'),
+            'relationtype': 0,
+            'ch': '3'
+          },
+          success: (res) => {
+            urls = urls.concat(JSON.parse(res.data).data)
+            urlLength++
+            if (urlLength === e.length) {
+              Taro.hideLoading()
+              console.log(urls)
+              changeImgUrl(index, urls)
+            }
+          }
+        })
+      })
+    }
     console.log(e)
   }
 
@@ -157,7 +159,7 @@ const EvaluationOrder: Taro.FC<Props> = () => {
             <View className='normalMarginBottom smallMarginLeft smallMarginRight'>
               <AtImagePicker
                 files={comment[shopIndex].files}
-                onChange={(e) => uploadFile(e, shopIndex)}
+                onChange={(e, type) => uploadFile(e, shopIndex, type)}
               />
             </View>
           </View>

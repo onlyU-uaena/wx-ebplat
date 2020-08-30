@@ -5,7 +5,7 @@ import {
   REFRESH_COMPLETE,
   SET_ADDRESS,
   SET_CART_NUM,
-  SET_SHOP_DATA
+  SET_SHOP_DATA, SHOW_SHOP_NAME
 } from '../constants'
 import store from '@redux/store'
 import Taro from '@tarojs/taro'
@@ -36,6 +36,13 @@ export const setShop = (shopData, needToRefresh) => {
     payload: {shopData, needToRefresh}
   }
 }
+
+export const showShopName = () => {
+  return {
+    type: SHOW_SHOP_NAME,
+  }
+}
+
 
 export const setAddress = (address) => {
   return {

@@ -8,6 +8,7 @@ import { navTo } from '@utils/route'
 interface Props extends SwiperProps {
   list: GetAdv[] | string[]
   marginLeft?: number
+  act?: boolean
   marginRight?: number
   imgWidth?: number
   swiperHeight?: string
@@ -15,7 +16,7 @@ interface Props extends SwiperProps {
 }
 
 const SwiperImg: Taro.FC<Props> = (props) => {
-  const { list, marginLeft, marginRight, circular, autoplay, imgWidth, swiperHeight, videoUrl } = props
+  const { list, marginLeft, marginRight, act, circular, autoplay, imgWidth, swiperHeight, videoUrl } = props
 
   const bannerJump = (item) => {
     if (item.imgurl) {
@@ -23,6 +24,8 @@ const SwiperImg: Taro.FC<Props> = (props) => {
         navTo('home', 'webPage', {url: item.url})
       } else if (item.type === 2) {
         navTo('home', 'productDetails', {id: item.typeid})
+      } else if (act) {
+        navTo('home', 'fullCutDetail', {actId: item.id})
       }
     }
   }

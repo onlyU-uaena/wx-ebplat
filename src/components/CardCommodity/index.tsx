@@ -9,6 +9,7 @@ import { navTo } from '@utils/route'
 import shopCart from '../../pages/shoppingCart/utils/shopCart'
 import { useSelector } from '@tarojs/redux'
 import { selectShopState } from '@redux/reducers/selector'
+import HeightView from '../HeightView'
 
 interface Props {
   imgUrl: string
@@ -19,6 +20,8 @@ interface Props {
   hurdle?: boolean
   proId: number
   jumpToDetail?: boolean
+  labelName?: string
+  labelUrl?: string
   onShopCart?: () => void
 }
 
@@ -26,7 +29,7 @@ interface Props {
 
 const CardCommodity: Taro.FC<Props> = (props) => {
   const shopState = useSelector(selectShopState)
-  const { imgUrl, onShopCart, title, proId, oldPrice, price, hurdle, desc, jumpToDetail = true } = props
+  const { imgUrl, onShopCart,labelName, labelUrl, title, proId, oldPrice, price, hurdle, desc, jumpToDetail = true } = props
   const [width, setWidth] = useState<number>(0)
 
   const getWindowWidth = async () => {
@@ -65,9 +68,17 @@ const CardCommodity: Taro.FC<Props> = (props) => {
                   justifyContent: 'space-between'
                 }}
           >
-            <Image src={imgUrl}
-                   className='displayImg'
-            />
+            <View style={{
+              position: 'relative',
+              flexShrink: 0,
+              marginRight: '8px'
+            }}
+            >
+              <Image src={labelUrl} className='labelImg' />
+              <Image src={imgUrl}
+                     className='displayImg'
+              />
+            </View>
             <View className='commonColumnFlex' style={{
               justifyContent: 'space-between',
               flex: 1
@@ -80,16 +91,27 @@ const CardCommodity: Taro.FC<Props> = (props) => {
                 <Text className='mediumText'>{LimitStr(title, 12)}</Text>
               </View>
               <Text className='slightlySmallText grayText'>{desc}</Text>
-              <View className='commonRowFlex'
-                    style={{
-                      justifyContent: 'space-between'
-                    }}
-              >
-                <View className='commonRowFlex flexCenter'>
-                  <Text className='mediumText redText'>¥ {price}</Text>
-                  {oldPrice && <Text className='smallText grayText smallMarginLeft'>¥ {oldPrice}</Text>}
+              <View>
+                {labelName && (
+                  <View className='commonRowFlex smallMarginTop normalMarginBottom'>
+                    <View className='commodityLabel gradientTheme'>
+                      <Text className='smallText whiteText'>
+                        {labelName}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+                <View className='commonRowFlex'
+                      style={{
+                        justifyContent: 'space-between'
+                      }}
+                >
+                  <View className='commonRowFlex flexCenter'>
+                    <Text className='mediumText redText'>¥ {price}</Text>
+                    {oldPrice && <Text className='smallText grayText smallMarginLeft'>¥ {oldPrice}</Text>}
+                  </View>
+                  <CustomIcon name='add' onClick={() => addToCart(proId)} color='rgb(239, 154, 151)' size={25} />
                 </View>
-                <CustomIcon name='add' onClick={() => addToCart(proId)} color='rgb(239, 154, 151)' size={25} />
               </View>
             </View>
           </View>
@@ -102,20 +124,29 @@ const CardCommodity: Taro.FC<Props> = (props) => {
                   marginBottom: '8px'
                 }}
           >
-            <Image src={imgUrl}
-                   style={{
-                     width: `${width}px`,
-                     height: `${width}px`
-                   }}
-            />
+            <View style={{
+              position: 'relative',
+              flexShrink: 0,
+            }}
+            >
+              <Image src={labelUrl} className='labelImg' />
+              <Image src={imgUrl}
+                     style={{
+                       width: `${width}px`,
+                       height: `${width}px`
+                     }}
+              />
+            </View>
             <Text className='mediumText smallMarginTop'>{LimitStr(title, 18)}</Text>
-            {/*<View className='commonRowFlex smallMarginTop normalMarginBottom'>*/}
-            {/*  <View className='commodityLabel gradientTheme'>*/}
-            {/*    <Text className='smallText whiteText'>*/}
-            {/*      明日达*/}
-            {/*    </Text>*/}
-            {/*  </View>*/}
-            {/*</View>*/}
+            {labelName && (
+              <View className='commonRowFlex smallMarginTop normalMarginBottom'>
+                <View className='commodityLabel gradientTheme'>
+                  <Text className='smallText whiteText'>
+                    {labelName}
+                  </Text>
+                </View>
+              </View>
+            )}
             <View className='commonRowFlex'
                   style={{
                     justifyContent: 'space-between'

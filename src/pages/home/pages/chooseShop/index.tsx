@@ -5,7 +5,7 @@ import './index.scss'
 import { AtButton, AtListItem } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import commodity from '../../utils/commodity'
-import { setShop } from '@redux/actions'
+import { setShop, showShopName } from '@redux/actions'
 import { delayBack } from '@utils/route'
 import colors from '../../../../common/styles/color'
 import { selectShopState } from '@redux/reducers/selector'
@@ -30,6 +30,7 @@ const ChooseShop: Taro.FC<Props> = () => {
 
   const choose = (item) => {
     dispatch(setShop(item, true))
+    dispatch(showShopName())
     Taro.navigateBack()
   }
 

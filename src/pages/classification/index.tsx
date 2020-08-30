@@ -56,7 +56,7 @@ const Classification: Taro.FC<Props> = () => {
   }, [])
 
   const getAdv = async () => {
-    const {data} = await commodity.getAdv(0)
+    const {data} = await commodity.getAdv(0, shopState.shopData.shopid)
     setAdvList(data[0])
   }
 

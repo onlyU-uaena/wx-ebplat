@@ -24,16 +24,23 @@ class Commodity {
     getSpikeList: '/api/app/act/mslist',
     getGroupHome: '/api/app/act/indexgroup',
     getGroupList: '/api/app/act/groupprolist',
+    getGroupImg: '/api/app/act/tgimglist',
     getSearchKeys: '/api/app/pro/getsearchkeys',
     getBrandList: '/api/app/pro/getbrands',
+    getAttr: '/api/app/pro/getattrvbyid',
+    getFullCutList: '/api/app/act/fullcutlist',
+    getFullCutDetailImg: '/api/app/act/fullcutdetail',
+    getFullCutDetailList: '/api/app/act/fullcutspulist',
+    getHotPro: '/api/app/pro/gethotpromore',
     //积分商品
     getPointItem: '/api/app/pointspro/getpagelist'
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
-  public async getAdv (pagemark: number) {
+  public async getAdv (pagemark: number, shopid: number) {
     const data = {
-      pagemark: pagemark
+      pagemark,
+      shopid
     }
     return await httpRequest(this.urls.getAdv, data, false)
   }
@@ -208,6 +215,52 @@ class Commodity {
       shopid
     }
     return await httpRequest(this.urls.getSkuList, data, false)
+  }
+
+  public async getFullCutList (shopid: number) {
+    const data = {
+      shopid
+    }
+    return await httpRequest(this.urls.getFullCutList, data, false)
+  }
+
+  public async getFullCutDetailImg (id: number) {
+    const data = {
+      id
+    }
+    return await httpRequest(this.urls.getFullCutDetailImg, data, false)
+  }
+
+  public async getFullCutDetailList (shopid: number, actid: number, page: number, size: number) {
+    const data = {
+      shopid,
+      actid,
+      page,
+      size
+    }
+    return await httpRequest(this.urls.getFullCutDetailList, data, false)
+  }
+
+  public async getHotPro (shopid: number, page: number, size: number) {
+    const data = {
+      shopid,
+      page,
+      size
+    }
+    return await httpRequest(this.urls.getHotPro, data, false)
+  }
+
+  public async getAttr (sid: number) {
+    const data = {
+      sid
+    }
+    return await httpRequest(this.urls.getAttr, data, false)
+  }
+
+  public async getGroupImg () {
+    const data = {
+    }
+    return await httpRequest(this.urls.getGroupImg, data, false)
   }
 
   // @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))

@@ -42,6 +42,7 @@ const Home: Taro.FC<Props> = () => {
   const [topicId, setTopicId] = useState<number>()
   const [showPage, setShowPage] = useState<boolean>(false)
   const [tabList, setTabList] = useState()
+  const [fullCutList, setFullCutList] = useState([])
   const [hotList, setHotList] = useState()
   const [messageList, setMessageList] = useState()
   const [classList, setClassList] = useState()
@@ -106,15 +107,16 @@ const Home: Taro.FC<Props> = () => {
       getSpikeHome(shopRes)
       getMessageCount(shopRes)
       getClassList(shopRes)
+      getFullCutList(shopRes)
       getGroupHome(shopRes)
-      getAdv()
+      getAdv(shopRes)
     } catch (e) {
       console.log(e)
     }
   }
 
   useEffect(() => {
-    if (showIndex > 3) {
+    if (showIndex > 4) {
       setShowPage(true)
       showIndex = 0
     }
@@ -126,8 +128,8 @@ const Home: Taro.FC<Props> = () => {
     }
   }, [authState.loginStatus, shopState.shopData])
 
-  const getAdv = async () => {
-    const {data} = await commodity.getAdv(0)
+  const getAdv = async (shopRes) => {
+    const {data} = await commodity.getAdv(0, shopState.shopData.shopid || shopRes.data.shopid)
     setAdvList(data)
     showIndex += 1
   }
@@ -164,6 +166,12 @@ const Home: Taro.FC<Props> = () => {
   const getSkuList = async (shopRes) => {
     const listRes = await commodity.getSkuList(shopState.shopData.shopid || shopRes.data.shopid)
     setTabList(listRes.data)
+    showIndex += 1
+  }
+
+  const getFullCutList = async (shopRes) => {
+    const listRes = await commodity.getFullCutList(shopState.shopData.shopid || shopRes.data.shopid)
+    setFullCutList(listRes.data)
     showIndex += 1
   }
 
@@ -223,7 +231,7 @@ const Home: Taro.FC<Props> = () => {
                   marginLeft: '8Px'
                 }}
               >
-                {location}
+                {shopState.showShopName ? shopState.shopData.shopname : location}
               </Text>
             </View>
           </View>
@@ -329,14 +337,15 @@ const Home: Taro.FC<Props> = () => {
               margin: '16px 16px 0 16px',
             }}
           >
-            {advList[1] &&
+            {fullCutList.length &&
             <SwiperImg
               marginRight={20}
               autoplay={false}
               circular={false}
               imgWidth={95}
+              act
               swiperHeight='100px'
-              list={advList[1].list}
+              list={fullCutList}
             />}
           </View>
           <View className='commonRowFlex'
@@ -554,10 +563,12 @@ const Home: Taro.FC<Props> = () => {
           {/*商品列表*/}
           <CusTabs tabs={tabList} active={0} changeTab={(id) => setTopicId(id)} defaultTitle='精选好物' />
           <View className='normalMarginLeft normalMarginRight'>
-            <FreshList onRef={setFreshList} topicId={topicId} shopid={shopState.shopData.shopid} dispatchListFunc={async (page: number, size: number, topicid: number, shopId: number) => {
-              return await commodity.getTopicSku(topicid, shopId, page, size)
-            }}
-            />
+            {shopState.shopData.shopid && (
+              <FreshList onRef={setFreshList} topicId={topicId} shopid={shopState.shopData.shopid} dispatchListFunc={async (page: number, size: number, topicid: number, shopId: number) => {
+                return await commodity.getTopicSku(topicid, shopId, page, size)
+              }}
+              />
+            )}
           </View>
         </View>
       )

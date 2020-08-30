@@ -10,8 +10,16 @@
 }
 
 .displayImg {
-  flex-shrink: 0;
   width: 220px;
   height: 100Px;
+}
+
+.labelImg {
+  position: absolute;
+  flex-shrink: 0;
+  left: 5Px;
+  top: 5Px;
+  width: 20Px;
+  height: 20Px;
   margin-right: 8Px;
 }

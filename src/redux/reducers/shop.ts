@@ -1,10 +1,11 @@
-import { REFRESH_COMPLETE, SET_ADDRESS, SET_CART_NUM, SET_SHOP_DATA } from '../constants'
+import { REFRESH_COMPLETE, SET_ADDRESS, SET_CART_NUM, SET_SHOP_DATA, SHOW_SHOP_NAME } from '../constants'
 
 const defaultState = {
   shopData: '',
   needToRefresh: false,
   cartNum: 0,
-  address: {}
+  address: {},
+  showShopName: false
 }
 
 export type ShopState = typeof defaultState
@@ -16,6 +17,11 @@ function shopReducer(state = defaultState, action) {
         ...state,
         needToRefresh: action.payload.needToRefresh,
         shopData: action.payload.shopData
+      }
+    case SHOW_SHOP_NAME:
+      return {
+        ...state,
+        showShopName: true
       }
     case REFRESH_COMPLETE:
       return {

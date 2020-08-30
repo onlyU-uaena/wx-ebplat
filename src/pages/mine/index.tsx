@@ -64,7 +64,9 @@ const Mine: Taro.FC<Props> = () => {
           onClick={() => navTo('mine', 'myMessage')}
           style={{
             position: 'absolute',
-            top: '-30px'
+            bottom: '-20px',
+            right: 0
+
           }}
         >
           <CustomIcon name='ring'

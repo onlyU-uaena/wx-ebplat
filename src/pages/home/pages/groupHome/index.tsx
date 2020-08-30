@@ -21,14 +21,21 @@ const GroupHome: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const shopState = useSelector(selectShopState)
   const [groupList, setGroupList] = useState()
+  const [groupImg, setGroupImg] = useState([{imgurl: ''}])
 
   const getGroup = async () => {
     const {data} = await commodity.getGroupList(shopState.shopData.shopid || 10)
     setGroupList(data)
   }
 
+  const getGroupImg = async () => {
+    const {data} = await commodity.getGroupImg()
+    setGroupImg(data)
+  }
+
   useEffect(() => {
     getGroup()
+    getGroupImg()
   }, [])
 
   useEffect(() => {
@@ -38,7 +45,7 @@ const GroupHome: Taro.FC<Props> = () => {
   return (
     <View>
       <TabBar title='拼团' />
-      <Image src='http://www.gx8899.com/uploads/allimg/160825/3-160R5093948-52.jpg'
+      <Image src={groupImg[0].imgurl}
              style={{
                height: '140px',
                width: '100%'

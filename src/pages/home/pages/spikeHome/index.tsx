@@ -51,7 +51,7 @@ const SpikeHome: Taro.FC<Props> = () => {
     if (data.length) {
       setTopicId(data[0].actid)
       const list = data.map((item, index) => {
-        return {id: item.actid, img: '', name: item.endtime.substring(11, 16), num: '', tagName: spikeStatus[item.status]}
+        return {id: item.actid, img: '', name: item.starttime.substring(11, 16), num: '', tagName: spikeStatus[item.status]}
       })
       setTabList(list)
     }
