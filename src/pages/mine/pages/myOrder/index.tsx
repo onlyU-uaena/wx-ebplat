@@ -18,7 +18,7 @@ const tabs = [
   { title: '全部' },
   { title: '待付款' },
   { title: '待收货' },
-  { title: '已完成' },
+  { title: '待评价' },
   { title: '售后/退款' }
 ]
 

@@ -21,7 +21,8 @@ const ReadCommodity: Taro.FC<Props> = (props) => {
     <View className='normalPadding'
           onClick={onClick ? () => onClick() : () => {}}
           style={{
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            flex: 1
           }}
     >
       <View className='commonRowFlex flexCenter'>

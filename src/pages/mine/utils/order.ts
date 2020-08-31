@@ -13,7 +13,7 @@ class Order {
     cancelOrder: '/api/app/order/cancel',
     getFreight: '/api/app/order/getFreightByShop',
     payOrder: '/api/app/pay/getwxconfig',
-    toRefund: '/api/app/order/afterreturn',
+    toRefund: '/api/app/order/newafterreturn',
     toComment: '/api/app/order/addordercomment',
     getCommentList: '/api/app/pro/getprodcmt',
     // 团购
@@ -103,10 +103,11 @@ class Order {
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async toRefund (orderid: number, reason: string, skustatus: number, imgs: string) {
+  public async toRefund (orderid: number, reason: string, skustatus: number, imgs: string, orderdetaiparams: any) {
     const data = {
       orderid,
       reason,
+      orderdetaiparams,
       skustatus,
       imgs
     }

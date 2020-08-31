@@ -7,3 +7,24 @@
   position: fixed;
   bottom: 0;
 }
+
+.at-checkbox__option-wrap {
+  padding: 0;
+}
+
+.at-checkbox__option {
+  padding-left: 0;
+}
+
+.at-checkbox::after {
+  border: none;
+}
+
+.at-checkbox::before {
+  border: none;
+}
+
+.at-checkbox__icon-cnt {
+  margin-top: 0;
+  margin-left: 24rpx;
+}

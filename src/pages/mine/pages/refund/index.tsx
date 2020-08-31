@@ -2,7 +2,7 @@ import Taro, { useState, useEffect, useRouter } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
-import { AtButton, AtImagePicker, AtInput, AtListItem } from 'taro-ui'
+import { AtButton, AtCheckbox, AtImagePicker, AtInput, AtListItem } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import ReadCommodity from '../../../../components/ReadCommodity'
 import { delayBack, navTo } from '@utils/route'
@@ -22,7 +22,13 @@ const Refund: Taro.FC<Props> = () => {
   const [reason, setReason] = useState()
   const [about, setAbout] = useState<string>()
   const [files, setFiles] = useState()
+  const [selectList, setSelectList] = useState([])
   const [filesUrl, setFilesUrl] = useState([])
+
+  const toggleCheck = (e) => {
+    setSelectList(e)
+    console.log(e)
+  }
 
   const confirmToRefund = async () => {
     let skuStatus
@@ -30,7 +36,21 @@ const Refund: Taro.FC<Props> = () => {
       skuStatus = 2
     else skuStatus = 1
     console.log(filesUrl.toString())
-    const {data, code} = await order.toRefund(itemDetail.id, reason, skuStatus, filesUrl.toString() || 0)
+    const proRefund = selectList.map(item => {
+      let proid
+      itemDetail.lsitdetais.map(pro => {
+        console.log(item === pro.id)
+        if (item === pro.id) {
+          proid = pro.skuid
+        }
+      })
+      return {
+        orderdetailid: item,
+        proid: proid
+      }
+    })
+    console.log(proRefund)
+    const {data, code} = await order.toRefund(itemDetail.id, reason, skuStatus, filesUrl.toString() || 0, JSON.stringify(proRefund))
     if (code === 0) {
       Taro.showToast({
         title: '退款提交成功',
@@ -86,7 +106,26 @@ const Refund: Taro.FC<Props> = () => {
       {itemDetail && (
         <View>
           {itemDetail.lsitdetais.map((shopItem, shopIndex) => (
-            <ReadCommodity key={shopIndex} imgUrl={shopItem.productimg} title={shopItem.productname} price={shopItem.proprice} num={shopItem.productcount} />
+            <View className='commonRowFlex flexCenter'
+                  key={shopIndex}
+                  style={{
+                    backgroundColor: 'white'
+                  }}
+            >
+              <AtCheckbox onChange={(e) => toggleCheck(e)}
+                          options={[{
+                            value: shopItem.id,
+                            label: ''
+                          }]}
+                          selectedList={selectList}
+              />
+             <View style={{
+               flex: 1
+             }}
+             >
+               <ReadCommodity imgUrl={shopItem.productimg} title={shopItem.productname} price={shopItem.proprice} num={shopItem.productcount} />
+             </View>
+            </View>
           ))}
           <HeightView />
           <View style={{
