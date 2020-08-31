@@ -116,7 +116,7 @@ const OrderDetail: Taro.FC<Props> = () => {
           }
         },
       ]},
-    1: {name: '待受理', button: [
+    1: {name: '已付款', button: [
         {
           title: '去退款',
           func: async (item) => {
@@ -154,7 +154,7 @@ const OrderDetail: Taro.FC<Props> = () => {
         //   }
         // }
       ]},
-    8: {name: '待收货', button: [
+    8: {name: '已发货', button: [
         {
           title: '去退款',
           func: async (item) => {
@@ -199,23 +199,9 @@ const OrderDetail: Taro.FC<Props> = () => {
                 ...item
               }})
           }
-        },{
-          title: '评价订单',
-          func: async (item) => {
-            navTo('mine','evaluationOrder', {item: {
-                lsitdetais: item.children.map(shopItem => {
-                  return {
-                    proprice: shopItem.productprice,
-                    ...shopItem
-                  }
-                }),
-                actualpay: item.actualPay,
-                ...item
-              }})
-          }
         }
       ]},
-    9: {name: '已完成', button: [
+    9: {name: '待评价', button: [
         {
           title: '去退款',
           func: async (item) => {
@@ -246,7 +232,7 @@ const OrderDetail: Taro.FC<Props> = () => {
           }
         }
       ]},
-    2: {name: '已受理', button: [
+    2: {name: '待发货', button: [
         {
           title: '去退款',
           func: async (item) => {
