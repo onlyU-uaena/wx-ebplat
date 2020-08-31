@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, useRouter, useReachBottom } from '@tarojs/taro'
+import Taro, { useState, useEffect, useRouter, useReachBottom, useScope } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { ScrollView, Text, View } from '@tarojs/components'
 import './index.scss'
@@ -15,6 +15,8 @@ import HeightView from '../../components/HeightView'
 import CardCommodity from '../../components/CardCommodity'
 import shopCart from '../shoppingCart/utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
+import useDidShow = Taro.useDidShow
+import usePageScroll = Taro.usePageScroll
 
 interface Props {
 
@@ -33,6 +35,7 @@ let outId: number
 const Classification: Taro.FC<Props> = () => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const scope = useScope()
   const shopState = useSelector(selectShopState)
   const authState = useSelector(selectAuthState)
   const [safeTop, setSafeTop] = useState<number>(0)
@@ -40,7 +43,8 @@ const Classification: Taro.FC<Props> = () => {
   const [skuList, setSkuList] = useState([])
   const [secClassList, setSecClassList] = useState<List[]>()
   const [advList, setAdvList] = useState<GetAdv[]>()
-  const [secIndex, setSecIndex] = useState<string>()
+  const [secIndex, setSecIndex] = useState<number>(0)
+  const [anchorArray, setAnchorArray] = useState([])
   const [secTitle, setSecTitle] = useState<string>()
   const [firIndex, setFirIndex] = useState<string>()
 
@@ -61,7 +65,7 @@ const Classification: Taro.FC<Props> = () => {
   }
 
   const getSecClass = async (num: string) => {
-    const {data} = await commodity.getClassList(num)
+    const {data} = await commodity.getAllSecPro(shopState.shopData.shopid, num)
     setSecClassList(data)
     return data
   }
@@ -78,44 +82,79 @@ const Classification: Taro.FC<Props> = () => {
     }
   }
 
-  const nextPage = async (id: number, reset: boolean) => {
-    const {data} = await commodity.getSortSku(shopState.shopData.shopid, id, page, 14, 0, 1)
-    if (reset)
-      setSkuList(data)
-    if (data.length) {
-      page = page + 1
-      if (reset)
-        setSkuList(data)
-      else
-        setSkuList(skuList.concat(data))
-    }
-  }
+  // const nextPage = async (id: number, reset: boolean) => {
+  //   const {data} = await commodity.getSortSku(shopState.shopData.shopid, id, page, 14, 0, 1)
+  //   if (reset)
+  //     setSkuList(data)
+  //   if (data.length) {
+  //     page = page + 1
+  //     if (reset)
+  //       setSkuList(data)
+  //     else
+  //       setSkuList(skuList.concat(data))
+  //   }
+  // }
 
-  useReachBottom(() => {
-    nextPage(outId, false)
-  })
+  // useReachBottom(() => {
+  //   nextPage(outId, false)
+  // })
 
-  const chooseSec = async (num: string, id: number, name: string) => {
-    setSecIndex(num)
-    page = 1
-    setSecTitle(name)
-    outId = id
-    nextPage(id, true)
+  const chooseSec = async (index) => {
+    setSecIndex(index)
+    Taro.pageScrollTo({
+      scrollTop: anchorArray[index] - anchorArray[0]
+    })
   }
 
   const chooseFir = async (num: string) => {
     const res = await getSecClass(num)
     setFirIndex(num)
-    chooseSec(res[0].num, res[0].id, res[0].name)
+    // chooseSec(res[0].num, res[0].id, res[0].name)
     return res
   }
 
-  useEffect(() => {
+  useDidShow(() => {
     initPage()
-  }, [])
+  })
+
+  const handleScroll = (e) => {
+    const scrollTop = e.scrollTop - anchorArray[0]
+    const scrollArr = anchorArray
+    // if (scrollTop >= scrollArr[scrollArr.length - 1] - (windowHeight - safeTop + 80)) {
+    //   return
+    // } else {
+    for (let i = 0; i < scrollArr.length; i++) {
+      if (scrollTop >= 0 && scrollTop < scrollArr[0]){
+        setSecIndex(0)
+      } else if (scrollTop >= scrollArr[i] && scrollTop < scrollArr[i + 1]) {
+        setSecIndex(i + 1)
+      }
+    }
+    // }
+  }
+
+  usePageScroll((e) => handleScroll(e))
 
   const toDetail = (id: number) => {
     navTo('home', 'productDetails', {id: id})
+  }
+
+  useEffect(() => {
+    getHeight()
+  }, [secClassList])
+
+  const getHeight = () => {
+    const query = Taro.createSelectorQuery().in(scope)
+    const heightArr = [];
+    let h = 0;
+    query.selectAll('.anchorPoint').boundingClientRect((react) =>{
+      react.forEach((res)=>{
+        h += res.height;
+        heightArr.push(h)
+      })
+      console.log(heightArr)
+      setAnchorArray(heightArr)
+    }).exec();
   }
 
   const addToCart = async (item) => {
@@ -205,20 +244,26 @@ const Classification: Taro.FC<Props> = () => {
       </View>
       <View className='commonRowFlex'>
         <View className='commonColumnFlex'>
-          {secClassList && secClassList.map((item, index) => (
-            <View className='commonRowFlex flexCenter normalPadding'
-                  key={item.id}
-                  onClick={() => chooseSec(item.num ,item.id, item.name)}
-                  style={{
-                    justifyContent: 'center',
-                    position: 'relative',
-                    backgroundColor: secIndex === item.num ? 'white' : colors.background
-                  }}
-            >
-              {secIndex === item.num ? (<View className='titleWithColor' />) : null}
-              <Text className={secIndex === item.num ? 'slightlySmallText redText boldText' : 'slightlySmallText'}>{item.name}</Text>
-            </View>
-          ))}
+          <View style={{
+            position: 'sticky',
+            top: safeTop + 107 + 'px'
+          }}
+          >
+            {secClassList && secClassList.map((item, index) => (
+              <View className='commonRowFlex flexCenter normalPadding'
+                    key={item.categoryid}
+                    onClick={() => chooseSec(index)}
+                    style={{
+                      justifyContent: 'center',
+                      position: 'relative',
+                      backgroundColor: secIndex === index ? 'white' : colors.background
+                    }}
+              >
+                {secIndex === index ? (<View className='titleWithColor' />) : null}
+                <Text className={secIndex === index ? 'slightlySmallText redText boldText' : 'slightlySmallText'}>{item.classname}</Text>
+              </View>
+            ))}
+          </View>
         </View>
         <View className='commonColumnFlex normalMargin'
               style={{
@@ -235,33 +280,37 @@ const Classification: Taro.FC<Props> = () => {
                 }}
           >
             <View className='commonColumnFlex'>
-              <Text className='boldText mediumText'>{secTitle}</Text>
-              {skuList.length && (
-                skuList.map(item => (
-                  <View key={item.id}
-                        className='normalPaddingTop normalPaddingBottom borderBottom commonRowFlex'
-                        onClick={() => toDetail(item.id)}
-                  >
-                    <AtAvatar size='normal' image={item.imgurl} />
-                    <View className='commonColumnFlex smallMarginLeft'
-                          style={{
-                            justifyContent: 'space-between',
-                            width: '100%'
-                          }}
-                    >
-                      <Text className='slightlySmallText'>{item.name}</Text>
-                      <View className='commonRowFlex flexCenter'
-                            style={{
-                              justifyContent: 'space-between'
-                            }}
+              {secClassList && (
+                secClassList.map(item => (
+                  <View className='anchorPoint' key={item.categoryid}>
+                    <Text className='boldText mediumText'>{item.classname}</Text>
+                    {item.skulist.map(shopItem => (
+                      <View className='normalPaddingTop normalPaddingBottom borderBottom commonRowFlex'
+                            key={shopItem.id}
+                            onClick={() => toDetail(shopItem.id)}
                       >
-                        <View className='commonRowFlex flexCenter'>
-                          <Text className='mediumText redText'>¥{item.price}</Text>
-                          {/*<Text className='smallText smallMarginLeft throughLineText grayText'>¥9.9</Text>*/}
+                        <AtAvatar size='normal' image={shopItem.imgurl} />
+                        <View className='commonColumnFlex smallMarginLeft'
+                              style={{
+                                justifyContent: 'space-between',
+                                width: '100%'
+                              }}
+                        >
+                          <Text className='slightlySmallText'>{shopItem.name}</Text>
+                          <View className='commonRowFlex flexCenter'
+                                style={{
+                                  justifyContent: 'space-between'
+                                }}
+                          >
+                            <View className='commonRowFlex flexCenter'>
+                              <Text className='mediumText redText'>¥{shopItem.price}</Text>
+                              {/*<Text className='smallText smallMarginLeft throughLineText grayText'>¥9.9</Text>*/}
+                            </View>
+                            <CustomIcon name='add' onClick={() => addToCart(shopItem)} color='rgb(239, 154, 151)' size={25} />
+                          </View>
                         </View>
-                        <CustomIcon name='add' onClick={() => addToCart(item)} color='rgb(239, 154, 151)' size={25} />
                       </View>
-                    </View>
+                    ))}
                   </View>
                 ))
               )}

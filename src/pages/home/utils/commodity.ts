@@ -32,6 +32,7 @@ class Commodity {
     getFullCutDetailImg: '/api/app/act/fullcutdetail',
     getFullCutDetailList: '/api/app/act/fullcutspulist',
     getHotPro: '/api/app/pro/gethotpromore',
+    getAllSecPro: 'api/app/pro/shopskunewlist',
     //积分商品
     getPointItem: '/api/app/pointspro/getpagelist'
   }
@@ -109,6 +110,14 @@ class Commodity {
       num
     }
     return await httpRequest(this.urls.getClassList, data, false)
+  }
+
+  public async getAllSecPro (shopid: number, classnum: string) {
+    const data = {
+      shopid,
+      classnum
+    }
+    return await httpRequest(this.urls.getAllSecPro, data, false)
   }
 
   public async getHotShop (shopid: number) {
