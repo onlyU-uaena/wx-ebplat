@@ -23,6 +23,7 @@ class User {
     getOrderCoupon: '/api/app/coupon/getOrderCoupon',
     getCouponCount: '/api/app/coupon/couponCount',
     swapCoupon: '/api/app/coupon/takeCoupon',
+    getOrderCount: '/api/app/order/getorderCount',
     // 微信接口
     wxAuth: '/api/app/ys/auth',
     wxRegister: '/api/app/userinfo/wxregister',
@@ -79,6 +80,12 @@ class User {
       type
     }
     return await httpRequest(this.urls.getPointInfo, data)
+  }
+
+  public async getOrderCount () {
+    const data = {
+    }
+    return await httpRequest(this.urls.getOrderCount, data)
   }
 
   public async getMessageList () {

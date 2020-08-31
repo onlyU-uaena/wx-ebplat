@@ -21,6 +21,7 @@ const Mine: Taro.FC<Props> = () => {
   const authState = useSelector(selectAuthState)
   const [assets, setAssets] = useState()
   const [couponCount, setCouponCount] = useState()
+  const [orderCount, setOrderCount] = useState([])
 
   const getAssets = async () => {
     const {data} = await user.queryassets()
@@ -40,9 +41,22 @@ const Mine: Taro.FC<Props> = () => {
     }
   }
 
+  const getOrderCount = async () => {
+    const {data} = await user.getOrderCount()
+    let list = []
+    for (let key in data) {
+      list.push(data[key])
+    }
+    list[1] = data['dsh']
+    list[2] = data['dpj']
+    setOrderCount(list)
+  }
+
   useEffect(() => {
-    if (authState.loginStatus)
+    if (authState.loginStatus) {
+      getOrderCount()
       getAssets()
+    }
   }, [authState.loginStatus])
 
   useDidShow(() => {
@@ -156,7 +170,7 @@ const Mine: Taro.FC<Props> = () => {
         >
           {firstIconList.map((item, index) => (
             <View onClick={() => navTo('mine', 'myOrder', {tab: index}, true)} className='commonColumnFlex flexCenter' style={{flex: 1}} key={index}>
-              <CustomIcon onClick={() => navTo('mine', 'myOrder', {tab: index}, true)} name={item.iconName} size={25} color='rgb(234, 114 ,49)' />
+              <CustomIcon dotNumber={orderCount[index] === 0 ? null : orderCount[index]} onClick={() => navTo('mine', 'myOrder', {tab: index}, true)} name={item.iconName} size={25} color='rgb(234, 114 ,49)' />
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>
           ))}
