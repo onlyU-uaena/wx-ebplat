@@ -55,6 +55,8 @@ class App extends Component {
           "swapRecord/index",
           "getCoupon/index",
           "qrCode/index",
+          "queryTrack/index",
+          "bindPhone/index",
           "changePassword/index",
           "payPwd/index",
           "setting/index",

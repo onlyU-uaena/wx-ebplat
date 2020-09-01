@@ -27,7 +27,7 @@ const PaySuccess: Taro.FC<Props> = () => {
 
   return (
     <View>
-      <TabBar title='支付成功' />
+      <TabBar backButton={false} title='支付成功' />
       {detail && (
         <View className='gradientTheme commonColumnFlex flexCenter'
               style={{

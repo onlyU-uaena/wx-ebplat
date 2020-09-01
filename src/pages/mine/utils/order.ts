@@ -11,11 +11,12 @@ class Order {
     deleteOrder: '/api/app/order/delOrder',
     confirmOrder: '/api/app/order/comfirmreceive',
     cancelOrder: '/api/app/order/cancel',
-    getFreight: '/api/app/order/getFreightByShop',
+    getFreight: '/api/app/order/getfreight',
     payOrder: '/api/app/pay/getwxconfig',
     toRefund: '/api/app/order/newafterreturn',
     toComment: '/api/app/order/addordercomment',
     getCommentList: '/api/app/pro/getprodcmt',
+    queryTrack: '/api/app/track/querytrack',
     // 团购
     addGroupOrder: '/api/app/grp/applypro',
     joinGroupOrder: '/api/app/grp/addorder',
@@ -59,11 +60,10 @@ class Order {
     return await httpRequest(this.urls.getCommentList, data, true, true, true, 'GET', () => {}, 2)
   }
 
-  public async getFreight (shopid: number, procount: number, proprice: number) {
+  public async getFreight (shopid: number, skuprice: number) {
     const data = {
       shopid,
-      procount,
-      proprice
+      skuprice
     }
     return await httpRequest(this.urls.getFreight, data)
   }
@@ -73,6 +73,13 @@ class Order {
       gnum
     }
     return await httpRequest(this.urls.myGroupDetail, data)
+  }
+
+  public async queryTrack (orderid: number) {
+    const data = {
+      orderid
+    }
+    return await httpRequest(this.urls.queryTrack, data)
   }
 
   @throttleFunc(1000)

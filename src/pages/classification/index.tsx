@@ -15,6 +15,7 @@ import HeightView from '../../components/HeightView'
 import CardCommodity from '../../components/CardCommodity'
 import shopCart from '../shoppingCart/utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
+
 import useDidShow = Taro.useDidShow
 import usePageScroll = Taro.usePageScroll
 
@@ -29,7 +30,7 @@ interface List {
   num: string
 }
 
-let page = 1
+const page = 1
 let outId: number
 
 const Classification: Taro.FC<Props> = () => {
@@ -102,7 +103,7 @@ const Classification: Taro.FC<Props> = () => {
   const chooseSec = async (index) => {
     setSecIndex(index)
     Taro.pageScrollTo({
-      scrollTop: anchorArray[index] - anchorArray[0]
+      scrollTop: anchorArray[index] - safeTop - 107 - 117
     })
   }
 
@@ -118,7 +119,7 @@ const Classification: Taro.FC<Props> = () => {
   })
 
   const handleScroll = (e) => {
-    const scrollTop = e.scrollTop - anchorArray[0]
+    const scrollTop = e.scrollTop + safeTop + 107 + 117 + 10
     const scrollArr = anchorArray
     // if (scrollTop >= scrollArr[scrollArr.length - 1] - (windowHeight - safeTop + 80)) {
     //   return
@@ -126,8 +127,8 @@ const Classification: Taro.FC<Props> = () => {
     for (let i = 0; i < scrollArr.length; i++) {
       if (scrollTop >= 0 && scrollTop < scrollArr[0]){
         setSecIndex(0)
-      } else if (scrollTop >= scrollArr[i] && scrollTop < scrollArr[i + 1]) {
-        setSecIndex(i + 1)
+      } else if (scrollTop >= scrollArr[i]) {
+        setSecIndex(i)
       }
     }
     // }
@@ -140,17 +141,19 @@ const Classification: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
-    getHeight()
+    Taro.pageScrollTo({
+      scrollTop: 0,
+      complete: () => getHeight()
+    })
   }, [secClassList])
 
   const getHeight = () => {
     const query = Taro.createSelectorQuery().in(scope)
     const heightArr = [];
     let h = 0;
-    query.selectAll('.anchorPoint').boundingClientRect((react) =>{
+    query.selectAll('.offSetPoint').boundingClientRect((react) =>{
       react.forEach((res)=>{
-        h += res.height;
-        heightArr.push(h)
+        heightArr.push(res.top)
       })
       console.log(heightArr)
       setAnchorArray(heightArr)
@@ -225,7 +228,12 @@ const Classification: Taro.FC<Props> = () => {
       </View>
       <View className='normalPadding'
             style={{
-              backgroundColor: 'white'
+              backgroundColor: 'white',
+              height: '117px',
+              position: 'fixed',
+              width: '100%',
+              top: safeTop + 107 + 'px',
+              zIndex: 100
             }}
       >
         <ScrollView scrollX>
@@ -246,7 +254,7 @@ const Classification: Taro.FC<Props> = () => {
         <View className='commonColumnFlex'>
           <View style={{
             position: 'sticky',
-            top: safeTop + 107 + 'px'
+            top: safeTop + 107 + 117 + 'px'
           }}
           >
             {secClassList && secClassList.map((item, index) => (
@@ -267,7 +275,8 @@ const Classification: Taro.FC<Props> = () => {
         </View>
         <View className='commonColumnFlex normalMargin'
               style={{
-                flex: 1
+                flex: 1,
+                marginTop: safeTop + 107 + 'px'
               }}
         >
           <View>
@@ -283,6 +292,7 @@ const Classification: Taro.FC<Props> = () => {
               {secClassList && (
                 secClassList.map(item => (
                   <View className='anchorPoint' key={item.categoryid}>
+                    <View className='offSetPoint' />
                     <Text className='boldText mediumText'>{item.classname}</Text>
                     {item.skulist.map(shopItem => (
                       <View className='normalPaddingTop normalPaddingBottom borderBottom commonRowFlex'

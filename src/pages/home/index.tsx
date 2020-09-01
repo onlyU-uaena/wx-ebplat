@@ -579,8 +579,8 @@ const Home: Taro.FC<Props> = () => {
           {/*商品列表*/}
           <CusTabs tabs={tabList} active={0} changeTab={(id) => setTopicId(id)} defaultTitle='精选好物' />
           <View className='normalMarginLeft normalMarginRight'>
-            {shopState.shopData.shopid && (
-              <FreshList onRef={setFreshList} topicId={topicId} shopid={shopState.shopData.shopid} dispatchListFunc={async (page: number, size: number, topicid: number, shopId: number) => {
+            {(shopState.shopData.shopid || (shopInfo && shopInfo.shopid)) && (
+              <FreshList onRef={setFreshList} topicId={topicId} shopid={shopState.shopData.shopid || shopInfo.shopid} dispatchListFunc={async (page: number, size: number, topicid: number, shopId: number) => {
                 return await commodity.getTopicSku(topicid, shopId, page, size)
               }}
               />

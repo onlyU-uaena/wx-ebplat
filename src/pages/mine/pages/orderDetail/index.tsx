@@ -10,6 +10,9 @@ import CustomIcon from '../../../../components/CustomIcon'
 import order from '../../utils/order'
 import { delayBack, navTo } from '@utils/route'
 import { toCancelOrder, toConfirmOrder, toDeleteOrder } from '../../utils/modalOrder'
+import user from '../../utils/user'
+import account from '../../utils/login'
+import { loginIn } from '@redux/actions'
 
 interface Props {
 
@@ -29,37 +32,43 @@ const OrderDetail: Taro.FC<Props> = () => {
         {
           title: '去支付',
           func: async (item) => {
-            if (!Taro.getStorageSync('openid'))
-              return Taro.showToast({
-                title: '请使用微信登录才可使用支付功能',
-                icon: 'none'
-              })
-            const {code, data} = await order.payOrder(item.groupcode, Taro.getStorageSync('openid'))
-            if (code === 0) {
-              Taro.requestPayment({
-                fail: () => {
-                  Taro.showToast({
-                    title: '支付取消',
-                    icon: 'none'
-                  })
-                },
-                success: () => {
-                  Taro.showToast({
-                    title: '支付成功',
-                    icon: 'none',
-                    mask: true
-                  })
-                  setTimeout(() => {
-                    navTo('home', 'paySuccess', {detail: orderDetail})
-                  }, 1500)
-                },
-                nonceStr: data.nonceStr,
-                signType: data.signType,
-                paySign: data.paySign,
-                timeStamp: data.timeStamp,
-                package: data.packages
-              })
-            }
+            Taro.login({
+              success: (e) => {
+                Taro.getUserInfo({
+                  withCredentials: true,
+                  success: async (info) => {
+                    console.log(info)
+                    console.log(e)
+                    const codeRes = await user.wxAuth(e.code)
+                    const {code, data} = await order.payOrder(item.groupcode, codeRes.data)
+                    if (code === 0) {
+                      Taro.requestPayment({
+                        fail: () => {
+                          Taro.showToast({
+                            title: '支付取消',
+                            icon: 'none'
+                          })
+                        },
+                        success: () => {
+                          Taro.showToast({
+                            title: '支付成功',
+                            icon: 'none',
+                            mask: true
+                          })
+                          setTimeout(() => {
+                            navTo('home', 'paySuccess', {detail: orderDetail})
+                          }, 1500)
+                        },
+                        nonceStr: data.nonceStr,
+                        signType: data.signType,
+                        paySign: data.paySign,
+                        timeStamp: data.timeStamp,
+                        package: data.packages
+                      })
+                    }                  }
+                })
+              }
+            })
           }
         }
       ]},
@@ -356,7 +365,14 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>配送方式</Text>
-              <Text className='mediumText'>{orderDetail.transportMode === 0 ? '物流配送' : '自提'}</Text>
+              <View onClick={() => {
+                if (orderDetail.transportMode === 0)
+                  navTo('mine' , 'queryTrack', {orderId: orderDetail.id})
+              }}
+              >
+                <Text className='mediumText'>{orderDetail.transportMode === 0 ? '物流配送' : '自提'}</Text>
+                <Text className='mediumText grayText'>{orderDetail.transportMode === 0 ? ' >' : ''}</Text>
+              </View>
             </View>
           </View>
           <HeightView />
@@ -431,6 +447,10 @@ const OrderDetail: Taro.FC<Props> = () => {
               <Text className='mediumText orangeText'>{statusToTitle[orderDetail.status].name}</Text>
             </View>
             <HeightView />
+            {(orderDetail && orderDetail.status === 0) && (
+              <Text className='slightlySmallText grayText normalMarginLeft'>订单超过24小时未支付将失效</Text>
+            )}
+            <HeightView />
             {(orderDetail && orderDetail.status === 13) && (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'
                     style={{
@@ -477,6 +497,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                 {orderDetail && !orderDetail.iscomment && (
                   <View className='smallMarginLeft'>
                     <AtButton type='primary'
+                              openType='getUserInfo'
                               onClick={() => statusToTitle[orderDetail.status].button[1].func(orderDetail)}
                               customStyle={{
                                 padding: '0 16px'

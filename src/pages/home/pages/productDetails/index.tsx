@@ -24,8 +24,8 @@ interface Props {
 
 }
 
-const tabList = ['商品', '评价', '详情', '推荐']
-const anchor = ['product', 'comment', 'detail', 'share']
+const tabList = ['商品', '评价', '推荐', '详情']
+const anchor = ['product', 'comment', 'share', 'detail']
 
 const ProductDetails: Taro.FC<Props> = () => {
   const [safeTop, setSafeTop] = useState<number>(0)
@@ -621,34 +621,38 @@ const ProductDetails: Taro.FC<Props> = () => {
             <AtFloatLayout isOpened={showFloat}
                            onClose={() => setShowFloat(false)}
             >
-              <View className='commonRowFlex normalMargin' style={{
-                justifyContent: 'space-between'
-              }}
-              >
-                <View className='commonRowFlex'>
-                  <AtAvatar size='large' image={proDetail.imgurl} />
-                  <View className='commonColumnFlex normalMarginLeft' style={{
-                    justifyContent: 'flex-end'
-                  }}
-                  >
-                    <Text className='redText mediumText'>¥{controlShow === 1 ? proDetail.packings.skiprice : buyGroup ? proDetail.skugrp.gprice : proDetail.price}</Text>
-                    <HeightView />
-                    <Text className='slightlySmallText grayText'>库存{proDetail.stock}件{controlShow === 1 && <Text className='slightlySmallText grayText smallMarginLeft'>(限购{proDetail.packings.maxcount}件)</Text>}</Text>
+              <View>
+                <View className='commonRowFlex normalMargin' style={{
+                  justifyContent: 'space-between'
+                }}
+                >
+                  <View className='commonRowFlex'>
+                    <AtAvatar size='large' image={proDetail.imgurl} />
+                    <View className='commonColumnFlex normalMarginLeft' style={{
+                      justifyContent: 'flex-end'
+                    }}
+                    >
+                      <Text className='redText mediumText'>¥{controlShow === 1 ? proDetail.packings.skiprice : buyGroup ? proDetail.skugrp.gprice : proDetail.price}</Text>
+                      <HeightView />
+                      <Text className='slightlySmallText grayText'>库存{proDetail.stock}件{controlShow === 1 && <Text className='slightlySmallText grayText smallMarginLeft'>(限购{proDetail.packings.maxcount}件)</Text>}</Text>
+                    </View>
                   </View>
+                  <CustomIcon name='close' size={15} color='gray' onClick={() => setShowFloat(false)} />
                 </View>
-                <CustomIcon name='close' size={15} color='gray' onClick={() => setShowFloat(false)} />
+                <View className='commonRowFlex normalMargin flexCenter' style={{
+                  justifyContent: 'space-between'
+                }}
+                >
+                  <Text>数量</Text>
+                  {proDetail.packings ? (
+                    <AtInputNumber type='number' min={1} max={proDetail.packings.maxcount} value={buyNum} onChange={setBuyNum} />
+                  ) : (
+                    <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
+                  )}
+                </View>
               </View>
-              <View className='commonRowFlex normalMargin flexCenter' style={{
-                justifyContent: 'space-between'
-              }}
-              >
-                <Text>数量</Text>
-                {proDetail.packings ? (
-                  <AtInputNumber type='number' min={1} max={proDetail.packings.maxcount} value={buyNum} onChange={setBuyNum} />
-                ) : (
-                  <AtInputNumber type='number' min={1} max={proDetail.stock} value={buyNum} onChange={setBuyNum} />
-                )}
-              </View>
+            </AtFloatLayout>
+            {showFloat && (
               <View className='commonRowFlex gradientTheme flexCenter normalPadding'
                     onClick={() => toOrder(controlShow === 1 ? 1 : buyGroup ? 2 : 0)}
                     style={{
@@ -656,12 +660,12 @@ const ProductDetails: Taro.FC<Props> = () => {
                       position: 'fixed',
                       width: '100%',
                       bottom: 0,
-                      zIndex: 999
+                      zIndex: 9999
                     }}
               >
                 <Text className='whiteText mediumText'>确认</Text>
               </View>
-            </AtFloatLayout>
+            )}
           </View>
         )}
       </ScrollView>

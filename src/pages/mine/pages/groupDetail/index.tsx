@@ -49,6 +49,7 @@ const GroupDetail: Taro.FC<Props> = () => {
       freightMoney: 0,
       activityId: 0,
       gnum: detail.ugnum,
+      gid: detail.gid,
       skuID: [{
         skuid: detail.proid,
         title: detail.proname,
@@ -85,13 +86,13 @@ const GroupDetail: Taro.FC<Props> = () => {
   })
 
   const getDetail = async (gnum: number) => {
-    const {data} = await order.myGroupDetail(gnum)
-    setDetail(data)
-    if (authState.userData.id === data.users[0].id)
+    const res = await order.myGroupDetail(gnum)
+    setDetail(res.data)
+    if (authState.userData.id === res.data.users[0].id)
       setMode(false)
     else
       setMode(true)
-    const time = getCount(data.endtime, data.paytime)
+    const time = getCount(res.data.endtime, res.data.paytime || res.startTime)
     setCountDown(time)
   }
 
@@ -242,7 +243,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                     <HeightView />
                   </View>
                 )}
-                {!helpMode && <AtButton circle
+                {!helpMode && detail && detail.orderid && <AtButton circle
                            onClick={() => navTo('mine', 'orderDetail', {id: detail.orderid})}
                            customStyle={{
                              borderColor: colors.themeRed,

@@ -21,6 +21,7 @@ const Refund: Taro.FC<Props> = () => {
   const [itemDetail, setItemDetail] = useState()
   const [reason, setReason] = useState()
   const [about, setAbout] = useState<string>()
+  const [refundPrice, setRefundPrice] = useState<number>(0.00)
   const [files, setFiles] = useState()
   const [selectList, setSelectList] = useState([])
   const [filesUrl, setFilesUrl] = useState([])
@@ -96,7 +97,24 @@ const Refund: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
+    let price = 0.00
+    selectList.map(selectItem => {
+      itemDetail.lsitdetais.map(item => {
+        if (item.id === selectItem) {
+          price += (item.proprice * item.productcount)
+        }
+      })
+    })
+    setRefundPrice(price)
+  }, [selectList])
+
+  useEffect(() => {
     const detail = JSON.parse(router.params.props).item
+    const defaultSelect = []
+    detail.lsitdetais.map(item => {
+      defaultSelect.push(item.id)
+    })
+    setSelectList(defaultSelect)
     setItemDetail(detail)
   }, [])
 
@@ -134,7 +152,7 @@ const Refund: Taro.FC<Props> = () => {
           >
             <InputCard title='订单编号' rightTitle={itemDetail.code} />
             <AtInput title='退款原因' name='退款原因' placeholder='请填写退款原因' onChange={e => setReason(String(e))} />
-            <InputCard title='退款金额' renderRight={() => (<Text className='mediumText redText'>{itemDetail.actualpay.toFixed(2)}</Text>)} />
+            <AtListItem title='退款金额' extraText={refundPrice.toFixed(2) || 0.00} />
             <AtInput title='退款说明' name='退款说明' placeholder='选填' onChange={e => setAbout(String(e))} />
           </View>
           <View className='normalPadding' style={{

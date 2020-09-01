@@ -24,6 +24,7 @@ export interface OrderDetail {
   activityId: number
   scids?: string
   gnum?: number
+  gid?: string
   skuID: {
     title: string
     subtitle: string
@@ -49,6 +50,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
   const shopState = useSelector(selectShopState)
 
   const [showFloat, setShowFloat] = useState<boolean>(false)
+  const [freightPrice, setFreightPrice] = useState({freight: '', freightdesc: ''})
   const [currentTab, setCurrentTab] = useState<number>(0)
   const [discount, setDiscount] = useState<number>(0)
   const [orderDetail, setOrderDetail] = useState<OrderDetail>()
@@ -59,7 +61,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
   useEffect(() => {
     const data = JSON.parse(router.params.props)
     setOrderDetail(data)
-    console.log(data)
+    getFreight(data.totalMoney)
     getOrderCoupon(data)
   }, [])
 
@@ -89,7 +91,13 @@ const ConfirmOrder: Taro.FC<Props> = () => {
     setCouponList(newList)
   }
 
+  const getFreight = async (price) => {
+    const {data} = await order.getFreight(shopState.shopData.shopid, price)
+    setFreightPrice(data)
+  }
+
   const chooseCoupon = (e) => {
+    console.log(e)
     if (e) {
       setDiscount(JSON.parse(e).facevalue)
       setCoupon(e)
@@ -145,9 +153,11 @@ const ConfirmOrder: Taro.FC<Props> = () => {
         icon: 'none'
       })
     }
-    const addRes = await order.addGroupOrder(orderDetail.skuID[0].skuid, orderDetail.skuID[0].skugrp.id, orderDetail.gnum)
-    if (addRes.code === 0) {
-      const {code, data} = await order.joinGroupOrder(orderDetail.skuID[0].proCount, orderDetail.skuID[0].skuid, addRes.data, shopState.address.id, currentTab, '12:00', remark, '12:00')
+    let addRes = {data: ''}
+    if (!orderDetail.gid)
+      addRes = await order.addGroupOrder(orderDetail.skuID[0].skuid, orderDetail.skuID[0].skugrp.id, orderDetail.gnum)
+    const {code, data} = await order.joinGroupOrder(orderDetail.skuID[0].proCount, orderDetail.skuID[0].skuid, addRes.data || orderDetail.gnum, shopState.address.id || '', currentTab, '12:00', remark, '12:00')
+    if (code === 0) {
       const orderRes = await order.getOrderList(1, 14, '', data)
       if (orderRes.code === 0)
         navTo('mine', 'orderDetail', {id: orderRes.data[0].id})
@@ -215,19 +225,21 @@ const ConfirmOrder: Taro.FC<Props> = () => {
             backgroundColor: 'white'
           }}
           >
-            <AtListItem title='商品金额' extraText={`¥${orderDetail.totalMoney}`} />
-            <AtListItem title='优惠金额' extraText={`¥${discount}`} />
-            <AtListItem title='配送费' extraText={`¥${orderDetail.freightMoney}`} />
+            <AtListItem title='商品金额' extraText={`¥${orderDetail.totalMoney.toFixed(2)}`} />
+            <AtListItem title='优惠金额' extraText={`¥${discount.toFixed(2)}`} />
+            <AtListItem title='配送费' extraText={`¥${freightPrice.freight}`} note={freightPrice.freightdesc} />
           </View>
           <HeightView />
           <View style={{
             backgroundColor: 'white'
           }}
           >
-            <InputCard title='优惠券'
-                       onClick={() => setShowFloat(true)}
-                       rightTitle={(couponList.length - 1) ? `${couponList.length - 1}张可用` : `暂无可用`}
-            />
+            {orderDetail && !(orderDetail.skuID[0].isgrp || orderDetail.skuID[0].spikeid !== 0) && (
+              <InputCard title='优惠券'
+                         onClick={() => setShowFloat(true)}
+                         rightTitle={coupon ? JSON.parse(coupon).couponname : `${couponList.length - 1 > 0 ? couponList.length - 1 : 0}张可用`}
+              />
+            )}
             <AtInput name='remark' title='备注' placeholder='请输入备注' onChange={(e) => setRemark(String(e))} />
             <InputCard title=''
                        link={false}

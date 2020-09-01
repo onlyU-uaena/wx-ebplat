@@ -41,6 +41,10 @@ const Mine: Taro.FC<Props> = () => {
     }
   }
 
+  useEffect(() => {
+    autoLogin()
+  }, [])
+
   const getOrderCount = async () => {
     const {data} = await user.getOrderCount()
     let list = []
@@ -53,14 +57,16 @@ const Mine: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
-    if (authState.loginStatus) {
-      getOrderCount()
-      getAssets()
+    if (!authState.loginStatus) {
+      setOrderCount([0, 0, 0, 0])
     }
   }, [authState.loginStatus])
 
   useDidShow(() => {
-    autoLogin
+    if (authState.loginStatus) {
+      getOrderCount()
+      getAssets()
+    }
   })
 
   return (

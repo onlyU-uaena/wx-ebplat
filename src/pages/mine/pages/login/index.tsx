@@ -83,12 +83,11 @@ const Login: Taro.FC<Props> = () => {
                 delayBack(1, 0)
               }
             } else {
-              const regRes = await user.wxRegister(data, info.userInfo.nickName, info.userInfo.avatarUrl)
-              if (regRes.code === 0) {
-                const userData = await account.getUserData()
-                dispatch(loginIn(userData.data))
-                delayBack(1, 0)
-              }
+              navTo('mine', 'bindPhone', {
+                openid: data,
+                nickName: info.userInfo.nickName,
+                imgUrl: info.userInfo.avatarUrl
+              })
             }
           }
         })

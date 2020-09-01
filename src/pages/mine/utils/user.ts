@@ -177,13 +177,15 @@ class User {
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
   @throttleFunc(1000)
-  public async wxRegister (openid: string, nickname: string, imgurl: string) {
+  public async wxRegister (openid: string, nickname: string, imgurl: string, mobile: string, sms: string) {
     const data = {
       openid,
       nickname,
-      imgurl
+      imgurl,
+      mobile,
+      sms
     }
-    return await httpRequest(this.urls.wxRegister, data)
+    return await httpRequest(this.urls.wxRegister, data, true, true, false)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
