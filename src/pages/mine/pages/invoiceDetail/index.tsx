@@ -43,7 +43,7 @@ const InvoiceDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText boldText'>电子发票</Text>
-              <Text className='mediumText orangeText'>{detail.isdel ? '已开票' : '未开票'}</Text>
+              <Text className='mediumText orangeText'>已开票</Text>
             </View>
             <HeightView />
             <View className='normalPadding'

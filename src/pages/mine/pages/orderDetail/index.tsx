@@ -328,23 +328,37 @@ const OrderDetail: Taro.FC<Props> = () => {
             backgroundColor: 'white'
           }}
           >
-            <View className='commonRowFlex normalPadding borderBottom flexCenter'
-                  style={{
-                    justifyContent: 'space-between'
-                  }}
-            >
-              <Text className='mediumText'>配送地址</Text>
-              <Text className='mediumText'>{orderDetail.address || '暂无'}</Text>
-            </View>
-            <View className='commonRowFlex normalPadding borderBottom flexCenter'
-                  style={{
-                    justifyContent: 'space-between'
-                  }}
-            >
-              <Text className='mediumText'>收货人 {orderDetail.telPhone}</Text>
-              <Text className='mediumText'>{orderDetail.consignee || '暂无'}</Text>
-            </View>
-            {(orderDetail && orderDetail.qrcodenumber && orderDetail.deliveryMode !== 0) ? (
+            {orderDetail.transportMode === 0 && (
+              <View>
+                <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                      style={{
+                        justifyContent: 'space-between'
+                      }}
+                >
+                  <Text className='mediumText'>配送地址</Text>
+                  <Text className='mediumText'>{orderDetail.address || '暂无'}</Text>
+                </View>
+                <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                      style={{
+                        justifyContent: 'space-between'
+                      }}
+                >
+                  <Text className='mediumText'>收货人 {orderDetail.telPhone}</Text>
+                  <Text className='mediumText'>{orderDetail.consignee || '暂无'}</Text>
+                </View>
+              </View>
+            )}
+            {orderDetail.transportMode !== 0 && (
+              <View className='commonRowFlex normalPadding borderBottom flexCenter'
+                    style={{
+                      justifyContent: 'space-between'
+                    }}
+              >
+                <Text className='mediumText'>店铺地址</Text>
+                <Text className='mediumText'>{orderDetail.shopname || '暂无'}</Text>
+              </View>
+            )}
+            {(orderDetail && orderDetail.qrcodenumber && orderDetail.transportMode !== 0) ? (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'
                     onClick={() => navTo('mine', 'qrCode', orderDetail)}
                     style={{

@@ -44,8 +44,8 @@ const InvoiceRecord: Taro.FC<Props> = () => {
                       justifyContent: 'space-between'
                     }}
               >
-                <Text className='slightlySmallText'>2018</Text>
-                <Text className='mediumText orangeText'>{item.type === 2 ? '未开票' : '已开票'}</Text>
+                <Text className='slightlySmallText'>开票状态</Text>
+                <Text className='mediumText orangeText'>已开票</Text>
               </View>
               <HeightView />
               <View className='commonRowFlex flexCenter'

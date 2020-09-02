@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, useDidShow } from '@tarojs/taro'
+import Taro, { useState, useEffect, useDidShow, useReachBottom } from '@tarojs/taro'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import { Text, View } from '@tarojs/components'
 import './index.scss'
@@ -25,11 +25,26 @@ const MyMessage: Taro.FC<Props> = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false)
   const [selectList, setSelectList] = useState([])
   const [allSelect, setAllSelect] = useState<string[]>([])
+  const [page, setPage] = useState<number>(1)
 
-  const getList = async () => {
-    const {data} = await user.getMessageList()
-    setMessageList(data)
+  const getList = async (reset?: boolean) => {
+    if (reset) {
+      setPage(1)
+    }
+    const {data} = await user.getMessageList(reset ? 1 : page, 14)
+    if (data.length) {
+      setPage(page + 1)
+      if (reset) {
+        setMessageList(data)
+      } else {
+        setMessageList(messageList.concat(data))
+      }
+    }
   }
+
+  useReachBottom(() => {
+    getList()
+  })
 
   const toggleCheck = (e) => {
     if (e.length === messageList.length) {
@@ -76,7 +91,7 @@ const MyMessage: Taro.FC<Props> = () => {
   }
 
   useDidShow(() => {
-    getList()
+    getList(true)
   })
 
   return (

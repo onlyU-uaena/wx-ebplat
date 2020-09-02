@@ -88,8 +88,10 @@ class User {
     return await httpRequest(this.urls.getOrderCount, data)
   }
 
-  public async getMessageList () {
+  public async getMessageList (page: number, size: number) {
     const data = {
+      page,
+      size
     }
     return await httpRequest(this.urls.getMessageList, data, true, true, true, 'GET', () => {}, 2)
   }
