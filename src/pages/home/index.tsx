@@ -1,5 +1,5 @@
 import Taro, { useState, useEffect, useReachBottom, usePullDownRefresh } from "@tarojs/taro"
-import { View, Text, ScrollView } from '@tarojs/components'
+import { View, Text, ScrollView, Image } from '@tarojs/components'
 import TabBar from '../../components/TabBar'
 import './index.scss'
 import { getLocation } from '@utils/getLocation'
@@ -47,6 +47,7 @@ const Home: Taro.FC<Props> = () => {
   const [tabList, setTabList] = useState()
   const [fullCutList, setFullCutList] = useState([])
   const [hotList, setHotList] = useState()
+  const [hotActivity, setHotActivity] = useState()
   const [messageList, setMessageList] = useState()
   const [classList, setClassList] = useState()
 
@@ -117,6 +118,7 @@ const Home: Taro.FC<Props> = () => {
       getClassList(shopRes)
       getFullCutList(shopRes)
       getGroupHome(shopRes)
+      getHotActivity()
       getAdv(shopRes)
     } catch (e) {
       console.log(e)
@@ -134,7 +136,7 @@ const Home: Taro.FC<Props> = () => {
   })
 
   useEffect(() => {
-    if (showIndex > 4) {
+    if (showIndex > 5) {
       setShowPage(true)
       Taro.stopPullDownRefresh()
       showIndex = 0
@@ -158,6 +160,13 @@ const Home: Taro.FC<Props> = () => {
     setHotList(hotListRes.data)
     showIndex += 1
   }
+
+  const getHotActivity = async () => {
+    const activity = await commodity.getHotActivity()
+    setHotActivity(activity.data)
+    showIndex += 1
+  }
+
   const getSpikeHome = async (shopRes) => {
     const spikeRes = await commodity.getSpikeHome(shopState.shopData.shopid || shopRes.data.shopid)
     setSpikeList(spikeRes.data || {pros: []})
@@ -542,6 +551,42 @@ const Home: Taro.FC<Props> = () => {
             )}
           </View>
           {/*热门活动*/}
+          <View className='normalMarginTop commonRowFlex flexCenter'
+                style={{
+                  position: 'relative',
+                  justifyContent: 'space-between'
+                }}
+          >
+            <View>
+              <View className='titleWithColor' />
+              <Text className='boldText'
+                    style={{
+                      marginLeft: '16px'
+                    }}
+              >热门活动</Text>
+            </View>
+            <Text onClick={() => navTo('home', 'hotActivity')}
+                  className='slightlySmallText normalMarginRight'
+            >{`查看更多 >`}</Text>
+          </View>
+          <View
+            style={{
+              margin: '16px 16px 0 16px',
+            }}
+          >
+            {hotActivity && (
+              <Image src={hotActivity.img}
+                     onClick={() => navTo('home', 'activityDetail', {id: hotActivity.id})}
+                     style={{
+                       height: '100px',
+                       width: '100%',
+                       borderRadius: '15px'
+                     }}
+              >
+              </Image>
+            )}
+          </View>
+          {/*热销排行榜*/}
           <View className='normalMarginTop commonRowFlex flexCenter'
                 style={{
                   position: 'relative',

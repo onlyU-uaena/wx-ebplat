@@ -79,6 +79,8 @@ class App extends Component {
           'chooseAddress/index',
           'pointOrder/index',
           'modifyAddress/index',
+          'hotActivity/index',
+          'activityDetail/index',
           'addAddress/index',
           'productDetails/index',
           'search/index',

@@ -21,6 +21,9 @@ class Commodity {
     getHotShop: '/api/app/pro/gethotpro',
     getClassList: '/api/app/pro/classlist',
     getSpikeHome: '/api/app/act/indexms',
+    getHotActivity: '/api/app/act/indexhot',
+    getHotActivityList: '/api/app/act/hotlist',
+    getHotActivityDetail: '/api/app/act/hotdetail',
     getSpikeList: '/api/app/act/mslist',
     getGroupHome: '/api/app/act/indexgroup',
     getGroupList: '/api/app/act/groupprolist',
@@ -125,6 +128,25 @@ class Commodity {
       shopid
     }
     return await httpRequest(this.urls.getHotShop, data, false)
+  }
+
+  public async getHotActivity () {
+    const data = {
+    }
+    return await httpRequest(this.urls.getHotActivity, data, false)
+  }
+
+  public async getHotActivityList () {
+    const data = {
+    }
+    return await httpRequest(this.urls.getHotActivityList, data)
+  }
+
+  public async getHotActivityDetail (id: string) {
+    const data = {
+      id
+    }
+    return await httpRequest(this.urls.getHotActivityDetail, data)
   }
 
   public async getShop () {
