@@ -22,6 +22,7 @@ export interface OrderDetail {
   totalMoney: number
   freightMoney: number
   activityId: number
+  discount?: number
   scids?: string
   gnum?: number
   gid?: string
@@ -53,6 +54,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
   const [freightPrice, setFreightPrice] = useState({freight: '', freightdesc: ''})
   const [currentTab, setCurrentTab] = useState<number>(0)
   const [discount, setDiscount] = useState<number>(0)
+  const [countDown, setCountDown] = useState<number>(0.00)
   const [orderDetail, setOrderDetail] = useState<OrderDetail>()
   const [remark, setRemark] = useState<string>('')
   const [coupon, setCoupon] = useState()
@@ -61,6 +63,8 @@ const ConfirmOrder: Taro.FC<Props> = () => {
   useEffect(() => {
     const data = JSON.parse(router.params.props)
     setOrderDetail(data)
+    setCountDown(data.discount || 0.00)
+    setDiscount(data.discount || 0.00)
     getFreight(data.totalMoney)
     getOrderCoupon(data)
   }, [])
@@ -99,11 +103,11 @@ const ConfirmOrder: Taro.FC<Props> = () => {
   const chooseCoupon = (e) => {
     console.log(e)
     if (e) {
-      setDiscount(JSON.parse(e).facevalue)
+      setDiscount(JSON.parse(e).facevalue + Number(countDown))
       setCoupon(e)
     } else {
       setCoupon(null)
-      setDiscount(0)
+      setDiscount(countDown)
     }
     setShowFloat(false)
   }
@@ -261,7 +265,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
           }}
           >
             <AtListItem title='商品金额' extraText={`¥${orderDetail.totalMoney.toFixed(2)}`} />
-            <AtListItem title='优惠金额' extraText={`¥${discount.toFixed(2)}`} />
+            <AtListItem title='优惠金额' extraText={`¥${discount}`} />
             {currentTab === 0 && (
               <AtListItem title='配送费' extraText={`¥${freightPrice.freight}`} note={freightPrice.freightdesc} />
             )}

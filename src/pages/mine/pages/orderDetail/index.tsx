@@ -328,7 +328,7 @@ const OrderDetail: Taro.FC<Props> = () => {
             backgroundColor: 'white'
           }}
           >
-            {orderDetail.transportMode === 0 && (
+            {orderDetail && orderDetail.transportMode === 0 && (
               <View>
                 <View className='commonRowFlex normalPadding borderBottom flexCenter'
                       style={{
@@ -348,7 +348,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                 </View>
               </View>
             )}
-            {orderDetail.transportMode !== 0 && (
+            {orderDetail && orderDetail.transportMode !== 0 && (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'
                     style={{
                       justifyContent: 'space-between'

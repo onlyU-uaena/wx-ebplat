@@ -54,7 +54,8 @@ const ShoppingCart: Taro.FC<Props> = () => {
       shopid: item.shopid,
       totalMoney: item.totalmoney,
       freightMoney: item.freightMoney,
-      activityId: item.activityid,
+      discount: item.delmoney.toFixed(2),
+      activityId: (cartList.shops[0].asd[0] && cartList.shops[0].asd[0].isselect) ? cartList.shops[0].asd[0].id : 0,
       scids: cartList.shops.map(item => item.spuscd.filter(filterItem => filterItem.isselected).map(shopItem => shopItem.shopcartproid)).toString(),
       skuID: item.spuscd.filter(sku => sku.isselected).map(sku => {
         return {
@@ -123,6 +124,8 @@ const ShoppingCart: Taro.FC<Props> = () => {
   }
 
   useDidShow(() => {
+    if (freshList)
+      freshList.refreshList()
     if (authState.loginStatus) {
       getCart()
     }
@@ -162,7 +165,7 @@ const ShoppingCart: Taro.FC<Props> = () => {
                   </View>
                   <Text className='orangeText slightlySmallText'
                         onClick={() => navTo('home', 'fullCutDetail', {actId: asdItem.id})}
-                  >去凑单</Text>
+                  >{asdItem.isselect ? '' : '去凑单'}</Text>
                 </View>
               ))}
               {item.spuscd.map((shopItem, shopIndex) => (
@@ -278,7 +281,7 @@ const ShoppingCart: Taro.FC<Props> = () => {
                     <Text className='smallText'>(不含运费):</Text>
                     <Text className='slightlySmallText redText'>¥{cartList.amountpayable}</Text>
                   </View>
-                  <Text className='smallText grayText'>已优惠:¥{cartList.money - cartList.amountpayable}</Text>
+                  <Text className='smallText grayText'>已优惠:¥{(cartList.money - cartList.amountpayable).toFixed(2)}</Text>
                 </View>
               </View>}
             </View>

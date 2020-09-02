@@ -20,6 +20,7 @@ import user from '../mine/utils/user'
 import { getCount } from './utils/count'
 import HeightView from '../../components/HeightView'
 import watchMore from './utils/watchMore.png'
+import useDidShow = Taro.useDidShow
 
 let firstIn = true
 let showIndex = 0
@@ -122,6 +123,15 @@ const Home: Taro.FC<Props> = () => {
       Taro.stopPullDownRefresh()
     }
   }
+
+  useDidShow( async () => {
+    if (authState.loginStatus) {
+      const messageRes = await user.getMessageCount(1, 0)
+      if (messageRes.data !== 0)
+        dispatch(setMessage())
+      setCartBadge(shopState.shopData.shopid || shopInfo.shopid)
+    }
+  })
 
   useEffect(() => {
     if (showIndex > 4) {
