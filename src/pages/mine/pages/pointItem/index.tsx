@@ -27,11 +27,16 @@ const PointItem: Taro.FC<Props> = () => {
     // point.swapItem()
   }
 
+  const getGoodDetail = async (id) => {
+    const {data} = await point.getGoodDetail(id)
+    setProDetail(data)
+    setImgList(data.goodimg.split(','))
+    WxParse.wxParse('article', 'html', data.goodinfo, scope, 5)
+  }
+
   useEffect(() => {
-    const pro = JSON.parse(router.params.props).pro
-    setProDetail(pro)
-    setImgList(pro.goodimg.split(','))
-    WxParse.wxParse('article', 'html', pro.goodinfo, scope, 5)
+    const id = JSON.parse(router.params.props).id
+    getGoodDetail(id)
   }, [])
 
   return (
@@ -74,7 +79,7 @@ const PointItem: Taro.FC<Props> = () => {
           {/*底部按钮*/}
           <View className='bottomGroup'>
             <AtButton full type='primary'
-                      onClick={() => navTo('home', 'pointOrder', {proDetail})}
+                      onClick={() => navTo('home', 'pointOrder', {id: proDetail.id})}
             >兑换</AtButton>
           </View>
         </View>

@@ -485,7 +485,7 @@ const OrderDetail: Taro.FC<Props> = () => {
                   }}
             >
               <Text className='mediumText'>支付时间</Text>
-              <Text className='slightlySmallText grayText'>暂无</Text>
+              <Text className='slightlySmallText grayText'>{orderDetail.paydatetr}</Text>
             </View>
             {statusToTitle[orderDetail.status].button.length === 2 ? (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'

@@ -158,9 +158,44 @@ const ConfirmOrder: Taro.FC<Props> = () => {
       addRes = await order.addGroupOrder(orderDetail.skuID[0].skuid, orderDetail.skuID[0].skugrp.id, orderDetail.gnum)
     const {code, data} = await order.joinGroupOrder(orderDetail.skuID[0].proCount, orderDetail.skuID[0].skuid, addRes.data || orderDetail.gnum, shopState.address.id || '', currentTab, '12:00', remark, '12:00')
     if (code === 0) {
-      const orderRes = await order.getOrderList(1, 14, '', data)
-      if (orderRes.code === 0)
-        navTo('mine', 'orderDetail', {id: orderRes.data[0].id})
+      Taro.login({
+        success: (e) => {
+          Taro.getUserInfo({
+            withCredentials: true,
+            success: async (info) => {
+              console.log(info)
+              console.log(e)
+              const codeRes = await user.wxAuth(e.code)
+              const payRes = await order.payOrder(data, codeRes.data)
+              if (payRes.code === 0) {
+                Taro.requestPayment({
+                  fail: () => {
+                    Taro.showToast({
+                      title: '支付取消',
+                      icon: 'none'
+                    })
+                  },
+                  success: () => {
+                    Taro.showToast({
+                      title: '支付成功',
+                      icon: 'none',
+                      mask: true
+                    })
+                    setTimeout(() => {
+                      navTo('mine', 'groupDetail', {outer: false, ugnum: addRes.data || orderDetail.gnum})
+                    }, 1500)
+                  },
+                  nonceStr: payRes.data.nonceStr,
+                  signType: payRes.data.signType,
+                  paySign: payRes.data.paySign,
+                  timeStamp: payRes.data.timeStamp,
+                  package: payRes.data.packages
+                })
+              }
+            }
+          })
+        }
+      })
     }
   }
 
@@ -227,7 +262,9 @@ const ConfirmOrder: Taro.FC<Props> = () => {
           >
             <AtListItem title='商品金额' extraText={`¥${orderDetail.totalMoney.toFixed(2)}`} />
             <AtListItem title='优惠金额' extraText={`¥${discount.toFixed(2)}`} />
-            <AtListItem title='配送费' extraText={`¥${freightPrice.freight}`} note={freightPrice.freightdesc} />
+            {currentTab === 0 && (
+              <AtListItem title='配送费' extraText={`¥${freightPrice.freight}`} note={freightPrice.freightdesc} />
+            )}
           </View>
           <HeightView />
           <View style={{
@@ -248,7 +285,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                            小计
                          </Text>
                          <Text className='mediumText redText normalMarginLeft'>
-                           {`¥${(orderDetail.totalMoney + orderDetail.freightMoney - discount) < 0 ? 0 : (orderDetail.totalMoney + orderDetail.freightMoney - discount).toFixed(2)}`}
+                           {`¥${(orderDetail.totalMoney + freightPrice.freight - discount) < 0 ? 0 : (orderDetail.totalMoney + freightPrice.freight - discount).toFixed(2)}`}
                          </Text>
                        </View>}
             />
@@ -270,7 +307,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                 合计
               </Text>
               <Text className='mediumText redText smallMarginLeft'>
-                {`¥${(orderDetail.totalMoney + orderDetail.freightMoney - discount) < 0 ? 0 : (orderDetail.totalMoney + orderDetail.freightMoney - discount).toFixed(2)}`}
+                {`¥${(orderDetail.totalMoney + freightPrice.freight - discount) < 0 ? 0 : (orderDetail.totalMoney + freightPrice.freight - discount).toFixed(2)}`}
               </Text>
             </View>
             {orderDetail && orderDetail.skuID[0].isgrp ? (
@@ -279,6 +316,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                 padding: '0 32px'
               }}
                         onClick={() => addGroupOrder()}
+                        openType='getUserInfo'
                         type='primary'
               >{orderDetail.gnum ? '参加团购' : '去开团'}</AtButton>
             ) : (

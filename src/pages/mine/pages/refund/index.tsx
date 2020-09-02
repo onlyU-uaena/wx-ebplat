@@ -31,6 +31,27 @@ const Refund: Taro.FC<Props> = () => {
     console.log(e)
   }
 
+  const getReturnPrice = async () => {
+    const proRefund = selectList.map(item => {
+      let proid
+      itemDetail.lsitdetais.map(pro => {
+        console.log(item === pro.id)
+        if (item === pro.id) {
+          proid = pro.spuid
+        }
+      })
+      return {
+        orderdetailid: item,
+        proid: proid
+      }
+    })
+    if (proRefund.length) {
+      const {data} = await order.getReturnPrice(1, JSON.stringify(proRefund), itemDetail.id)
+      setRefundPrice(data)
+    } else
+      setRefundPrice(0.00)
+  }
+
   const confirmToRefund = async () => {
     let skuStatus
     if ((itemDetail.status !== 9) || (itemDetail.status !== 10))
@@ -42,7 +63,7 @@ const Refund: Taro.FC<Props> = () => {
       itemDetail.lsitdetais.map(pro => {
         console.log(item === pro.id)
         if (item === pro.id) {
-          proid = pro.skuid
+          proid = pro.spuid
         }
       })
       return {
@@ -97,15 +118,16 @@ const Refund: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
-    let price = 0.00
-    selectList.map(selectItem => {
-      itemDetail.lsitdetais.map(item => {
-        if (item.id === selectItem) {
-          price += (item.proprice * item.productcount)
-        }
-      })
-    })
-    setRefundPrice(price)
+    // let price = 0.00
+    // selectList.map(selectItem => {
+    //   itemDetail.lsitdetais.map(item => {
+    //     if (item.id === selectItem) {
+    //       price += (item.proprice * item.productcount)
+    //     }
+    //   })
+    // })
+    // setRefundPrice(price)
+    getReturnPrice()
   }, [selectList])
 
   useEffect(() => {

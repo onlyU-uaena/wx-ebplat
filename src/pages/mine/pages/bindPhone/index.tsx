@@ -32,6 +32,7 @@ const BindPhone: Taro.FC<Props> = () => {
     const {openid, nickName, imgUrl} = wxInfo
     const regRes = await user.wxRegister(openid, nickName, imgUrl, phone, sms)
     if (regRes.code === 0) {
+      Taro.setStorageSync('token', regRes.token)
       const userData = await account.getUserData()
       dispatch(loginIn(userData.data))
       delayBack(2, 0)

@@ -119,15 +119,15 @@ const SpikeHome: Taro.FC<Props> = () => {
                       >
                         <Text className='mediumText'>{LimitStr(shopItem.skuname, 12)}</Text>
                       </View>
-                      <View style={{
-                        width: '70%'
-                      }}
-                      >
-                        <AtProgress percent={50}
-                                    status='progress'
-                                    color={colors.themeRed}
-                        />
-                      </View>
+                      {/*<View style={{*/}
+                      {/*  width: '70%'*/}
+                      {/*}}*/}
+                      {/*>*/}
+                      {/*  <AtProgress percent={50}*/}
+                      {/*              status='progress'*/}
+                      {/*              color={colors.themeRed}*/}
+                      {/*  />*/}
+                      {/*</View>*/}
                       <View className='commonRowFlex flexCenter'
                             style={{
                               justifyContent: 'space-between'
@@ -137,17 +137,31 @@ const SpikeHome: Taro.FC<Props> = () => {
                           <Text className='mediumText redText'>¥ {shopItem.activityprice}</Text>
                           <Text className='smallText throughLineText grayText smallMarginLeft'>¥ {shopItem.price}</Text>
                         </View>
-                        <AtButton className=''
-                                  size='small'
-                                  type='primary'
-                                  customStyle={{
-                                    backgroundColor: 'rgb(235, 60, 74)',
-                                    borderRadius: '4px',
-                                    color: 'white'
-                                  }}
-                        >
-                          马上抢 {`>`}
-                        </AtButton>
+                        {item.status === 1 ? (
+                          <AtButton className=''
+                                    size='small'
+                                    type='primary'
+                                    customStyle={{
+                                      backgroundColor: 'rgb(235, 60, 74)',
+                                      borderRadius: '4px',
+                                      color: 'white'
+                                    }}
+                          >
+                            马上抢 {`>`}
+                          </AtButton>
+                        ) : (
+                          <AtButton className=''
+                          size='small'
+                          disabled
+                          customStyle={{
+                          backgroundColor: 'gray',
+                          borderRadius: '4px',
+                          color: 'white'
+                        }}
+                          >
+                            {item.status === 2 ? '未开始' : '已结束'}
+                          </AtButton>
+                          )}
                       </View>
                     </View>
                   </View>

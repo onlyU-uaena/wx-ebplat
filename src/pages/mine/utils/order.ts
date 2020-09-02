@@ -14,6 +14,7 @@ class Order {
     getFreight: '/api/app/order/getfreight',
     payOrder: '/api/app/pay/getwxconfig',
     toRefund: '/api/app/order/newafterreturn',
+    getReturnPrice: '/api/app/order/getreturnprice',
     toComment: '/api/app/order/addordercomment',
     getCommentList: '/api/app/pro/getprodcmt',
     queryTrack: '/api/app/track/querytrack',
@@ -66,6 +67,15 @@ class Order {
       skuprice
     }
     return await httpRequest(this.urls.getFreight, data)
+  }
+
+  public async getReturnPrice (type: number, orderdetaiparams: string, orderid: string) {
+    const data = {
+      type,
+      orderdetaiparams,
+      orderid
+    }
+    return await httpRequest(this.urls.getReturnPrice, data)
   }
 
   public async myGroupDetail (gnum: number) {

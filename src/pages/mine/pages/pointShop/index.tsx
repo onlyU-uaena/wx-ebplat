@@ -129,9 +129,9 @@ const PointShop: Taro.FC<Props> = () => {
               paddingRight: 0
             }}
       >
-        {list.length && list.map(item => (
+        {list.map(item => (
           <View className='commonColumnFlex flexCenter normalMarginRight'
-                onClick={() => navTo('mine', 'pointItem', {pro: item})}
+                onClick={() => navTo('mine', 'pointItem', {id: item.id})}
                 key={item.id}
                 style={{
                   width: `${width}px`,

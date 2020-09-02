@@ -13,6 +13,7 @@ import order from '../../../mine/utils/order'
 import CustomIcon from '../../../../components/CustomIcon'
 import user from '../../../mine/utils/user'
 import point from '../../../mine/utils/point'
+import WxParse from '../../../../components/wxParse/wxParse'
 
 interface Props {
 
@@ -55,9 +56,14 @@ const PointOrder: Taro.FC<Props> = () => {
   const [remark, setRemark] = useState<string>('')
 
   useEffect(() => {
-    const data = JSON.parse(router.params.props).proDetail
-    setOrderDetail(data)
+    const id = JSON.parse(router.params.props).id
+    getGoodDetail(id)
   }, [])
+
+  const getGoodDetail = async (id) => {
+    const {data} = await point.getGoodDetail(id)
+    setOrderDetail(data)
+  }
 
   const confirmOrder = async () => {
     if (!shopState.address.id && (currentTab === 0)) {
@@ -66,7 +72,7 @@ const PointOrder: Taro.FC<Props> = () => {
         icon: 'none'
       })
     }
-
+    console.log(orderDetail.id, 1, orderDetail.points, shopState.address.id, remark, currentTab, '12:00', '12:00')
     const {code} = await point.swapItem(orderDetail.id, 1, orderDetail.points, shopState.address.id, remark, currentTab, '12:00', '12:00')
     if (code === 0) {
       Taro.showToast({

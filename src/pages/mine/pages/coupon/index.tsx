@@ -115,6 +115,7 @@ const Coupon: Taro.FC<Props> = () => {
         >{`查看过期的券 >`}</Text>
       </View>
       <HeightView high='large' />
+      <HeightView high='large' />
       <View className='commonRowFlex gradientTheme flexCenter normalPadding'
             onClick={() => navTo('mine', 'getCoupon')}
             style={{

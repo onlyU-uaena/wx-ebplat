@@ -343,7 +343,7 @@ const Home: Taro.FC<Props> = () => {
               )
             })}
             <View onClick={() => toSort()} className='commonColumnFlex flexCenter'>
-              <AtAvatar size='large' image='http://www.gx8899.com/uploads/allimg/160825/3-160R5093948-52.jpg' circle />
+              <AtAvatar size='large' image='' circle />
               <Text className='slightlySmallText' style={{marginTop: '4px'}}>查看更多</Text>
             </View>
           </View>
@@ -355,10 +355,10 @@ const Home: Taro.FC<Props> = () => {
           >
             {fullCutList.length &&
             <SwiperImg
-              marginRight={20}
+              // marginRight={20}
               autoplay={false}
               circular={false}
-              imgWidth={95}
+              // imgWidth={95}
               act
               swiperHeight='100px'
               list={fullCutList}

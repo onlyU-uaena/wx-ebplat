@@ -45,7 +45,7 @@ const EvaluationOrder: Taro.FC<Props> = () => {
 
   const changeImgUrl = (index, e) => {
     const newList = comment.concat()
-    newList[index].commimg = e
+    newList[index].commimg = e.toString()
     setComment(newList)
   }
 

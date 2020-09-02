@@ -183,7 +183,8 @@ class User {
       nickname,
       imgurl,
       mobile,
-      sms
+      sms,
+      dtype: 3
     }
     return await httpRequest(this.urls.wxRegister, data, true, true, false)
   }
