@@ -32,13 +32,15 @@ const MyMessage: Taro.FC<Props> = () => {
       setPage(1)
     }
     const {data} = await user.getMessageList(reset ? 1 : page, 14)
+    if (reset) {
+      if (data.length)
+        setPage(page + 1)
+      return setMessageList(data)
+    }
     if (data.length) {
       setPage(page + 1)
-      if (reset) {
-        setMessageList(data)
-      } else {
-        setMessageList(messageList.concat(data))
-      }
+    } else {
+      setMessageList(messageList.concat(data))
     }
   }
 
@@ -77,7 +79,7 @@ const MyMessage: Taro.FC<Props> = () => {
       })
       setSelectList([])
       setAllSelect([])
-      getList()
+      getList(true)
       setModifyMode(false)
     }
   }
