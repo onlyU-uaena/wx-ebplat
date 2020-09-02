@@ -137,7 +137,7 @@ const CardCommodity: Taro.FC<Props> = (props) => {
                      }}
               />
             </View>
-            <Text className='mediumText smallMarginTop'>{LimitStr(title, 18)}</Text>
+            <Text className='mediumText smallMarginTop'>{LimitStr(title, 7)}</Text>
             {labelName && (
               <View className='commonRowFlex smallMarginTop normalMarginBottom'>
                 <View className='commodityLabel gradientTheme'>

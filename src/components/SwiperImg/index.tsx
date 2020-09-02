@@ -13,6 +13,7 @@ interface Props extends SwiperProps {
   imgWidth?: number
   swiperHeight?: string
   videoUrl?: string
+  imgRadius?: number
   networkType?: string
   onChange?: (e) => void
   onVideoPlay?: (e) => void
@@ -41,7 +42,7 @@ class SwiperImg extends Taro.Component<Props, any> {
   }
 
   render () {
-    const { list, marginLeft, onVideoPlay, onChange, marginRight, networkType, act, circular, autoplay, imgWidth, swiperHeight, videoUrl } = this.props
+    const { list, marginLeft, imgRadius = 15, onVideoPlay, onChange, marginRight, networkType, act, circular, autoplay, imgWidth, swiperHeight, videoUrl } = this.props
     return (
       <Swiper
         indicatorDots
@@ -75,6 +76,7 @@ class SwiperImg extends Taro.Component<Props, any> {
             <Image className='swiperImg'
                    src={item.imgurl || item}
                    style={{
+                     borderRadius: imgRadius + 'px',
                      width: imgWidth ? `${imgWidth}%` : '100%'
                    }}
             >

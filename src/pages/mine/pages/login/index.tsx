@@ -35,11 +35,11 @@ const Login: Taro.FC<Props> = () => {
   }, [])
 
   const login = async () => {
-    if (read.length < 2)
-      return Taro.showToast({
-        title: '请先同意隐私/用户协议',
-        icon: 'none'
-      })
+    // if (read.length < 2)
+    //   return Taro.showToast({
+    //     title: '请先同意隐私/用户协议',
+    //     icon: 'none'
+    //   })
     if (useSmsLogin) {
       const { code, token } = await account.loginWithPhoneNumber(username, sms)
       if (!code) {
@@ -60,11 +60,11 @@ const Login: Taro.FC<Props> = () => {
   }
 
   const wxLogin = async () => {
-    if (read.length < 2)
-      return Taro.showToast({
-        title: '请先同意隐私/用户协议',
-        icon: 'none'
-      })
+    // if (read.length < 2)
+    //   return Taro.showToast({
+    //     title: '请先同意隐私/用户协议',
+    //     icon: 'none'
+    //   })
     Taro.login({
       success: (e) => {
         Taro.getUserInfo({
@@ -159,22 +159,27 @@ const Login: Taro.FC<Props> = () => {
           </Button>
         </View>
         <HeightView />
-        <View className='commonColumnFlex flexCenter'>
-          <CheckboxGroup onChange={(e) => {
-            setRead(e.detail.value)
-          }}
-          >
-            <View className='commonRowFlex flexCenter'>
-              <Checkbox className='commonRowFlex flexCenter' value='pri'><Text className='slightlySmallText'>同意并已阅读</Text></Checkbox>
-              <Text onClick={() => navTo('mine', 'protocol', {title: '隐私协议',content: 4 })} className='orangeText slightlySmallText textMargin'>隐私协议</Text>
-            </View>
-            <HeightView />
-            <View className='commonRowFlex flexCenter'>
-              <Checkbox className='commonRowFlex flexCenter' value='user'><Text className='slightlySmallText'>同意并已阅读</Text></Checkbox>
-              <Text onClick={() => navTo('mine', 'protocol', {title: '用户协议',content: 5 })} className='orangeText slightlySmallText textMargin'>用户协议</Text>
-            </View>
-          </CheckboxGroup>
+        <View className='normalMarginLeft'>
+          <Text className='slightlySmallText grayText'>登录代表同意</Text>
+          <Text onClick={() => navTo('mine', 'protocol', {title: '隐私协议',content: 4 })} className='orangeText slightlySmallText textMargin'>《隐私协议》</Text>
+          <Text onClick={() => navTo('mine', 'protocol', {title: '用户协议',content: 5 })} className='orangeText slightlySmallText textMargin'>《用户协议》</Text>
         </View>
+        {/*<View className='commonColumnFlex flexCenter'>*/}
+        {/*  <CheckboxGroup onChange={(e) => {*/}
+        {/*    setRead(e.detail.value)*/}
+        {/*  }}*/}
+        {/*  >*/}
+        {/*    <View className='commonRowFlex flexCenter'>*/}
+        {/*      <Checkbox className='commonRowFlex flexCenter' value='pri'><Text className='slightlySmallText'>同意并已阅读</Text></Checkbox>*/}
+        {/*      <Text onClick={() => navTo('mine', 'protocol', {title: '隐私协议',content: 4 })} className='orangeText slightlySmallText textMargin'>隐私协议</Text>*/}
+        {/*    </View>*/}
+        {/*    <HeightView />*/}
+        {/*    <View className='commonRowFlex flexCenter'>*/}
+        {/*      <Checkbox className='commonRowFlex flexCenter' value='user'><Text className='slightlySmallText'>同意并已阅读</Text></Checkbox>*/}
+        {/*      <Text onClick={() => navTo('mine', 'protocol', {title: '用户协议',content: 5 })} className='orangeText slightlySmallText textMargin'>用户协议</Text>*/}
+        {/*    </View>*/}
+        {/*  </CheckboxGroup>*/}
+        {/*</View>*/}
       </View>
     </View>
   )

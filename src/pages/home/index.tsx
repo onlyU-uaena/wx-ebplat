@@ -18,7 +18,8 @@ import shopCart, { setCartBadge } from '../shoppingCart/utils/shopCart'
 import { selectAuthState, selectShopState } from '@redux/reducers/selector'
 import user from '../mine/utils/user'
 import { getCount } from './utils/count'
-import index from 'nervjs/dist/packages/nerv-create-class/src'
+import HeightView from '../../components/HeightView'
+import watchMore from './utils/watchMore.png'
 
 let firstIn = true
 let showIndex = 0
@@ -197,7 +198,7 @@ const Home: Taro.FC<Props> = () => {
   useEffect(() => {
     if (freshList)
       freshList.refreshList()
-  }, [topicId])
+  }, [topicId, shopState.shopData.shopid])
 
   const getLocationMes = async () => {
     const res = await getLocation()
@@ -296,35 +297,38 @@ const Home: Taro.FC<Props> = () => {
           {/*首页banner*/}
           <View
             style={{
-              margin: '0 16px 8px 16px'
+              margin: '0'
             }}
           >
             {advList[0] &&
             <SwiperImg list={advList[0].list}
                        autoplay
+                       imgRadius={0}
+                       circular={false}
             >
             </SwiperImg>}
           </View>
-          <View
-            className='commonRowFlex'
-            style={{
-              margin: '8px 16Px',
-              justifyContent: 'space-around'
-            }}
-          >
-            <View className='commonRowFlex flexCenter'>
-              <CustomIcon name='diamond' color='gray' size={15} style={{marginRight: '8px'}} />
-              <Text className='slightlySmallText grayText'>品质好物</Text>
-            </View>
-            <View className='commonRowFlex flexCenter'>
-              <CustomIcon name='lightning' color='gray' size={15} style={{marginRight: '8px'}} />
-              <Text className='slightlySmallText grayText'>急速送达</Text>
-            </View>
-            <View className='commonRowFlex flexCenter'>
-              <CustomIcon name='heart' color='gray' size={15} style={{marginRight: '8px'}} />
-              <Text className='slightlySmallText grayText'>无忧售后</Text>
-            </View>
-          </View>
+          <HeightView />
+          {/*<View*/}
+          {/*  className='commonRowFlex'*/}
+          {/*  style={{*/}
+          {/*    margin: '8px 16Px',*/}
+          {/*    justifyContent: 'space-around'*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <View className='commonRowFlex flexCenter'>*/}
+          {/*    <CustomIcon name='diamond' color='gray' size={15} style={{marginRight: '8px'}} />*/}
+          {/*    <Text className='slightlySmallText grayText'>品质好物</Text>*/}
+          {/*  </View>*/}
+          {/*  <View className='commonRowFlex flexCenter'>*/}
+          {/*    <CustomIcon name='lightning' color='gray' size={15} style={{marginRight: '8px'}} />*/}
+          {/*    <Text className='slightlySmallText grayText'>急速送达</Text>*/}
+          {/*  </View>*/}
+          {/*  <View className='commonRowFlex flexCenter'>*/}
+          {/*    <CustomIcon name='heart' color='gray' size={15} style={{marginRight: '8px'}} />*/}
+          {/*    <Text className='slightlySmallText grayText'>无忧售后</Text>*/}
+          {/*  </View>*/}
+          {/*</View>*/}
           {/*栏目分类*/}
           <View className='commonRowFlex'
                 style={{
@@ -343,7 +347,7 @@ const Home: Taro.FC<Props> = () => {
               )
             })}
             <View onClick={() => toSort()} className='commonColumnFlex flexCenter'>
-              <AtAvatar size='large' image='' circle />
+              <AtAvatar size='large' image={watchMore} circle />
               <Text className='slightlySmallText' style={{marginTop: '4px'}}>查看更多</Text>
             </View>
           </View>
