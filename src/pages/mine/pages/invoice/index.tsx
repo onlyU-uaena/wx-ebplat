@@ -20,7 +20,7 @@ const Invoice: Taro.FC<Props> = () => {
   const [list, setList] = useState([])
 
   useReachBottom(async () => {
-    const {data} = await invoice.getOrderList(1, 14)
+    const {data} = await invoice.getOrderList(page, 14)
     if (data.length) {
       setList(list.concat(data))
       setPage(page + 1)

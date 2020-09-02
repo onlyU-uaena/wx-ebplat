@@ -192,7 +192,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                         >团长</AtTag>
                       )}
                     </View>
-                    <Text className='slightlySmallText'>{(item.id === authState.userData.id) ? '你' : '好友'}</Text>
+                    <Text className='slightlySmallText'>{item.nickname}</Text>
                   </View>
                 ))}
               </View>

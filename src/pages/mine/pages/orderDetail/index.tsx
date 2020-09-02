@@ -151,7 +151,7 @@ const OrderDetail: Taro.FC<Props> = () => {
         // ,{
         //   title: '确认收货',
         //   func: async (item) => {
-        //     if (item.deliverymode !== 1) {
+        //     if (item.deliveryMode !== 1) {
         //       await toConfirmOrder(item.id)
         //       delayBack()
         //     } else {
@@ -181,7 +181,7 @@ const OrderDetail: Taro.FC<Props> = () => {
         },{
           title: '确认收货',
           func: async (item) => {
-            if (item.deliverymode !== 1) {
+            if (item.deliveryMode !== 1) {
               await toConfirmOrder(item.id)
               delayBack()
             } else {
@@ -267,7 +267,7 @@ const OrderDetail: Taro.FC<Props> = () => {
         // ,{
         //   title: '确认收货',
         //   func: async (item) => {
-        //     if (item.deliverymode !== 1) {
+        //     if (item.deliveryMode !== 1) {
         //       await toConfirmOrder(item.id)
         //       delayBack()
         //     } else {
@@ -344,7 +344,7 @@ const OrderDetail: Taro.FC<Props> = () => {
               <Text className='mediumText'>收货人 {orderDetail.telPhone}</Text>
               <Text className='mediumText'>{orderDetail.consignee || '暂无'}</Text>
             </View>
-            {(orderDetail && orderDetail.qrcodenumber && orderDetail.deliverymode !== 0) ? (
+            {(orderDetail && orderDetail.qrcodenumber && orderDetail.deliveryMode !== 0) ? (
               <View className='commonRowFlex normalPadding borderBottom flexCenter'
                     onClick={() => navTo('mine', 'qrCode', orderDetail)}
                     style={{

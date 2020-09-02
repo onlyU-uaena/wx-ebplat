@@ -88,7 +88,7 @@ const InvoiceDetail: Taro.FC<Props> = () => {
                     }}
               >
                 <Text className='mediumText'>申请时间</Text>
-                <Text className='mediumText'>2017</Text>
+                <Text className='mediumText'>{detail.createtime}</Text>
               </View>
             </View>
           </View>

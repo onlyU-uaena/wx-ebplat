@@ -62,7 +62,7 @@ const InvoiceRecord: Taro.FC<Props> = () => {
                     }}
               >
                 <Text className='mediumText'>{item.content}</Text>
-                <Text className='mediumText'>¥20</Text>
+                <Text className='mediumText'>{item.money}</Text>
               </View>
             </View>
           </View>
