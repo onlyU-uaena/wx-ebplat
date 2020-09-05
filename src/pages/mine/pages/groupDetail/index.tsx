@@ -182,7 +182,7 @@ const GroupDetail: Taro.FC<Props> = () => {
                     <HeightView />
                     <View style={{
                       position: 'absolute',
-                      bottom: '25px'
+                      top: '25px'
                     }}
                     >
                       {(index === 0) && (

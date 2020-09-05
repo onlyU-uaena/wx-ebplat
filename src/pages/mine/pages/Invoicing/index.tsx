@@ -32,9 +32,15 @@ const Invoicing: Taro.FC<Props> = () => {
   }, [])
 
   const addInvoice = async () => {
+    const reg = /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/
     if (!email)
       return Taro.showToast({
         title: '请填写邮箱',
+        icon: 'none'
+      })
+    if (!reg.test(email))
+      return Taro.showToast({
+        title: '邮箱格式不正确',
         icon: 'none'
       })
     const {code} = await invoice.addInvoice(titleType, content, email, companyName, num, money, ids)
@@ -77,13 +83,13 @@ const Invoicing: Taro.FC<Props> = () => {
             }}
       >
         <Text className='mediumText boldText'>发票内容</Text>
-        <HeightView />
-        <View>
-          <RadioGroup onChange={(e) => setContent(e.detail.value)}>
-            <Radio value='商品明细' checked={content === '商品明细'} color={colors.themeColor}><Text className='slightlySmallText'>商品明细</Text></Radio>
-            <Radio className='normalMarginLeft' value='商品类别' checked={content === '商品类别'} color={colors.themeColor}><Text className='slightlySmallText'>商品类别</Text></Radio>
-          </RadioGroup>
-        </View>
+        {/*<HeightView />*/}
+        {/*<View>*/}
+        {/*  <RadioGroup onChange={(e) => setContent(e.detail.value)}>*/}
+        {/*    <Radio value='商品明细' checked={content === '商品明细'} color={colors.themeColor}><Text className='slightlySmallText'>商品明细</Text></Radio>*/}
+        {/*    <Radio className='normalMarginLeft' value='商品类别' checked={content === '商品类别'} color={colors.themeColor}><Text className='slightlySmallText'>商品类别</Text></Radio>*/}
+        {/*  </RadioGroup>*/}
+        {/*</View>*/}
       </View>
       <HeightView />
       <View className='normalPadding commonRowFlex flexCenter'

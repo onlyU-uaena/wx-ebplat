@@ -40,11 +40,11 @@ class Commodity {
     getPointItem: '/api/app/pointspro/getpagelist'
   }
 
-  @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
-  public async getAdv (pagemark: number, shopid: number) {
+  public async getAdv (pagemark: number, shopid: number, classid?: string) {
     const data = {
       pagemark,
-      shopid
+      shopid,
+      classid: classid || ''
     }
     return await httpRequest(this.urls.getAdv, data, false)
   }

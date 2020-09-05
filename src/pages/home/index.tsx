@@ -90,10 +90,10 @@ const Home: Taro.FC<Props> = () => {
     }
   }
 
-  const toSort = (num?: string) => {
-    if (num)
+  const toSort = (num?: string, id?: string) => {
+    if (num && id)
       Taro.reLaunch({
-        url: '/pages/classification/index?props=' + JSON.stringify({num: num})
+        url: '/pages/classification/index?props=' + JSON.stringify({num: num, id: id})
       })
     else
       Taro.switchTab({
@@ -359,7 +359,7 @@ const Home: Taro.FC<Props> = () => {
               if (index > 3)
                 return
               return (
-                <View onClick={() => toSort(item.num)} className='commonColumnFlex flexCenter' key={index}>
+                <View onClick={() => toSort(item.num, item.id)} className='commonColumnFlex flexCenter' key={index}>
                   <AtAvatar size='large' image={item.img} circle />
                   <Text className='slightlySmallText' style={{marginTop: '4px'}}>{item.name}</Text>
                 </View>
@@ -381,6 +381,7 @@ const Home: Taro.FC<Props> = () => {
               // marginRight={20}
               autoplay={false}
               circular={false}
+              indicatorDots={false}
               // imgWidth={95}
               act
               swiperHeight='100px'

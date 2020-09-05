@@ -229,19 +229,25 @@ const Mine: Taro.FC<Props> = () => {
               <Text className='slightlySmallText smallMarginTop grayText'>{item.title}</Text>
             </View>
           ))}
-          <Button plain openType={authState.loginStatus ? 'contact' : ''} className='commonColumnFlex flexCenter'
-                style={{
-                  flex: 1,
-                  paddingLeft: 0,
-                  paddingRight: 0,
-                  lineHeight: 'initial',
-                  border: 'none'
-                }}
-                key={44}
-                onClick={() => {
-                  if (!authState.loginStatus)
-                    navTo('mine', 'login')
-                }}
+          <Button plain
+                  sessionFrom={JSON.stringify({
+                    "nickName": authState.userData.nickname,
+                    "avatarUrl": authState.userData.imgurl
+                  })}
+                  openType={authState.loginStatus ? 'contact' : ''}
+                  className='commonColumnFlex flexCenter'
+                  style={{
+                    flex: 1,
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                    lineHeight: 'initial',
+                    border: 'none'
+                  }}
+                  key={44}
+                  onClick={() => {
+                    if (!authState.loginStatus)
+                      navTo('mine', 'login')
+                  }}
           >
             <CustomIcon name='customerService'
                         size={25}

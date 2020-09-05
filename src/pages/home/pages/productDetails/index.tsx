@@ -287,7 +287,7 @@ const ProductDetails: Taro.FC<Props> = () => {
           <View id='product'>
             <View className='anchorPoint'>
               {/*轮播图*/}
-              {proDetail && <SwiperImg onRef={setImgRef} onVideoPlay={playVideo} onChange={(e) => changeImgTab(e)} networkType={networkType} videoUrl={proDetail.videourl} swiperHeight='300px' list={proDetail.imgs} />}
+              {proDetail && <SwiperImg onRef={setImgRef} onVideoPlay={playVideo} onChange={(e) => changeImgTab(e)} networkType={networkType} videoUrl={proDetail.videourl} swiperHeight='750rpx' list={proDetail.imgs} />}
               {/*拼团秒杀*/}
               {controlShow === 2 && (
                 <View className='commonRowFlex flexCenter gradientTheme radius'

@@ -45,6 +45,7 @@ class App extends Component {
           "groupDetail/index",
           "messageDetail/index",
           "pointShop/index",
+          "invoiceRule/index",
           "invoice/index",
           "invoicing/index",
           "invoiceRecord/index",

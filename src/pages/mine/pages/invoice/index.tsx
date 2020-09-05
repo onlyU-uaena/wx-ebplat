@@ -74,9 +74,14 @@ const Invoice: Taro.FC<Props> = () => {
             }}
       >
         <Text className='mediumText'>可开发票订单</Text>
-        <Text className='mediumText orangeText'
-              onClick={() => navTo('mine', 'invoiceRecord')}
-        >开票记录</Text>
+        <View>
+          <Text className='mediumText orangeText smallMarginRight'
+                onClick={() => navTo('mine', 'invoiceRule')}
+          >开票规则</Text>
+          <Text className='mediumText orangeText'
+                onClick={() => navTo('mine', 'invoiceRecord')}
+          >开票记录</Text>
+        </View>
       </View>
       {list.length ? list.map(item => (
         <View key={item.id}

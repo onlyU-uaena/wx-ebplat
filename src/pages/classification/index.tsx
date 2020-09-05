@@ -60,8 +60,8 @@ const Classification: Taro.FC<Props> = () => {
     setSafeTop(safeArea.top)
   }, [])
 
-  const getAdv = async () => {
-    const {data} = await commodity.getAdv(0, shopState.shopData.shopid)
+  const getAdv = async (classid: string) => {
+    const {data} = await commodity.getAdv(2, shopState.shopData.shopid, classid)
     setAdvList(data[0])
   }
 
@@ -73,13 +73,17 @@ const Classification: Taro.FC<Props> = () => {
 
   const initPage = async () => {
     const data = await getClass()
-    let numProps
-    if (router.params.props)
+    let numProps, idProps
+    if (router.params.props) {
       numProps = JSON.parse(router.params.props).num
+      idProps = JSON.parse(router.params.props).id
+    }
     if (numProps) {
       const res = await chooseFir(numProps)
+      getAdv(idProps)
     } else {
       const res = await chooseFir(data[0].num)
+      getAdv(data[0].id)
     }
   }
 
@@ -150,7 +154,7 @@ const Classification: Taro.FC<Props> = () => {
   const getHeight = () => {
     const query = Taro.createSelectorQuery().in(scope)
     const heightArr = [];
-    let h = 0;
+    const h = 0;
     query.selectAll('.offSetPoint').boundingClientRect((react) =>{
       react.forEach((res)=>{
         heightArr.push(res.top)
@@ -171,7 +175,6 @@ const Classification: Taro.FC<Props> = () => {
   }
 
   useEffect(() => {
-    getAdv()
   }, [])
 
   return (
