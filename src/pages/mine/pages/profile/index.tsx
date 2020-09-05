@@ -1,7 +1,7 @@
 import Taro, { useState, useEffect, useRef } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import './index.scss'
-import { AtAvatar, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtInput } from 'taro-ui'
+import { AtAvatar, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtInput, AtButton } from 'taro-ui'
 import TabBar from '../../../../components/TabBar'
 import { useDispatch, useSelector } from '@tarojs/redux'
 import InputCard from '../../../../components/InputCard'
@@ -76,8 +76,13 @@ const Profile: Taro.FC<Props> = () => {
     })
   }
 
-  const backFuc = async () => {
-    account.postUserInfo(imgurl, nickname, sex, birthDay, email, userwork)
+  const postUserInfo = async () => {
+    const postRes = await account.postUserInfo(imgurl, nickname, sex, birthDay, email, userwork)
+    if (postRes.code === 0) {
+      Taro.showToast({
+        title: '修改成功'
+      })
+    }
 
     const { code, data } = await account.getUserData()
     if (!code) {
@@ -89,7 +94,7 @@ const Profile: Taro.FC<Props> = () => {
 
   return (
     <View>
-      <TabBar title='个人信息' beforeBackFuc={backFuc} />
+      <TabBar title='个人信息' />
       <InputCard title='头像'
                  onClick={chooseImagesListFn}
                  renderRight={
@@ -116,6 +121,9 @@ const Profile: Taro.FC<Props> = () => {
                 confirmRes={() => confirmChange()}
                 cancelRes={() => setModalOpen(false)}
       />
+      <View className='normalMargin'>
+        <AtButton type='primary' full onClick={() => postUserInfo()}>确认</AtButton>
+      </View>
     </View>
   )
 }
