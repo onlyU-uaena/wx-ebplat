@@ -144,7 +144,7 @@ const MyMessage: Taro.FC<Props> = () => {
               />
             )}
             <AtListItem
-              title={item.title}
+              title='美家臻选'
               note={LimitStr(item.content, 10)}
               onClick={() => navTo('mine', 'messageDetail', {id: item.id})}
               extraText={item.sendtime}
