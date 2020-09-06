@@ -288,9 +288,15 @@ const ConfirmOrder: Taro.FC<Props> = () => {
                          <Text className='slightlySmallText'>
                            小计
                          </Text>
-                         <Text className='mediumText redText normalMarginLeft'>
-                           {`¥${(orderDetail.totalMoney + freightPrice.freight - discount) < 0 ? 0 : (orderDetail.totalMoney + freightPrice.freight - discount).toFixed(2)}`}
-                         </Text>
+                         {currentTab === 0 ? (
+                           <Text className='mediumText redText smallMarginLeft'>
+                             {`¥${(orderDetail.totalMoney + freightPrice.freight - discount) < 0 ? 0 : (orderDetail.totalMoney + freightPrice.freight - discount).toFixed(2)}`}
+                           </Text>
+                         ) : (
+                           <Text className='mediumText redText smallMarginLeft'>
+                             {`¥${(orderDetail.totalMoney - discount) < 0 ? 0 : (orderDetail.totalMoney - discount).toFixed(2)}`}
+                           </Text>
+                         )}
                        </View>}
             />
           </View>
@@ -310,9 +316,15 @@ const ConfirmOrder: Taro.FC<Props> = () => {
               <Text className='mediumText'>
                 合计
               </Text>
-              <Text className='mediumText redText smallMarginLeft'>
-                {`¥${(orderDetail.totalMoney + freightPrice.freight - discount) < 0 ? 0 : (orderDetail.totalMoney + freightPrice.freight - discount).toFixed(2)}`}
-              </Text>
+              {currentTab === 0 ? (
+                <Text className='mediumText redText smallMarginLeft'>
+                  {`¥${(orderDetail.totalMoney + freightPrice.freight - discount) < 0 ? 0 : (orderDetail.totalMoney + freightPrice.freight - discount).toFixed(2)}`}
+                </Text>
+              ) : (
+                <Text className='mediumText redText smallMarginLeft'>
+                  {`¥${(orderDetail.totalMoney - discount) < 0 ? 0 : (orderDetail.totalMoney - discount).toFixed(2)}`}
+                </Text>
+              )}
             </View>
             {orderDetail && orderDetail.skuID[0].isgrp ? (
               <AtButton customStyle={{
