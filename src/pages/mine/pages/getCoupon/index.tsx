@@ -67,7 +67,7 @@ const GetCoupon: Taro.FC<Props> = () => {
                   <Text className='whiteText mediumText'>¥</Text>
                   <Text className='whiteText' style={{fontSize: '34px'}}>{item.facevalue}</Text>
                 </View>
-                <Text className='whiteText slightlySmallText'>{item.coupontype === 1 ? `满${item.fullreductionvalue}可使用` : '无门槛'}</Text>
+                <Text className='whiteText slightlySmallText'>{item.coupontype === 1 ? `满${item.fullreductionvalue.toFixed(2)}可使用` : '无门槛'}</Text>
               </View>
               <View className='commonColumnFlex normalPadding'
                     style={{

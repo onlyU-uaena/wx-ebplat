@@ -18,6 +18,7 @@ interface Props {
 }
 
 const GroupHome: Taro.FC<Props> = () => {
+  const [safeTop, setSafeTop] = useState<number>(0)
   const dispatch = useDispatch()
   const shopState = useSelector(selectShopState)
   const [groupList, setGroupList] = useState()
@@ -27,6 +28,11 @@ const GroupHome: Taro.FC<Props> = () => {
     const {data} = await commodity.getGroupList(shopState.shopData.shopid || 10)
     setGroupList(data)
   }
+
+  useEffect(() => {
+    const { safeArea } = Taro.getSystemInfoSync()
+    setSafeTop(safeArea.top)
+  }, [])
 
   const getGroupImg = async () => {
     const {data} = await commodity.getGroupImg()
@@ -55,6 +61,11 @@ const GroupHome: Taro.FC<Props> = () => {
       <View className='normalPadding'>
         <View className='cusSearchBar flexCenter commonRowFlex'
               onClick={() => navTo('home', 'search')}
+              style={{
+                position: 'sticky',
+                top: safeTop + 196 + 'px',
+                zIndex: 10
+              }}
         >
           <CustomIcon
             name='search'

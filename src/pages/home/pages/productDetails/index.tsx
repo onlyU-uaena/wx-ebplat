@@ -466,12 +466,20 @@ const ProductDetails: Taro.FC<Props> = () => {
                           {item.content}
                         </Text>
                         {item.showImgList.length && <View className='commonRowFlex normalMarginTop' style={{
-                          justifyContent: 'space-between'
+                          justifyContent: 'space-between',
+                          flexWrap: 'wrap'
                         }}
                         >
                           <Image src={item.showImgList[0] && item.showImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
                           <Image src={item.showImgList[1] && item.showImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
                           <Image src={item.showImgList[2] && item.showImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                          <Image src={item.showImgList[3] && item.showImgList[3].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                          <Image src={item.showImgList[4] && item.showImgList[4].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                          <Image src={item.showImgList[5] && item.showImgList[5].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                          <Image src={item.showImgList[6] && item.showImgList[6].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                          <Image src={item.showImgList[7] && item.showImgList[7].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                          <Image src={item.showImgList[8] && item.showImgList[8].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                          <Image src={item.showImgList[9] && item.showImgList[9].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
                         </View>}
                       </View>
                     </View>
@@ -578,42 +586,46 @@ const ProductDetails: Taro.FC<Props> = () => {
                   </View>
                 )}
                 {controlShow === 2 && (
-                  <View onClick={() => chooseCount()} className='gradientYellow commonRowFlex flexCenter' style={{
+                  <View onClick={() => chooseCount()} className='gradientYellow commonColumnFlex flexCenter' style={{
                     flex: 1,
                     justifyContent: 'center'
                   }}
                   >
                     <Text className='whiteText slightlySmallText'>我要开团</Text>
+                    <Text className='whiteText mediumText'>¥{proDetail.skugrp.gprice}</Text>
                   </View>
                 )}
                 {controlShow === 0 && (
-                  <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
+                  <View onClick={() => setShowFloat(true)} className='gradientTheme commonColumnFlex flexCenter' style={{
                     flex: 1,
                     justifyContent: 'center'
                   }}
                   >
                     <Text className='whiteText slightlySmallText'>立即购买</Text>
+                    <Text className='whiteText mediumText'>¥{proDetail.price}</Text>
                   </View>
                 )}
                 {controlShow === 1 && (
-                  <View onClick={() => setShowFloat(true)} className='gradientTheme commonRowFlex flexCenter' style={{
+                  <View onClick={() => setShowFloat(true)} className='gradientTheme commonColumnFlex flexCenter' style={{
                     flex: 1,
                     justifyContent: 'center'
                   }}
                   >
                     <Text className='whiteText slightlySmallText'>立即购买</Text>
+                    <Text className='whiteText mediumText'>¥{proDetail.packings.skiprice}</Text>
                   </View>
                 )}
                 {controlShow === 2 && (
                   <View onClick={() => {
                     setShowFloat(true)
                     setBuyGroup(false)
-                  }} className='gradientTheme commonRowFlex flexCenter' style={{
+                  }} className='gradientTheme commonColumnFlex flexCenter' style={{
                     flex: 1,
                     justifyContent: 'center'
                   }}
                   >
                     <Text className='whiteText slightlySmallText'>直接购买</Text>
+                    <Text className='whiteText mediumText'>¥{proDetail.price}</Text>
                   </View>
                 )}
               </View>

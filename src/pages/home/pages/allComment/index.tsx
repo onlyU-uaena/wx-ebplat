@@ -97,12 +97,20 @@ const AllComment: Taro.FC<Props> = () => {
                 {item.content}
               </Text>
               {item.showImgList.length && <View className='commonRowFlex normalMarginTop' style={{
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                flexWrap: 'wrap'
               }}
               >
                 <Image src={item.showImgList[0] && item.showImgList[0].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
                 <Image src={item.showImgList[1] && item.showImgList[1].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
                 <Image src={item.showImgList[2] && item.showImgList[2].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                <Image src={item.showImgList[3] && item.showImgList[3].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                <Image src={item.showImgList[4] && item.showImgList[4].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                <Image src={item.showImgList[5] && item.showImgList[5].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                <Image src={item.showImgList[6] && item.showImgList[6].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                <Image src={item.showImgList[7] && item.showImgList[7].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                <Image src={item.showImgList[8] && item.showImgList[8].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
+                <Image src={item.showImgList[9] && item.showImgList[9].imgurl || ''} style={{width: '170rpx', height: '170rpx'}} />
               </View>}
             </View>
           </View>

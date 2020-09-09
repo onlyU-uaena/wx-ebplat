@@ -148,15 +148,17 @@ const Mine: Taro.FC<Props> = () => {
         backgroundColor: 'white'
       }}
       >
-        <View className='commonRowFlex' style={{
-          justifyContent: 'space-between'
-        }}
+        <View className='commonRowFlex'
+              onClick={() => navTo('mine', 'myOrder', {tab: -1})}
+              style={{
+                justifyContent: 'space-between'
+              }}
         >
           <View className='commonRowFlex flexCenter'>
             <CustomIcon name='order' color='black' />
             <Text className='mediumText smallMarginLeft'>全部订单</Text>
           </View>
-          <View onClick={() => navTo('mine', 'myOrder', {tab: -1})} className='commonRowFlex flexCenter'>
+          <View className='commonRowFlex flexCenter'>
             <Text className='slightlySmallText grayText'>查看全部订单</Text>
             <View className='smallMarginLeft horMirror'>
               <CustomIcon name='back' color='gray' />
