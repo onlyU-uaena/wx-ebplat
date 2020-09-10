@@ -12,6 +12,7 @@ import InputCard from '../../../../components/InputCard'
 import order from '../../../mine/utils/order'
 import CustomIcon from '../../../../components/CustomIcon'
 import user from '../../../mine/utils/user'
+import useDidShow = Taro.useDidShow
 
 interface Props {
 
@@ -60,14 +61,14 @@ const ConfirmOrder: Taro.FC<Props> = () => {
   const [coupon, setCoupon] = useState()
   const [couponList, setCouponList] = useState([])
 
-  useEffect(() => {
+  useDidShow(() => {
     const data = JSON.parse(router.params.props)
     setOrderDetail(data)
     setCountDown(data.discount || 0.00)
     setDiscount(data.discount || 0.00)
     getFreight(data.totalMoney)
     getOrderCoupon(data)
-  }, [])
+  })
 
   const getOrderCoupon = async (detail) => {
     const param = [{
