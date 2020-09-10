@@ -18,6 +18,7 @@ class Order {
     toComment: '/api/app/order/addordercomment',
     getCommentList: '/api/app/pro/getprodcmt',
     queryTrack: '/api/app/track/querytrack',
+    buyAgain: '/api/app/cart/buyone',
     // 团购
     addGroupOrder: '/api/app/grp/applypro',
     joinGroupOrder: '/api/app/grp/addorder',
@@ -30,6 +31,13 @@ class Order {
       orderid
     }
     return await httpRequest(this.urls.getOrderDetail, data)
+  }
+
+  public async buyAgain (id: string) {
+    const data = {
+      id
+    }
+    return await httpRequest(this.urls.buyAgain, data)
   }
 
   public async getOrderList (page: number, size: number, status: string | number = '', ordercode = '') {

@@ -154,6 +154,15 @@ const MyOrder: Taro.FC<Props> = () => {
           func: async (item) => {
             navTo('mine','refund', {item})
           }
+        },{
+          title: '再来一单',
+          func: async (item) => {
+            const {code} = await order.buyAgain(item.id)
+            if (code === 0)
+              Taro.showToast({
+                title: '已将商品添加到购物车'
+              })
+          }
         }
       ]},
     9: {name: '待评价', button: [
@@ -350,7 +359,7 @@ const MyOrder: Taro.FC<Props> = () => {
                                 }}
                           >
                             <AtButton onClick={() => statusToTitle[item.status].button[0].func(item)} size='small'>{statusToTitle[item.status].button[0].title}</AtButton>
-                            {!item.iscomment && (
+                            {(!item.iscomment || item.status === 10) && (
                               <View className='smallMarginLeft'>
                                 <AtButton type='primary'
                                           onClick={() => statusToTitle[item.status].button[1].func(item)}
