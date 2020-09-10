@@ -197,7 +197,7 @@ class User {
     const data = {
       openid
     }
-    return await httpRequest(this.urls.wxLogin, data)
+    return await httpRequest(this.urls.wxLogin, data, true, true, false)
   }
 
   @noEmpty(() => Taro.showToast({title: '请勿提交空值', icon: 'none'}))
