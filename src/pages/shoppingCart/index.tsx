@@ -12,6 +12,7 @@ import commodity from '../home/utils/commodity'
 import colors from '../../common/styles/color'
 import { navTo } from '@utils/route'
 import { OrderDetail } from '../home/pages/confirmOrder'
+import CustomIcon from '../../components/CustomIcon'
 
 interface Props {
 
@@ -44,8 +45,9 @@ const ShoppingCart: Taro.FC<Props> = () => {
     }
   }
 
-  const toDetail = (id: number) => {
-    navTo('home', 'productDetails', {id: id})
+  const toDetail = (item) => {
+    if (item.stock !== 0)
+      navTo('home', 'productDetails', {id: item.id})
   }
 
   const jumpToConfirm = () => {
@@ -196,11 +198,22 @@ const ShoppingCart: Taro.FC<Props> = () => {
                     />
                     <View className='commonRowFlex normalPadding'
                           style={{flex: 1}}
-                          onClick={() => toDetail(shopItem.id)}
+                          onClick={() => toDetail(shopItem)}
                     >
-                      <Image src={shopItem.img}
-                             className='displayImg'
-                      />
+                      <View style={{
+                        position: 'relative'
+                      }}
+                      >
+                        <Image src={shopItem.img}
+                               className='displayImg'
+                        />
+                        {(shopItem.stock === 0) && (
+                          <View className='offShelfImg'>
+                            <CustomIcon color={colors.gray} size={40} name='offShelf' />
+                          </View>
+                        )}
+                      </View>
+
                       <View className='commonColumnFlex'
                             style={{
                               justifyContent: 'space-between',
@@ -212,7 +225,11 @@ const ShoppingCart: Taro.FC<Props> = () => {
                         }}
                         >
                           <Text className='slightlySmallText'>{shopItem.name}</Text>
-                          {/*<Text className='slightlySmallText redText'>库存紧张</Text>*/}
+                          {(shopItem.stock <= 10 && shopItem.stock > 0) && <Text className='slightlySmallText redText'
+                                 style={{
+                                   flexShrink: 0
+                                 }}
+                          >库存紧张</Text>}
                         </View>
                         <View className='commonRowFlex flexCenter' style={{
                           justifyContent: 'space-between'
