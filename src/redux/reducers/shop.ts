@@ -1,4 +1,4 @@
-import { REFRESH_COMPLETE, SET_ADDRESS, SET_CART_NUM, SET_SHOP_DATA, SHOW_SHOP_NAME } from '../constants'
+import { REFRESH_COMPLETE, RESET_ADDRESS, SET_ADDRESS, SET_CART_NUM, SET_SHOP_DATA, SHOW_SHOP_NAME } from '../constants'
 
 const defaultState = {
   shopData: '',
@@ -37,6 +37,11 @@ function shopReducer(state = defaultState, action) {
       return {
         ...state,
         address: action.payload
+      }
+    case RESET_ADDRESS:
+      return {
+        ...state,
+        address: {}
       }
     default:
       return state

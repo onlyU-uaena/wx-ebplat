@@ -2,7 +2,7 @@ import {
   HAVE_MESSAGE,
   LOGIN_IN,
   LOGIN_OUT, NO_MESSAGE,
-  REFRESH_COMPLETE,
+  REFRESH_COMPLETE, RESET_ADDRESS,
   SET_ADDRESS,
   SET_CART_NUM,
   SET_SHOP_DATA, SHOW_SHOP_NAME
@@ -48,6 +48,12 @@ export const setAddress = (address) => {
   return {
     type: SET_ADDRESS,
     payload: address
+  }
+}
+
+export const resetAddress = () => {
+  return {
+    type: RESET_ADDRESS
   }
 }
 

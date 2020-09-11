@@ -8,7 +8,7 @@ import address from '../../../mine/utils/address'
 import { navTo } from '@utils/route'
 import CustomIcon from '../../../../components/CustomIcon'
 import colors from '../../../../common/styles/color'
-import { setAddress } from '@redux/actions'
+import { resetAddress, setAddress } from '@redux/actions'
 
 interface Props {
 
@@ -63,6 +63,7 @@ const ChooseAddress: Taro.FC<Props> = () => {
       const data = await address.removeAddress(id)
       if (!data.code) {
         await getAddress()
+        dispatch(resetAddress())
         await Taro.showToast({
           title: '删除成功'
         })
