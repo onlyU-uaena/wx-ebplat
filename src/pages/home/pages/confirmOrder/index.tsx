@@ -118,7 +118,7 @@ const ConfirmOrder: Taro.FC<Props> = () => {
       shopID: orderDetail.shopid,
       totalMoney: orderDetail.totalMoney,
       delMoney: discount,
-      freightMoney: freightPrice.freight,
+      freightMoney: currentTab === 1 ? 0 : freightPrice.freight,
       couponID: coupon ? JSON.parse(coupon).couponid : 0,
       activityid: orderDetail.activityId,
       isInvoice: 0,
