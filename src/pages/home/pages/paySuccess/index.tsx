@@ -8,6 +8,7 @@ import HeightView from '../../../../components/HeightView'
 import FreshList, { FreshListInterface } from '../../../../components/FreshList'
 import commodity from '../../utils/commodity'
 import { selectShopState } from '@redux/reducers/selector'
+import order from '../../../mine/utils/order'
 
 interface Props {
 
@@ -25,9 +26,15 @@ const PaySuccess: Taro.FC<Props> = () => {
     setDetail(order)
   }, [])
 
+  const backToDetail = (id) => {
+    Taro.redirectTo({
+      url: `/pages/home/pages/productDetails/index?props=${JSON.stringify({id: id})}`
+    })
+  }
+
   return (
     <View>
-      <TabBar backButton={false} title='支付成功' />
+      <TabBar defaultBack={false} beforeBackFuc={() => backToDetail(detail.children[0].productid)} title='支付成功' />
       {detail && (
         <View className='gradientTheme commonColumnFlex flexCenter'
               style={{

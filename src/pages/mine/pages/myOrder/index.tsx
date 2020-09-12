@@ -160,7 +160,8 @@ const MyOrder: Taro.FC<Props> = () => {
             const {code} = await order.buyAgain(item.id)
             if (code === 0)
               Taro.showToast({
-                title: '已将商品添加到购物车'
+                title: '已将商品添加到购物车',
+                icon: 'none'
               })
           }
         }
