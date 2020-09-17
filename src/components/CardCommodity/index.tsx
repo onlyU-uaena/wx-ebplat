@@ -74,7 +74,7 @@ const CardCommodity: Taro.FC<Props> = (props) => {
               marginRight: '8px'
             }}
             >
-              <Image src={labelUrl} className='labelImg' />
+              <Image src={labelUrl.split(',')[0]} className='labelImg' />
               <Image src={imgUrl}
                      className='displayImg'
               />
@@ -92,15 +92,18 @@ const CardCommodity: Taro.FC<Props> = (props) => {
               </View>
               <Text className='slightlySmallText grayText'>{desc}</Text>
               <View>
-                {labelName && (
-                  <View className='commonRowFlex smallMarginTop normalMarginBottom'>
-                    <View className='commodityLabel gradientTheme'>
-                      <Text className='smallText whiteText'>
-                        {labelName}
-                      </Text>
-                    </View>
-                  </View>
-                )}
+                <View className='commonRowFlex smallMarginTop normalMarginBottom'>
+                  {labelName.split(',').map(item => {
+                    if (item !== '')
+                    return (
+                      <View key={item} className='commodityLabel gradientTheme'>
+                        <Text className='smallText whiteText'>
+                          {item}
+                        </Text>
+                      </View>
+                    )
+                  })}
+                </View>
                 <View className='commonRowFlex'
                       style={{
                         justifyContent: 'space-between'
@@ -129,7 +132,7 @@ const CardCommodity: Taro.FC<Props> = (props) => {
               flexShrink: 0,
             }}
             >
-              <Image src={labelUrl} className='labelImg' />
+              <Image src={labelUrl.split(',')[0]} className='labelImg' />
               <Image src={imgUrl}
                      style={{
                        width: `${width}px`,
@@ -138,15 +141,18 @@ const CardCommodity: Taro.FC<Props> = (props) => {
               />
             </View>
             <Text className='mediumText smallMarginTop'>{LimitStr(title, 7)}</Text>
-            {labelName && (
-              <View className='commonRowFlex smallMarginTop normalMarginBottom'>
-                <View className='commodityLabel gradientTheme'>
-                  <Text className='smallText whiteText'>
-                    {labelName}
-                  </Text>
-                </View>
-              </View>
-            )}
+            <View className='commonRowFlex smallMarginTop normalMarginBottom'>
+              {labelName.split(',').map(item => {
+                if (item !== '')
+                  return (
+                    <View key={item} className='commodityLabel gradientTheme'>
+                      <Text className='smallText whiteText'>
+                        {item}
+                      </Text>
+                    </View>
+                  )
+              })}
+            </View>
             <View className='commonRowFlex'
                   style={{
                     justifyContent: 'space-between'

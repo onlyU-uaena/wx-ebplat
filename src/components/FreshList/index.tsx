@@ -109,7 +109,7 @@ class FreshList extends Taro.Component<Props, any> implements FreshListInterface
         {hurdle ? (
           <View>
             {list && list.map((item, index) => (
-              <CardCommodity labelName={item.lablename} labelUrl={item.lableimg} onShopCart={onShopCart} key={index} proId={item.id} hurdle imgUrl={item.imgurl} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
+              <CardCommodity labelName={item.lablenames} labelUrl={item.lableimgs} onShopCart={onShopCart} key={index} proId={item.id} hurdle imgUrl={item.imgurl} title={item.name} desc={item.num || item.subtitle} price={item.price} oldPrice={item.oldPrice || ''} />
             ))}
           </View>
         ) : (
@@ -119,7 +119,7 @@ class FreshList extends Taro.Component<Props, any> implements FreshListInterface
           }}
           >
             {list && list.map((item, index) => (
-              <CardCommodity labelName={item.lablename} labelUrl={item.lableimg} onShopCart={onShopCart} key={index} proId={item.id} imgUrl={item.imgurl} title={item.name} price={item.price} oldPrice={item.oldPrice || ''} />
+              <CardCommodity labelName={item.lablenames} labelUrl={item.lableimgs} onShopCart={onShopCart} key={index} proId={item.id} imgUrl={item.imgurl} title={item.name} price={item.price} oldPrice={item.oldPrice || ''} />
             ))}
           </View>
         )}
