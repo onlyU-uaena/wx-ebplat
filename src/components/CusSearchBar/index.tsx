@@ -59,6 +59,8 @@ class CusSearchBar extends Taro.Component<Props, any> {
   }
 
   search = async (sort = 1, field = 0, brand = '', value) => {
+    if (value)
+      this.onChange(value)
     let list = Taro.getStorageSync('historySearch') || []
     if (this.state.value)
       list.push(this.state.value)

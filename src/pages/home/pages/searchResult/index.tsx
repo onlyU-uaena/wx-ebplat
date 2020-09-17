@@ -88,12 +88,19 @@ const SearchResult: Taro.FC<Props> = () => {
         position: 'fixed',
         width: '100%',
         height: '42px',
-        zIndex: 999,
+        zIndex: 1000,
         top: `${safeTop + 40}px`
       }}
       >
-        <View style={{flex: 1}}>
-          <CusSearchBar onRef={setSearchBar} searchStr={searchStr} onChangeResult={setSearchRes} />
+        <View style={{
+          flex: 1,
+        }}
+        >
+          <CusSearchBar onRef={setSearchBar} searchStr={searchStr} onChangeResult={(e, v) => {
+            setSearchRes(e)
+            setSearchStr(v)
+          }}
+          />
         </View>
         <View className='commonRowFlex flexCenter normalMarginLeft normalMarginRight'
               onClick={() => Taro.switchTab({url: '/pages/shoppingCart/index'})}
