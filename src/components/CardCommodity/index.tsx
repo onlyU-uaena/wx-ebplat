@@ -29,7 +29,7 @@ interface Props {
 
 const CardCommodity: Taro.FC<Props> = (props) => {
   const shopState = useSelector(selectShopState)
-  const { imgUrl, onShopCart,labelName, labelUrl, title, proId, oldPrice, price, hurdle, desc, jumpToDetail = true } = props
+  const { imgUrl, onShopCart, labelName, labelUrl, title, proId, oldPrice, price, hurdle, desc, jumpToDetail = true } = props
   const [width, setWidth] = useState<number>(0)
 
   const getWindowWidth = async () => {

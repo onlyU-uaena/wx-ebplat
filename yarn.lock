@@ -1111,7 +1111,7 @@
 
 "@tarojs/cli@2.2.10":
   version "2.2.10"
-  resolved "https://registry.npm.taobao.org/@tarojs/cli/download/@tarojs/cli-2.2.10.tgz?cache=0&sync_timestamp=1599210278289&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tarojs%2Fcli%2Fdownload%2F%40tarojs%2Fcli-2.2.10.tgz#7d70beaa51c03f1b192f595c95a3d515f807bc49"
+  resolved "https://registry.npm.taobao.org/@tarojs/cli/download/@tarojs/cli-2.2.10.tgz?cache=0&sync_timestamp=1599739702889&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tarojs%2Fcli%2Fdownload%2F%40tarojs%2Fcli-2.2.10.tgz#7d70beaa51c03f1b192f595c95a3d515f807bc49"
   integrity sha1-fXC+qlHAPxsZL1lclaPVFfgHvEk=
   dependencies:
     "@hapi/joi" "17.1.1"
@@ -1425,7 +1425,7 @@
 
 "@tarojs/taroize@^2.2.10":
   version "2.2.13"
-  resolved "https://registry.npm.taobao.org/@tarojs/taroize/download/@tarojs/taroize-2.2.13.tgz#e727a4bffebea68f0e38db9e9f87db8a89058fe1"
+  resolved "https://registry.npm.taobao.org/@tarojs/taroize/download/@tarojs/taroize-2.2.13.tgz?cache=0&sync_timestamp=1599739702446&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tarojs%2Ftaroize%2Fdownload%2F%40tarojs%2Ftaroize-2.2.13.tgz#e727a4bffebea68f0e38db9e9f87db8a89058fe1"
   integrity sha1-5yekv/6+po8OONuen4fbiokFj+E=
   dependencies:
     "@babel/code-frame" "^7.0.0"
@@ -5156,7 +5156,7 @@ eslint-config-taro@2.2.8:
 
 eslint-config-taro@^2.2.10:
   version "2.2.13"
-  resolved "https://registry.npm.taobao.org/eslint-config-taro/download/eslint-config-taro-2.2.13.tgz#a8a3a87b2ed3a9dd4551077a0e86b08efff66565"
+  resolved "https://registry.npm.taobao.org/eslint-config-taro/download/eslint-config-taro-2.2.13.tgz?cache=0&sync_timestamp=1599739698909&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-config-taro%2Fdownload%2Feslint-config-taro-2.2.13.tgz#a8a3a87b2ed3a9dd4551077a0e86b08efff66565"
   integrity sha1-qKOoey7Tqd1FUQd6Doawjv/2ZWU=
   dependencies:
     eslint-plugin-taro "2.2.13"
@@ -5274,7 +5274,7 @@ eslint-plugin-react@^7.8.2:
 
 eslint-plugin-taro@2.2.13:
   version "2.2.13"
-  resolved "https://registry.npm.taobao.org/eslint-plugin-taro/download/eslint-plugin-taro-2.2.13.tgz#f91a821d110801f320fc4b20bce63aff2da86a4f"
+  resolved "https://registry.npm.taobao.org/eslint-plugin-taro/download/eslint-plugin-taro-2.2.13.tgz?cache=0&sync_timestamp=1599739699500&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint-plugin-taro%2Fdownload%2Feslint-plugin-taro-2.2.13.tgz#f91a821d110801f320fc4b20bce63aff2da86a4f"
   integrity sha1-+RqCHREIAfMg/EsgvOY6/y2oak8=
   dependencies:
     has "^1.0.1"
@@ -5387,7 +5387,7 @@ eslint@5.16.0, eslint@^5.16.0:
 
 eslint@^6.8.0:
   version "6.8.0"
-  resolved "https://registry.npm.taobao.org/eslint/download/eslint-6.8.0.tgz?cache=0&sync_timestamp=1598991497283&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint%2Fdownload%2Feslint-6.8.0.tgz#62262d6729739f9275723824302fb227c8c93ffb"
+  resolved "https://registry.npm.taobao.org/eslint/download/eslint-6.8.0.tgz?cache=0&sync_timestamp=1599936305732&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feslint%2Fdownload%2Feslint-6.8.0.tgz#62262d6729739f9275723824302fb227c8c93ffb"
   integrity sha1-YiYtZylzn5J1cjgkMC+yJ8jJP/s=
   dependencies:
     "@babel/code-frame" "^7.0.0"
@@ -9663,7 +9663,7 @@ postcss-pxtorem@^4.0.1:
 
 postcss-pxtransform@^2.2.10:
   version "2.2.13"
-  resolved "https://registry.npm.taobao.org/postcss-pxtransform/download/postcss-pxtransform-2.2.13.tgz#4ac458d151eedb4ebbeded76bcd1f98cc5014256"
+  resolved "https://registry.npm.taobao.org/postcss-pxtransform/download/postcss-pxtransform-2.2.13.tgz?cache=0&sync_timestamp=1599739700125&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fpostcss-pxtransform%2Fdownload%2Fpostcss-pxtransform-2.2.13.tgz#4ac458d151eedb4ebbeded76bcd1f98cc5014256"
   integrity sha1-SsRY0VHu20677e12vNH5jMUBQlY=
   dependencies:
     postcss "^6.0.16"
@@ -11806,7 +11806,7 @@ tar@^2.0.0:
 
 taro-css-to-react-native@^2.2.10:
   version "2.2.10"
-  resolved "https://registry.npm.taobao.org/taro-css-to-react-native/download/taro-css-to-react-native-2.2.10.tgz#c90d555614fd16c06efc2049e9b90a930f65b6ad"
+  resolved "https://registry.npm.taobao.org/taro-css-to-react-native/download/taro-css-to-react-native-2.2.10.tgz?cache=0&sync_timestamp=1596177508564&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftaro-css-to-react-native%2Fdownload%2Ftaro-css-to-react-native-2.2.10.tgz#c90d555614fd16c06efc2049e9b90a930f65b6ad"
   integrity sha1-yQ1VVhT9FsBu/CBJ6bkKkw9ltq0=
   dependencies:
     camelize "^1.0.0"

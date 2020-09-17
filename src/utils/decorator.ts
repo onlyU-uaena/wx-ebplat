@@ -4,11 +4,13 @@ export const debounceFunc = (waitTime: number) => {
   return (target: any, name: string, descriptor: any) => {
     const func = descriptor.value
     if (typeof func === 'function') {
-      descriptor.value = function(...args: any) {
-        if (timer) clearTimeout(timer)
-        timer = setTimeout(() => {
-          return func.apply(this, args)
-        }, waitTime)
+      descriptor.value = async function (...args: any) {
+        return new Promise(resolve => {
+          if (timer) clearTimeout(timer)
+          timer = setTimeout(() => {
+            resolve(func.apply(this, args))
+          }, waitTime)
+        })
       }
     }
   }

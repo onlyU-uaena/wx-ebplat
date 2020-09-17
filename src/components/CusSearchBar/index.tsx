@@ -19,10 +19,24 @@ class CusSearchBar extends Taro.Component<Props, any> {
 
   state = {
     value: '',
-    showIndex: true
+    showIndex: true,
+    keyWords: []
+  }
+
+  async getKeywords (value) {
+    const state = store.getState()
+    const {code, data} = await commodity.getKeywords(0, state.shopState.shopData.shopid, 1, value, '',  1, 10)
+    console.log(code === 0)
+    if (code === 0) {
+      console.log(data.map(item => item.name))
+      this.setState({
+        keyWords: data.map(item => item.name)
+      })
+    }
   }
 
   onChange (value) {
+    this.getKeywords(value)
     this.setState({
       value: value
     })
@@ -44,20 +58,22 @@ class CusSearchBar extends Taro.Component<Props, any> {
       this.props.onRef(this)
   }
 
-  search = async (sort = 1, field = 0, brand = '') => {
+  search = async (sort = 1, field = 0, brand = '', value) => {
     let list = Taro.getStorageSync('historySearch') || []
     if (this.state.value)
       list.push(this.state.value)
     list = Array.from(new Set(list))
     Taro.setStorageSync('historySearch', list)
     const state = store.getState()
-    const {code, data} = await commodity.search(field, state.shopState.shopData.shopid, sort, this.state.value, brand,  1, 10000)
+    const {code, data} = await commodity.search(field, state.shopState.shopData.shopid, sort, value || this.state.value, brand,  1, 10000)
     if (code === 0) {
-      this.props.onChangeResult(data, this.state.value)
+      this.props.onChangeResult(data, value || this.state.value)
     }
   }
 
   render () {
+    const {keyWords} = this.state
+
     return (
       <View>
         <AtSearchBar
@@ -73,36 +89,35 @@ class CusSearchBar extends Taro.Component<Props, any> {
           onConfirm={this.search.bind(this)}
         />
         {/*搜索建议*/}
-        {/*{this.state.showIndex &&*/}
-        {/*<View style={{*/}
-        {/*  position: 'relative'*/}
-        {/*}}*/}
-        {/*>*/}
-        {/*  <View style={{*/}
-        {/*    position: 'absolute',*/}
-        {/*    width: '100%',*/}
-        {/*    padding: '0 16px',*/}
-        {/*    boxSizing: 'border-box',*/}
-        {/*    backgroundColor: 'white',*/}
-        {/*    zIndex: 99*/}
-        {/*  }}*/}
-        {/*  >*/}
-        {/*    <View className='borderBottom'*/}
-        {/*          style={{*/}
-        {/*            padding: '8px 0'*/}
-        {/*          }}*/}
-        {/*    >*/}
-        {/*      <Text className='mediumText'>123</Text>*/}
-        {/*    </View>*/}
-        {/*    <View className='borderBottom'*/}
-        {/*          style={{*/}
-        {/*            padding: '8px 0'*/}
-        {/*          }}*/}
-        {/*    >*/}
-        {/*      <Text className='mediumText'>123</Text>*/}
-        {/*    </View>*/}
-        {/*  </View>*/}
-        {/*</View>}*/}
+        {this.state.showIndex &&
+        <View style={{
+          position: 'relative'
+        }}
+        >
+          <View style={{
+            position: 'absolute',
+            width: '100%',
+            padding: '0 16px',
+            boxSizing: 'border-box',
+            backgroundColor: 'white',
+            zIndex: 99
+          }}
+          >
+            {keyWords.map((item, index) => (
+              <View className='borderBottom'
+                    key={index}
+                    onClick={() => {
+                      this.search(1, 0, '', item)
+                    }}
+                    style={{
+                      padding: '8px 0'
+                    }}
+              >
+                <Text className='mediumText'>{item}</Text>
+              </View>
+            ))}
+          </View>
+        </View>}
       </View>
     )
   }

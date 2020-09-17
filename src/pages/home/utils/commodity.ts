@@ -1,5 +1,5 @@
 import AccountVerification from '@utils/accountVerification'
-import { noEmpty, throttleFunc } from '@utils/decorator'
+import { debounceFunc, noEmpty, throttleFunc } from '@utils/decorator'
 import Taro from '@tarojs/taro'
 import httpRequest from '@utils/request'
 import order from '../../mine/utils/order'
@@ -11,6 +11,7 @@ class Commodity {
     getSkuList: '/api/app/topic/getlist',
     getSortSku: '/api/app/pro/shopskulist',
     getSortList: '/api/app/pro/shopskulist',
+    getKeywords: '/api/app/pro/shopskulist',
     search: '/api/app/pro/shopskulist',
     gettopicsku: '/api/app/topic/gettopicsku',
     productDetail: '/api/app/pro/getprodetail',
@@ -318,6 +319,20 @@ class Commodity {
       sort
     }
     return await httpRequest(this.urls.getSortSku, data)
+  }
+
+  @debounceFunc(1000)
+  public async getKeywords (field: number, shopid: number, sort: number, keys: string, brand: number | string, index: number, size: number) {
+    const data = {
+      shopid,
+      field,
+      sort,
+      keys,
+      brand,
+      index,
+      size
+    }
+    return await httpRequest(this.urls.getKeywords, data, false, false)
   }
 
   @throttleFunc(1000)
