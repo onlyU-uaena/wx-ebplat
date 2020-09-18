@@ -37,3 +37,11 @@ yarn
 yarn run dev:weapp
 ```
 
+### 文件结构
+
+* common 一般常量
+* components 可复用组件
+* pages 页面
+* pages/utils 页面工具以及页面网络请求
+* redux 全局变量
+* utils 工具类函数
